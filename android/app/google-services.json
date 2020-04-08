@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "534650958077",
+    "firebase_url": "https://helpapp-97212.firebaseio.com",
+    "project_id": "helpapp-97212",
+    "storage_bucket": "helpapp-97212.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:534650958077:android:0fc40b160cfddcf4638e94",
+        "android_client_info": {
+          "package_name": "com.filledstacks.compound"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "534650958077-fcnf31g052cdv1ttvi285q324hnv7ep8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVFbS9Cjm_lP9Jtk9aoOkqdOvLaezAGA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "534650958077-fcnf31g052cdv1ttvi285q324hnv7ep8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
