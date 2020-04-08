@@ -30,7 +30,7 @@ class SignUpView extends StatelessWidget {
               verticalSpaceLarge,
               // TODO: Add additional user data here to save (episode 2)
               InputField(
-                placeholder: 'Email????????',
+                placeholder: 'Email',
                 controller: emailController,
               ),
               verticalSpaceSmall,
