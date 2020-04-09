@@ -1,5 +1,6 @@
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:compound/ui/widgets/busy_button.dart';
+import 'package:compound/ui/widgets/expansion_list.dart';
 import 'package:compound/ui/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -8,6 +9,7 @@ import 'package:compound/viewmodels/signup_view_model.dart';
 class SignUpView extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final fullNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,15 @@ class SignUpView extends StatelessWidget {
                 ),
               ),
               verticalSpaceLarge,
-              // TODO: Add additional user data here to save (episode 2)
               InputField(
+<<<<<<< Updated upstream
+=======
+                placeholder: 'Full Name',
+                controller: fullNameController,
+              ),
+              verticalSpaceSmall,
+              InputField(
+>>>>>>> Stashed changes
                 placeholder: 'Email',
                 controller: emailController,
               ),
@@ -40,6 +49,11 @@ class SignUpView extends StatelessWidget {
                 controller: passwordController,
                 additionalNote: 'Password has to be a minimum of 6 characters.',
               ),
+              verticalSpaceSmall,
+              ExpansionList<String>(
+                  items: ['Admin', 'User'],
+                  title: model.selectedRole,
+                  onItemSelected: (item) => model.setSelectedRole(item)),
               verticalSpaceMedium,
               Row(
                 mainAxisSize: MainAxisSize.max,
@@ -47,8 +61,12 @@ class SignUpView extends StatelessWidget {
                 children: [
                   BusyButton(
                     title: 'Sign Up',
+                    busy: model.busy,
                     onPressed: () {
-                      // TODO: Perform firebase login here
+                      model.signUp(
+                          email: emailController.text,
+                          password: passwordController.text,
+                          fullName: fullNameController.text);
                     },
                   )
                 ],
