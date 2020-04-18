@@ -13,6 +13,8 @@ class FirestoreService {
     }
   }
 
+  
+
   Future getUser(String uid) async {
     try {
       var userData = await _usersCollectionReference.document(uid).get();

@@ -31,14 +31,11 @@ class SignUpView extends StatelessWidget {
               ),
               verticalSpaceLarge,
               InputField(
-<<<<<<< Updated upstream
-=======
-                placeholder: 'Full Name',
+                placeholder: 'Name',
                 controller: fullNameController,
               ),
               verticalSpaceSmall,
               InputField(
->>>>>>> Stashed changes
                 placeholder: 'Email',
                 controller: emailController,
               ),
