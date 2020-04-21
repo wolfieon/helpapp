@@ -1,4 +1,5 @@
 import 'package:compound/ui/views/home_view.dart';
+import 'package:compound/viewmodels/menu_options_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/constants/route_names.dart';
 import 'package:compound/ui/views/login_view.dart';
@@ -20,6 +21,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: HomeView(),
+      );
+    case SettingsViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: MenuOptionsScreen(),
       );
     default:
       return MaterialPageRoute(

@@ -34,6 +34,6 @@ class _BaseWidgetState<T extends ChangeNotifier> extends State<BaseWidget<T>> {
         child: Consumer<T>(
           child: widget.child,
           builder: widget.builder ?? (context, model, child) => child,
-        ));
+        ), create: (BuildContext context) {},);
   }
 }
