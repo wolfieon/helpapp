@@ -36,6 +36,7 @@ dependencies:
   provider_architecture: ^1.0.3
   firebase_auth: ^0.15.3
   cloud_firestore: ^0.13.0+1
+  curved_navigation_bar: ^0.3.2 #latest version
   
 
 dev_dependencies:
