@@ -17,9 +17,9 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAFAFA),
+      backgroundColor: Colors.deepPurple,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.deepPurple,
         title: Text('Settings'),
         leading: FlatButton(
           textColor: Colors.white,
@@ -92,7 +92,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
       bottomSheet: Container(
         width: double.infinity,
         height: 80.0,
-        color: Color(0xFFF3F3F3),
+        color: Colors.deepPurple,
         child: Padding(
           padding: EdgeInsets.only(right: 20.0),
           child: Row(

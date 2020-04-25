@@ -2,6 +2,8 @@ import 'package:compound/constants/route_names.dart';
 import 'package:compound/ui/views/chat_view.dart';
 import 'package:compound/ui/views/home_view.dart';
 import 'package:compound/ui/views/login_view.dart';
+import 'package:compound/ui/views/map_view.dart';
+import 'package:compound/ui/views/profile_view.dart';
 import 'package:compound/ui/views/settings_view.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -16,18 +18,17 @@ class MyBottomNagivation extends StatefulWidget {
 
 
 class _MyBottomNagivationState extends State<MyBottomNagivation> {
-  
-   int _currentIndex = 1;
+   int _currentIndex = 2;
   final List<Widget> _children = [
-   Chat(), HomeView(), MenuOptionsScreen() // create the pages you want to navigate between
+   Chat(), MapView() , HomeView(), ProfileView(), MenuOptionsScreen() // create the pages you want to navigate between
   ];
-  
-  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
+      backgroundColor: Colors.deepPurple,
+        index: 2,
         onTap: (index){
           setState(() {
             this._currentIndex = index;
@@ -37,13 +38,14 @@ class _MyBottomNagivationState extends State<MyBottomNagivation> {
         height: 50,
         items: <Widget>[
           Icon(Icons.chat, size: 20, color: Colors.black,),
+          Icon(Icons.map, size: 20, color: Colors.black,),
           Icon(Icons.home, size: 20, color: Colors.black,),
+          Icon(Icons.person, size: 20, color: Colors.black,),
           Icon(Icons.settings, size: 20, color: Colors.black,),
         ],
         animationDuration: Duration(
           milliseconds: 200
         ),
-        index: 1,
         animationCurve: Curves.bounceInOut,
 
       ),
