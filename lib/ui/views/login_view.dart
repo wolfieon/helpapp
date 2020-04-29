@@ -60,13 +60,6 @@ class LoginView extends StatelessWidget {
                   onPressed: () {
                     model.navigateToSignUp();
                   },
-                ),
-                IconButton(
-                  icon: Icon(Icons.settings_applications),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    model.navigateToSettings();
-                  },
                 )
               ],
             ),

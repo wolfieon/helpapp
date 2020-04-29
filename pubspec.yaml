@@ -16,9 +16,14 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.1.0 <3.0.0"
 
+
+
 dependencies:
   flutter:
     sdk: flutter
+  #openstreetmap api and geolocation api // danny
+  flutter_map: ^0.9.0
+  geolocator: ^5.3.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -34,10 +39,19 @@ dependencies:
   provider_architecture: ^1.0.3
   firebase_auth: ^0.15.3
   cloud_firestore: ^0.13.0+1
+  curved_navigation_bar: ^0.3.2 #latest version
+  
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.7.3"
   flutter_test:
     sdk: flutter
+    
+
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

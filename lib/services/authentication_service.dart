@@ -27,6 +27,22 @@ class AuthenticationService {
     }
   }
 
+  Future signOut() async {
+   FirebaseUser user = await _firebaseAuth.currentUser();
+  print(user.uid);
+  if(_firebaseAuth.currentUser() != null){
+      print('cool');
+
+}
+    try {
+      return await _firebaseAuth.signOut();
+      
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future signUpWithEmail({
     @required String email,
     @required String password,

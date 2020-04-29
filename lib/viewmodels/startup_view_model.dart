@@ -3,7 +3,6 @@ import 'package:compound/locator.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/viewmodels/base_model.dart';
-import 'package:compound/viewmodels/menu_options_screen.dart';
 
 class StartUpViewModel extends BaseModel {
   final AuthenticationService _authenticationService =
@@ -12,11 +11,11 @@ class StartUpViewModel extends BaseModel {
 
   Future handleStartUpLogic() async {
     var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
+
     if (hasLoggedInUser) {
       _navigationService.navigateTo(HomeViewRoute);
     } else {
       _navigationService.navigateTo(LoginViewRoute);
-      
     }
   }
 }

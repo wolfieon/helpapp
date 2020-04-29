@@ -1,7 +1,7 @@
+import 'package:compound/models/options_model.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/ui/views/login_view.dart';
 import 'package:flutter/material.dart';
-import 'package:compound/models/option_model.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/locator.dart';
 
