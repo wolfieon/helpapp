@@ -18,4 +18,6 @@ class StartUpViewModel extends BaseModel {
       _navigationService.navigateTo(LoginViewRoute);
     }
   }
+
+  
 }
