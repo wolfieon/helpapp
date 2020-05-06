@@ -1,11 +1,11 @@
 import 'package:compound/services/authentication_service.dart';
-import 'package:compound/ui/views/chat_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/options_model.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
+
+import 'login_view.dart';
 
 
 class MenuOptionsScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class MenuOptionsScreen extends StatefulWidget {
 
 class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   int _selectedOption = 0;
-
+ final AuthenticationService _firebaseAuth = AuthenticationService();
   final AuthenticationService auth = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
   
@@ -26,13 +26,15 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
     return Scaffold(
      backgroundColor: Colors.white,
       appBar: AppBar(
+
         backgroundColor: Colors.white,
         title: Text('Settings'),
+
         leading: FlatButton(
           textColor: Colors.white,
           child: Icon(
             Icons.arrow_back,
-          ),
+          ), onPressed: () {print('back');},
           // onPressed: () => loginUser(),
           
         ),
@@ -98,9 +100,12 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
         },
       ),
       bottomSheet: Container(
+
         width: double.infinity,
         height: 80.0,
         color: Colors.white,
+
+
         child: Padding(
           padding: EdgeInsets.only(right: 20.0),
           child: Row(
@@ -108,18 +113,23 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                'SAVE & CONTINUE',
+                'Logga Ut',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.lime,
                   fontSize: 18.0,
                 ),
               ),
               SizedBox(width: 8.0),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.black,
-                size: 18.0,
-              ),
+              new IconButton(
+                  icon: new Icon(Icons.input),
+                  color: Colors.black,
+                  onPressed: () async {
+                    await _firebaseAuth.signOut();
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                    Navigator.pushReplacement(context,
+                     MaterialPageRoute(builder: (context)=> LoginView()),);
+
+                  }),
             ],
           ),
         ),
