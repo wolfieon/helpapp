@@ -3,9 +3,13 @@ import 'package:compound/ui/views/looking_to_help_view.dart';
 import 'package:compound/ui/views/need_help_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:compound/services/firestore_service.dart';
+import 'package:compound/services/authentication_service.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key key}) : super(key: key);
+
+  
 
   @override
   Widget build(BuildContext context) {

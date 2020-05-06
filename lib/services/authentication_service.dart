@@ -1,12 +1,18 @@
+import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
 import 'package:compound/models/user.dart';
+import 'package:compound/services/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:compound/services/firestore_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+
 
   User _currentUser;
   User get currentUser => _currentUser;
@@ -32,6 +38,7 @@ class AuthenticationService {
     @required String password,
     @required String fullName,
     @required String role,
+    @required String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -45,6 +52,7 @@ class AuthenticationService {
         email: email,
         fullName: fullName,
         userRole: role,
+        photo: photo,
       );
 
       await _firestoreService.createUser(_currentUser);
@@ -66,4 +74,20 @@ class AuthenticationService {
       _currentUser = await _firestoreService.getUser(user.uid);
     }
   }
+
+  Future<void> signOut() async {
+    _firebaseAuth.signOut();
+    _navigationService.navigateTo(LoginViewRoute);
+    
+    
+  }
+
+  Future<String> getCurrentUID() async {
+    return (await _firebaseAuth.currentUser()).uid;
+  }
+
+  getCurrentUser() async {
+    return _firebaseAuth.currentUser();
+  }
+
 }

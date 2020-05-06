@@ -1,3 +1,6 @@
+import 'package:compound/services/authentication_service.dart';
+import 'package:compound/ui/views/chat_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/options_model.dart';
 import 'package:compound/services/navigation_service.dart';
@@ -13,7 +16,11 @@ class MenuOptionsScreen extends StatefulWidget {
 class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   int _selectedOption = 0;
 
+  final AuthenticationService auth = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +33,8 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
           child: Icon(
             Icons.arrow_back,
           ),
-          onPressed: () => navigateToLogIn(),
+          // onPressed: () => loginUser(),
+          
         ),
         actions: <Widget>[
           FlatButton(
@@ -130,4 +138,8 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   {
     _navigationService.navigateTo(LoginViewRoute);
   }
+ 
+
+
+
 }
