@@ -22,7 +22,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         children: <Widget>[      
             SizedBox(height: 110),
             Align(
-                  child: Text("Vad Behöver du hjälp med?", style: GoogleFonts.openSans(
+                  child: Text("Vilken typ av hjälp behöver du?", style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
                   fontSize: 25,
