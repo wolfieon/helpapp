@@ -123,6 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     addthething() {
     Firestore.instance.collection('markers').add({
+      'type': 'a type',
       'name': 'a place',
       'desc': 'a description',
       'userID': 'user billy',
