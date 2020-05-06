@@ -12,7 +12,7 @@ class Chat extends StatefulWidget {
   final User user;
   final User mottagare;
 
-  const Chat( {Key key, this.user, this.mottagare}) : super(key: key);
+  const Chat({Key key, this.user, this.mottagare,}) : super(key: key);
   @override
   _ChatState createState() => _ChatState();
 }
@@ -22,49 +22,34 @@ class _ChatState extends State<Chat> {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final Firestore _firestore = Firestore.instance;
   final NavigationService _navigationService = locator<NavigationService>();
-  
-  
-  
 
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
-  Object get user =>  _auth.currentUser();
+  Object get user => _auth.currentUser();
 
-  
 
-  
-
-  
-  
-
-   Future<void> loginUser() async {
-    //Future user = await _firestoreService.getUser(_auth.currentUser);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Chat(
-          user: user,
-        ),
-      ),
-    );
-  }
-  
 
   Future<void> callback() async {
     //print('This is the current user' + _currentUser.toString());
-    
-    
+
     if (messageController.text.length > 0) {
       //adda till sändarens collection samt mottagarens collection
       //duplicate code bara för att jag orkar inte, addar meddelanden till bägge users databas
-      await _firestore.collection('chats').document(widget.user.id).collection(widget.mottagare.id).add({
+      await _firestore
+          .collection('chats')
+          .document(widget.user.id)
+          .collection(widget.mottagare.id)
+          .add({
         'text': messageController.text,
         'from': widget.user.fullName,
         'date': DateTime.now().toIso8601String().toString(),
       });
-      await _firestore.collection('chats').document(widget.mottagare.id).collection(widget.user.id).add({
+      await _firestore
+          .collection('chats')
+          .document(widget.mottagare.id)
+          .collection(widget.user.id)
+          .add({
         'text': messageController.text,
         'from': widget.user.fullName,
         'date': DateTime.now().toIso8601String().toString(),
@@ -89,32 +74,51 @@ class _ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-    
-    if(User().email == null){
+    if (User().email == null) {
       //loginUser();
-      
+
     }
-    
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        // actions: <Widget>[
+        //   Container(
+        //     height: 40.0,
+        //     child: CircleAvatar(
+        //                   radius: 20,
+        //                   backgroundImage: NetworkImage(
+        //                       widget.mottagare.photo))
+        //   ),
+
+        // ],
         leading: Hero(
-          tag: 'logo',
-          child: Container(
-            height: 40.0,
-            child: Image.network(widget.mottagare.photo),
+          tag: 'backbutton',
+          child: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black,),
+            onPressed: () async {
+              Navigator.pop(context);
+              //_navigationService.navigateTo(ChatListRoute);
+            },
           ),
         ),
-        title: Text('talking to: ' + widget.mottagare.fullName),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.close),
-            onPressed: ()  async {
-              Navigator.pop(context);
-               //_navigationService.navigateTo(ChatListRoute);
-            },
-          )
-        ],
+        title: Column(
+          children: <Widget>[
+            Row(children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(56.0,0,4,0),
+                child: CircleAvatar(
+                  radius: 15,
+                  backgroundImage: NetworkImage(widget.mottagare.photo)),
+              ),
+                Text(widget.mottagare.fullName, style: TextStyle(color: Colors.black),),
+            ],)
+            
+
+          
+          ],
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -135,7 +139,6 @@ class _ChatState extends State<Chat> {
                     );
 
                   List<DocumentSnapshot> docs = snapshot.data.documents;
-                  
 
                   List<Widget> messages = docs
                       .map((doc) => Message(
@@ -158,16 +161,23 @@ class _ChatState extends State<Chat> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: TextField(
-                      onSubmitted: (value) => callback(),
-                      decoration: InputDecoration(
-                        hintText: "Enter a Message...",
-                        border: const OutlineInputBorder(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: TextField(
+                        onSubmitted: (value) => callback(),
+                        decoration: InputDecoration(
+                          hintText: "Enter a Message...",
+                          border: const OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(const Radius.circular(40))
+                          ),
+                          
+                        ),
+                        controller: messageController,
                       ),
-                      controller: messageController,
                     ),
                   ),
                   SendButton(
+                    
                     text: "Send",
                     callback: callback,
                   )
@@ -179,6 +189,7 @@ class _ChatState extends State<Chat> {
       ),
     );
   }
+
   Future<String> getEmailCurrent() async {
     FirebaseUser userb = await _auth.currentUser();
     return userb.email.toString();
@@ -192,10 +203,20 @@ class SendButton extends StatelessWidget {
   const SendButton({Key key, this.text, this.callback}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: Colors.orange,
-      onPressed: callback,
-      child: Text(text),
+    return ButtonTheme(
+      minWidth: 100,
+      height: 60,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+          
+  borderRadius: BorderRadius.circular(40),
+  side: BorderSide(color: Colors.black)
+),
+        
+        
+        onPressed: callback,
+        child: Text(text),
+      ),
     );
   }
 }
@@ -211,26 +232,28 @@ class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        crossAxisAlignment:
-            me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: <Widget>[
-          
-          Text(
-            from,
-          ),
-          Material(
-            color: me ? Colors.teal : Colors.red,
-            borderRadius: BorderRadius.circular(10.0),
-            elevation: 6.0,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-              child: Text(
-                text,
-              ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment:
+              me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              from,
             ),
-          )
-        ],
+            Material(
+              color: me ? Colors.teal : Colors.red,
+              borderRadius: BorderRadius.circular(10.0),
+              elevation: 6.0,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                child: Text(
+                  text,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

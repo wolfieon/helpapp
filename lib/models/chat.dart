@@ -1,9 +1,11 @@
+import 'package:flutter/widgets.dart';
+
 class Chatters {
   final String messengerid1;
   final String messengerid2;
   
 
-  Chatters({this.messengerid1, this.messengerid2});
+  Chatters({@required this.messengerid1, @required this.messengerid2});
 
   Chatters.fromData(Map<String, dynamic> data)
       : messengerid1 = data['messengerid1'],

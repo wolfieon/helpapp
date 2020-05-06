@@ -42,6 +42,7 @@ class _MyBottomNagivationState extends State<MyBottomNagivation> {
         onTap: (index){
           setState(() {
             this._currentIndex = index;
+            
           });
           debugPrint("Current Index is $index");
         },

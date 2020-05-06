@@ -38,7 +38,7 @@ class AuthenticationService {
     @required String password,
     @required String fullName,
     @required String role,
-    @required String photo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Microsoft_Account.svg/512px-Microsoft_Account.svg.png',
+    @required String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
