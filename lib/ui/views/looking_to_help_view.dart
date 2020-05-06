@@ -8,9 +8,9 @@ class LookingToHelp extends StatefulWidget{
 }
 
 class _LookingToHelpState extends State<LookingToHelp> {
-bool groVal = false;
-bool socVal = false;
-bool tekVal = false;
+bool groVal = true;
+bool socVal = true;
+bool tekVal = true;
 List<String> testList = [
   "Test1","Test2","Test3","Test4","Test4","Test5","Test6","Test","Test","Test",
   "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
@@ -44,7 +44,7 @@ List<String> testList = [
       child: Column(
         children: <Widget>[
           SizedBox(height:20),
-          Text("Ta bort", style: TextStyle(
+          Text("Visa Endast", style: TextStyle(
                   color: Colors.black,
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
