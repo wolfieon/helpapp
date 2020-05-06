@@ -37,7 +37,8 @@ class _MyBottomNagivationState extends State<MyBottomNagivation> {
     return new Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: CurvedNavigationBar(
-      backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.white,
+        color: Colors.black,
         index: 2,
         onTap: (index){
           setState(() {
@@ -48,11 +49,11 @@ class _MyBottomNagivationState extends State<MyBottomNagivation> {
         },
         height: 50,
         items: <Widget>[
-          Icon(Icons.chat, size: 20, color: Colors.black,),
-          Icon(Icons.map, size: 20, color: Colors.black,),
-          Icon(Icons.home, size: 20, color: Colors.black,),
-          Icon(Icons.person, size: 20, color: Colors.black,),
-          Icon(Icons.settings, size: 20, color: Colors.black,),
+          Icon(Icons.chat, size: 20, color: Colors.white,),
+          Icon(Icons.map, size: 20, color: Colors.white,),
+          Icon(Icons.home, size: 20, color: Colors.white,),
+          Icon(Icons.person, size: 20, color: Colors.white,),
+          Icon(Icons.settings, size: 20, color: Colors.white,),
         ],
         animationDuration: Duration(
           milliseconds: 200

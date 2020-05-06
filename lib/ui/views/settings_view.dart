@@ -24,10 +24,11 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+     backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text('Inställningar'),
+
+        backgroundColor: Colors.white,
+        title: Text('Settings'),
 
         leading: FlatButton(
           textColor: Colors.white,
@@ -44,7 +45,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
               'HELP',
               style: TextStyle(
                 fontSize: 16.0,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold, color: Colors.black,
               ),
             ),
             onPressed: () => navigateToSignUp(),
@@ -99,9 +100,12 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
         },
       ),
       bottomSheet: Container(
-         width: double.infinity,
-        height: 40.0,
-        color: Colors.deepOrange,
+
+        width: double.infinity,
+        height: 80.0,
+        color: Colors.white,
+
+
         child: Padding(
           padding: EdgeInsets.only(right: 20.0),
           child: Row(
