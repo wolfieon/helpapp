@@ -10,7 +10,7 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+     backgroundColor: Colors.white,
       body: Center(
         child: Text('Chat'),
       ),
