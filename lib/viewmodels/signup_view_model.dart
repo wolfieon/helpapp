@@ -32,7 +32,7 @@ class SignUpViewModel extends BaseModel {
         email: email,
         password: password,
         fullName: fullName,
-        role: _selectedRole);
+        role: _selectedRole, photo: null);
 
     setBusy(false);
 
