@@ -90,4 +90,33 @@ class AuthenticationService {
     return _firebaseAuth.currentUser();
   }
 
+  Future getCurrentUserId() async {
+    FirebaseUser userb = await _firebaseAuth.currentUser();
+
+    final uid = userb.uid;
+    //User user = await _firestoreService.getUser(uid);
+    return uid;
+  }
+
+   Future updatePassword({
+    @required String newPassword,
+    @required String oldPassword,
+  }) async {
+    FirebaseUser userb = await _firebaseAuth.currentUser();
+    //final uid = userb.uid;
+    print(userb.displayName);
+    print(userb.email);
+    print(userb.uid);
+    print(userb.displayName);
+    //User user = await _firestoreService.getUser(uid);
+    //DocumentReference userRef = _usersCollectionReference.document(uid);
+    print(newPassword);
+    print(oldPassword);
+    await loginWithEmail(email: userb.email, password: oldPassword);
+  print('here ');
+    await userb.updatePassword(newPassword);
+    return true;
+
+   
+  }
 }
