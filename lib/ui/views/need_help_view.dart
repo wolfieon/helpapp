@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:compound/models/chat.dart';
+import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
+import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:compound/models/markers.dart';
-import 'package:compound/services/firestore_service.dart';
 
 import '../../locator.dart';
 
@@ -22,16 +21,18 @@ Services _services = Services.Matvaror;
 class _NeedHelpViewState extends State<NeedHelpView> {
 
 
-  String desc;
-  String type;
+  String desc = 'no Description';
+  String type = 'Matvaror';
   final databaseReference = Firestore.instance;
   final AuthenticationService authService = locator<AuthenticationService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   addRequest() async {
+    User userData = await _firestoreService.getUser(authService.currentUser.id); 
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     Firestore.instance.collection('markers').add({
       'type': type,
-      'name': 'Placeholder for name',  // GetCurrentUser Name ask philip. 
+      'name': userData.fullName,  // GetCurrentUser Name ask philip. 
       'desc': desc,
       'userID': await authService.getCurrentUID(),
       'coords':
