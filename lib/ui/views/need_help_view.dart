@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:compound/models/chat.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:compound/ui/views/startup_view.dart';
 import 'package:flutter/material.dart';
@@ -117,6 +118,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                             fontSize: 25,
                             fontWeight: FontWeight.w600))),
           onPressed: () {
+               _helpLogic().getCurrentLocation();
                },
               ),
             ),
@@ -132,6 +134,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
 class _helpLogic  {
 
 final List<MarkObj> markers = [];
+
   final databaseReference = Firestore.instance;
   bool listMade = false;
   String _address = "";
@@ -208,6 +211,11 @@ final List<MarkObj> markers = [];
       double distanceInMeters = await Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
       print(distanceInMeters);
       print('stopped');
+    }
+
+
+    hardcodedChatmetod() { // will add closest marker to chat with you
+      new Chatters(messengerid1: markers[0].userID, messengerid2: null);
     }
 }
 
