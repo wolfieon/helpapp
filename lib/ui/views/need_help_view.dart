@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
+import 'package:compound/services/authentication_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:compound/ui/views/startup_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:compound/models/markers.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:compound/services/firestore_service.dart';
+
+import '../../locator.dart';
 
 
 class NeedHelpView extends StatefulWidget{
@@ -117,8 +122,11 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                             color: Colors.white,
                             fontSize: 25,
                             fontWeight: FontWeight.w600))),
-          onPressed: () {
-               _helpLogic().getCurrentLocation();
+          onPressed: () async {
+               await _helpLogic().listthething2();
+               await _helpLogic().sorthething();
+               await _helpLogic().hardcodedChatmetod();
+
                },
               ),
             ),
@@ -134,6 +142,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
 class _helpLogic  {
 
 final List<MarkObj> markers = [];
+final AuthenticationService authService = locator<AuthenticationService>();
 
   final databaseReference = Firestore.instance;
   bool listMade = false;
@@ -214,8 +223,9 @@ final List<MarkObj> markers = [];
     }
 
 
-    hardcodedChatmetod() { // will add closest marker to chat with you
-      new Chatters(messengerid1: markers[0].userID, messengerid2: null);
+    hardcodedChatmetod() async  { // will add closest marker to chat with you
+      Chatters nyChat = new Chatters (messengerid1: markers[0].userID, messengerid2: await authService.getCurrentUID());
+      FirestoreService().createChat(nyChat);
     }
 }
 
