@@ -9,7 +9,6 @@ import 'package:compound/ui/views/profile_view.dart';
 import 'package:compound/ui/views/settings_view.dart';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
