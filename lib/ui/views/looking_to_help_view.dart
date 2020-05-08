@@ -3,6 +3,7 @@ import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
 import 'package:geolocator/geolocator.dart';
+import 'dart:async';
 
 
 class LookingToHelp extends StatefulWidget{
@@ -10,23 +11,13 @@ class LookingToHelp extends StatefulWidget{
   _LookingToHelpState createState() => _LookingToHelpState();
 }
 
-class _LookingToHelpState extends State<LookingToHelp> {
-final List<MarkObj> markers = [];
-final databaseReference = Firestore.instance;
 bool groVal = true;
 bool socVal = true;
 bool tekVal = true;
-List<String> testList = [
-  "Test1","Test2","Test3","Test4","Test4","Test5","Test6","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-];
+final List<MarkObj> markers = [];
+final databaseReference = Firestore.instance;
 
-void initState() {
-  createList();
-}
+class _LookingToHelpState extends State<LookingToHelp> {
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +26,28 @@ void initState() {
         title: Text("Hjälp App"),
         backgroundColor: Colors.white,
       ), 
-      body: ListView.builder(
-        itemCount: testList.length,
-        itemBuilder: (context, index){
-          return Card(
-            child: ListTile(
-                title: Text(testList[index]),
-                onTap: () {
-                },
-              ),
-            );
-          } 
-        ),
+      body: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
+        if (snapshot.connectionState == ConnectionState.waiting){
+          return Center(
+            child: Text("Loading"),
+          );
+        }
+        else {
+          return ListView.builder(
+            itemCount: markers.length,
+            itemBuilder: (context, index) {
+              return Card(
+                child: ListTile(
+                  title: Text(markers[index].getName),
+                  onTap: (){
+                  },
+                ),
+              );
+             }
+          );
+        }
+       },
+      ),
       bottomSheet: Container(
       width: screenWidth(context),
       height: screenHeight(context)/6,
@@ -113,8 +114,10 @@ void initState() {
     ),
     );
   }
+}
 
-       createList() async {
+
+  Future createList() async {
         QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
         for(var f in snapshot.documents) {
           double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
@@ -122,7 +125,9 @@ void initState() {
           print(distanceInMeters);
           markers.add(newMarkObj);
         }
+        sorthething();
   }
+  
   sorthething() { // snapshot data document ID (fetchthething)
         if (markers.length > 1) {
           markers.sort((a, b) => a.getDistance.compareTo(b.getDistance));
@@ -132,4 +137,3 @@ void initState() {
           print('list is less than 2');
       }
   } 
-}
