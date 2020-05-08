@@ -10,7 +10,6 @@ import 'dart:async';
 
 import '../../locator.dart';
 
-
 class LookingToHelp extends StatefulWidget{
   @override
   _LookingToHelpState createState() => _LookingToHelpState();
@@ -126,6 +125,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
 
 
   Future createList() async {
+        markers.clear();
         Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
         QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
         for(var f in snapshot.documents) {
