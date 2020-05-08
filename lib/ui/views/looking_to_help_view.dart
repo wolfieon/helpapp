@@ -118,9 +118,10 @@ class _LookingToHelpState extends State<LookingToHelp> {
 
 
   Future createList() async {
+        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
         QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
         for(var f in snapshot.documents) {
-          double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
+          double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, position.latitude, position.longitude);
           MarkObj newMarkObj = MarkObj (coords: f.data['coords'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
           print(distanceInMeters);
           markers.add(newMarkObj);
