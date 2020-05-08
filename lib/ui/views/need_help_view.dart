@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:compound/models/user.dart';
+import 'package:compound/services/authentication_service.dart';
+import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
-import 'package:compound/ui/views/startup_view.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../locator.dart';
 
 
 class NeedHelpView extends StatefulWidget{
@@ -13,6 +19,31 @@ enum Services { Matvaror, Socialt, Teknisk }
 Services _services = Services.Matvaror;
 
 class _NeedHelpViewState extends State<NeedHelpView> {
+
+
+  String desc = 'no Description';
+  String type = 'Matvaror';
+  final databaseReference = Firestore.instance;
+  final AuthenticationService authService = locator<AuthenticationService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
+
+  addRequest() async {
+    User userData = await _firestoreService.getUser(authService.currentUser.id); 
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Firestore.instance.collection('markers').add({
+      'type': type,
+      'name': userData.fullName,  // GetCurrentUser Name ask philip. 
+      'desc': desc,
+      'userID': await authService.getCurrentUID(),
+      'coords':
+          new GeoPoint(position.latitude, position.longitude),
+      });
+      //Trigged flag on account here. prevent more posts.
+      //Move back to main menu?
+    } 
+
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +65,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         title: const Text('Matvaror'),
         value: Services.Matvaror,
         groupValue: _services,
-        onChanged: (Services value) { setState(() { _services = value; }); },
+        onChanged: (Services value) { setState(() { _services = value; type = 'Matvaror';}); },
             ),
           ),
           Align(
@@ -42,7 +73,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         title: const Text('Socialt'),
         value: Services.Socialt,
         groupValue: _services,
-        onChanged: (Services value) { setState(() { _services = value; }); },
+        onChanged: (Services value) { setState(() { _services = value; type = 'Socialt';}); },
            ),
           ),
           Align(
@@ -50,7 +81,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         title: const Text('Teknisk'),
         value: Services.Teknisk,
         groupValue: _services,
-        onChanged: (Services value) { setState(() { _services = value; }); },
+        onChanged: (Services value) { setState(() { _services = value; type = 'Teknisk';}); },
            ),
           ),
           SizedBox(height: 40),
@@ -73,6 +104,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         ),
       ),
       child: new TextField(
+        onChanged: (text) {desc = text;},
         textAlign: TextAlign.center,
         decoration: new InputDecoration(
           border: InputBorder.none,
@@ -111,7 +143,8 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                             color: Colors.white,
                             fontSize: 25,
                             fontWeight: FontWeight.w600))),
-          onPressed: () {
+          onPressed: () async {
+                await addRequest();
                },
               ),
             ),

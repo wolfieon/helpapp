@@ -1,23 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:compound/models/markers.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:async';
+
 
 class LookingToHelp extends StatefulWidget{
   @override
   _LookingToHelpState createState() => _LookingToHelpState();
 }
 
-class _LookingToHelpState extends State<LookingToHelp> {
 bool groVal = true;
 bool socVal = true;
 bool tekVal = true;
-List<String> testList = [
-  "Test1","Test2","Test3","Test4","Test4","Test5","Test6","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-  "Test","Test","Test","Test","Test","Test","Test","Test","Test","Test",
-];
+
+class _LookingToHelpState extends State<LookingToHelp> {
+final List<MarkObj> markers = [];
+final databaseReference = Firestore.instance;
+
+Future getPosts() async {
+  var fireStore = Firestore.instance;
+
+  QuerySnapshot qn = await fireStore.collection("markers").getDocuments();
+  
+
+  return qn.documents;
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,18 +35,29 @@ List<String> testList = [
         title: Text("Hjälp App"),
         backgroundColor: Colors.white,
       ), 
-      body: ListView.builder(
-        itemCount: testList.length,
-        itemBuilder: (context, index){
-          return Card(
-            child: ListTile(
-                title: Text(testList[index]),
-                onTap: () {
-                },
-              ),
-            );
-          } 
-        ),
+      body: FutureBuilder(future: getPosts() , builder: (BuildContext context, snapshot) { 
+        if (snapshot.connectionState == ConnectionState.waiting){
+          return Center(
+            child: Text("Loading"),
+          );
+        }
+        else {
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return Card(
+                child: ListTile(
+                  title: Text(snapshot.data[index].data["name"]),
+                  onTap: (){
+
+                  },
+                ),
+              );
+             }
+          );
+        }
+       },
+      ),
       bottomSheet: Container(
       width: screenWidth(context),
       height: screenHeight(context)/6,
@@ -90,6 +111,7 @@ List<String> testList = [
                           onChanged: (bool value) {
                               setState(() {
                                   groVal = value;
+                                  
                               });
                           },
                       ),
@@ -103,3 +125,4 @@ List<String> testList = [
     );
   }
 }
+
