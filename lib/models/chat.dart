@@ -18,4 +18,12 @@ class Chatters {
       
     };
   }
+
+  Map<String, dynamic> toJsonSwap() {
+    return {
+      'messengerid1': messengerid2,
+      'messengerid2': messengerid1,
+      
+    };
+  }
 }

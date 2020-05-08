@@ -38,7 +38,7 @@ class AuthenticationService {
     @required String password,
     @required String fullName,
     @required String role,
-    @required String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
+    String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -87,7 +87,7 @@ class AuthenticationService {
   }
 
   getCurrentUser() async {
-    return _firebaseAuth.currentUser();
+    return (await _firebaseAuth.currentUser());
   }
 
   Future getCurrentUserId() async {
