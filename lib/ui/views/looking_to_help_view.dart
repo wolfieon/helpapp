@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:compound/models/chat.dart';
+import 'package:compound/services/authentication_service.dart';
+import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
+
+import '../../locator.dart';
 
 
 class LookingToHelp extends StatefulWidget{
@@ -16,6 +21,8 @@ bool socVal = true;
 bool tekVal = true;
 final List<MarkObj> markers = [];
 final databaseReference = Firestore.instance;
+final AuthenticationService authService = locator<AuthenticationService>();
+final FirestoreService _firestoreService = locator<FirestoreService>();
 
 class _LookingToHelpState extends State<LookingToHelp> {
 
@@ -40,6 +47,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                 child: ListTile(
                   title: Text(markers[index].getName),
                   onTap: (){
+                      createChat(markers[index].getUserID, authService.currentUser.id );
                   },
                 ),
               );
@@ -138,3 +146,8 @@ class _LookingToHelpState extends State<LookingToHelp> {
           print('list is less than 2');
       }
   } 
+
+  createChat(userOne, userTwo) async {
+    Chatters test = new Chatters(messengerid1: userOne, messengerid2: userTwo);
+    await _firestoreService.createChat(test);
+  }
