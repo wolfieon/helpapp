@@ -14,19 +14,10 @@ class LookingToHelp extends StatefulWidget{
 bool groVal = true;
 bool socVal = true;
 bool tekVal = true;
-
-class _LookingToHelpState extends State<LookingToHelp> {
 final List<MarkObj> markers = [];
 final databaseReference = Firestore.instance;
 
-Future getPosts() async {
-  var fireStore = Firestore.instance;
-
-  QuerySnapshot qn = await fireStore.collection("markers").getDocuments();
-  
-
-  return qn.documents;
-}
+class _LookingToHelpState extends State<LookingToHelp> {
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +26,7 @@ Future getPosts() async {
         title: Text("Hjälp App"),
         backgroundColor: Colors.white,
       ), 
-      body: FutureBuilder(future: getPosts() , builder: (BuildContext context, snapshot) { 
+      body: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
         if (snapshot.connectionState == ConnectionState.waiting){
           return Center(
             child: Text("Loading"),
@@ -43,13 +34,12 @@ Future getPosts() async {
         }
         else {
           return ListView.builder(
-            itemCount: snapshot.data.length,
+            itemCount: markers.length,
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
-                  title: Text(snapshot.data[index].data["name"]),
+                  title: Text(markers[index].getName),
                   onTap: (){
-
                   },
                 ),
               );
@@ -126,3 +116,24 @@ Future getPosts() async {
   }
 }
 
+
+  Future createList() async {
+        QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
+        for(var f in snapshot.documents) {
+          double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
+          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
+          print(distanceInMeters);
+          markers.add(newMarkObj);
+        }
+        sorthething();
+  }
+  
+  sorthething() { // snapshot data document ID (fetchthething)
+        if (markers.length > 1) {
+          markers.sort((a, b) => a.getDistance.compareTo(b.getDistance));
+          print(markers[0].distance);
+          print('list sorted');
+      } else {
+          print('list is less than 2');
+      }
+  } 
