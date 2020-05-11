@@ -30,10 +30,12 @@ class _LookingToHelpState extends State<LookingToHelp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hjälp App"),
         backgroundColor: Colors.white,
       ), 
-      body: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
+      body: Column(
+        children: <Widget>[
+        new Expanded(
+        child: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
         if (snapshot.connectionState == ConnectionState.waiting){
           return Center(
             child: Text("Loading"),
@@ -45,6 +47,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
+                  leading: Icon(Icons.chat_bubble),
                   title: Text(markers[index].getName, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
@@ -57,15 +60,16 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   fontWeight: FontWeight.w600))),
                   onTap: (){
                       createChat(markers[index].getUserID, authService.currentUser.id );
-                  },
-                ),
-              );
-             }
-          );
-        }
-       },
-      ),
-      bottomSheet: Container(
+                          },
+                        ),
+                      );
+                    }
+                  );
+                }
+              }
+            ),
+          ),
+          Container(   
       width: screenWidth(context),
       height: screenHeight(context)/6,
       color: Colors.white,
@@ -128,7 +132,9 @@ class _LookingToHelpState extends State<LookingToHelp> {
           )
         ],
       ),
-    ),
+          ),
+        ],
+      ),
     );
   }
 }
