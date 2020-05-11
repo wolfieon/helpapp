@@ -145,6 +145,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                             fontWeight: FontWeight.w600))),
           onPressed: () async {
                 await addRequest();
+                Navigator.pop(context);
                },
               ),
             ),
