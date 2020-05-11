@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _getCurrentLocation() async {
    final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
    print(position);
-   List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(59.3293, 18.0686);
+   List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
    Placemark placeMark  = placemark[0]; 
    String name = placeMark.name;
    String subLocality = placeMark.subLocality;
@@ -100,7 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
       listthething2() async {
         QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
-
         for(var f in snapshot.documents) {
           double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
           MarkObj newMarkObj = MarkObj (coords: f.data['coords'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
@@ -123,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     addthething() {
     Firestore.instance.collection('markers').add({
+      'type': 'a type',
       'name': 'a place',
       'desc': 'a description',
       'userID': 'user billy',
