@@ -33,7 +33,7 @@ class PickupLayout extends StatelessWidget {
                   return PickupScreen(call: call);
                 }
               }
-              print("wtf");
+              
               return scaffold;
             },
           )

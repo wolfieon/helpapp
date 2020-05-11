@@ -33,6 +33,9 @@ class _ChatState extends State<Chat> {
   ScrollController scrollController = ScrollController();
 
   Future<void> callback() async {
+    var today = DateTime.now();
+    var date2 = today.millisecondsSinceEpoch;
+    
     //print('This is the current user' + _currentUser.toString());
 
     if (messageController.text.length > 0) {
@@ -45,7 +48,7 @@ class _ChatState extends State<Chat> {
           .add({
         'text': messageController.text,
         'from': widget.user.fullName,
-        'date': DateTime.now().toIso8601String().toString(),
+        'date': date2.toString(),
       });
       await _firestore
           .collection('chats')
@@ -54,7 +57,7 @@ class _ChatState extends State<Chat> {
           .add({
         'text': messageController.text,
         'from': widget.user.fullName,
-        'date': DateTime.now().toIso8601String().toString(),
+        'date': date2.toString(),
       });
       messageController.clear();
       scrollController.animateTo(
@@ -70,8 +73,7 @@ class _ChatState extends State<Chat> {
     final uid = user.uid;
     // Similarly we can get email as well
     //final uemail = user.email;
-    print(uid);
-    //print(uemail);
+
   }
 
   @override

@@ -92,7 +92,6 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
   Future getUser(String uid) async {
     try {
       var userData = await _usersCollectionReference.document(uid).get();
-      print(userData.data.toString());
       return User.fromData(userData.data);
     } catch (e) {
       return e.message;
@@ -114,7 +113,6 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
   Future getChats(String uid) async {
     try {
       var userData = await db.collection('chats').document(uid).get();
-      print(userData.data.toString());
       return User.fromData(userData.data);
     } catch (e) {
       return e.message;

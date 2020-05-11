@@ -33,7 +33,7 @@ class _MyHomePageState extends State<Chats> {
     SchedulerBinding.instance.addPostFrameCallback((_){
       userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.refreshUser();
-    print("USER REFRESHED CHATS VIEW");
+    
 
     });
   }
@@ -192,7 +192,7 @@ class MountainList extends StatelessWidget {
                       return Text('Loading...');
                     }
                   }),
-              subtitle: new Text(user.fullName),
+              
               onTap: () async {
                 sendToChat(document['messengerid2'], context);
 
