@@ -34,13 +34,18 @@ dependencies:
   # get it
   get_it: ^3.0.0+1
   # provider
-  provider: ^3.2.0
+  provider: ^4.0.3
   # provider architecture
   provider_architecture: ^1.0.3
+  cached_network_image: ^2.0.0
   firebase_auth: ^0.15.3
   cloud_firestore: ^0.13.0+1
   curved_navigation_bar: ^0.3.2 #latest version
   google_fonts: ^1.0.0
+  #permission handler
+  permission_handler: 3.0.0
+
+  agora_rtc_engine: ^1.0.8
   
 
 dev_dependencies:

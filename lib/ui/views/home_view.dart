@@ -15,10 +15,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Hjälp App'),
-      ),
+    
+      
       body: Column(
         children: <Widget>[
         SizedBox(height: 110),
@@ -53,7 +51,7 @@ class HomeView extends StatelessWidget {
         child: RaisedButton(
           color: Colors.black45,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  child: Text("Jag Vill Hjälpa", style: GoogleFonts.openSans(
+                  child: Text("Jag vill hjälpa", style: GoogleFonts.openSans(
                         textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 25,

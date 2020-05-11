@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/user.dart';
+import 'package:compound/provider/user_provider.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 import '../../locator.dart';
 import 'chat_view.dart';
@@ -20,15 +23,27 @@ class _MyHomePageState extends State<Chats> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthenticationService authService = locator<AuthenticationService>();
+  UserProvider userProvider; 
 
   @override
   void initState() {
     super.initState();
+    
+
+    SchedulerBinding.instance.addPostFrameCallback((_){
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.refreshUser();
+    
+
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider<UserProvider>(
+      create:(context) => UserProvider(),
+
+    child: MaterialApp(
       title: 'Help Chat',
       home: Scaffold(
         appBar: AppBar(
@@ -61,7 +76,7 @@ class _MyHomePageState extends State<Chats> {
                     //Dålig konfiguration men bara för att testa, kartfunktionen bör hantera skapandet av chatter.
                     Chatters chat = new Chatters(
                         messengerid1: userman.id,
-                        messengerid2: 'IDtkswOy3FPIOX7HYnVYOtG1dFj1');
+                        messengerid2: 'eGFUoNHg1ohZMyHcRGbnZCoKLm83');
                    await _firestoreService.createChat(chat);
                   },
                 ),
@@ -70,7 +85,7 @@ class _MyHomePageState extends State<Chats> {
           },
         ),
       ),
-    );
+    ),);
   }
 }
 
@@ -177,7 +192,7 @@ class MountainList extends StatelessWidget {
                       return Text('Loading...');
                     }
                   }),
-              subtitle: new Text(user.fullName),
+              
               onTap: () async {
                 sendToChat(document['messengerid2'], context);
 

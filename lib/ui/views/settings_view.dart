@@ -48,7 +48,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                 fontWeight: FontWeight.bold, color: Colors.black,
               ),
             ),
-            onPressed: () => navigateToSignUp(),
+            onPressed: () => print('HEEEEEEEEEEEEELP'),
           )
         ],
       ),

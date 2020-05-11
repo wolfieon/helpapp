@@ -4,6 +4,8 @@ import 'package:compound/locator.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
+import 'package:compound/utils/call_utilities.dart';
+import 'package:compound/utils/permissions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,11 @@ class Chat extends StatefulWidget {
   final User user;
   final User mottagare;
 
-  const Chat({Key key, this.user, this.mottagare,}) : super(key: key);
+  const Chat({
+    Key key,
+    this.user,
+    this.mottagare,
+  }) : super(key: key);
   @override
   _ChatState createState() => _ChatState();
 }
@@ -26,11 +32,10 @@ class _ChatState extends State<Chat> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
-  Object get user => _auth.currentUser();
-
-
-
   Future<void> callback() async {
+    var today = DateTime.now();
+    var date2 = today.millisecondsSinceEpoch;
+    
     //print('This is the current user' + _currentUser.toString());
 
     if (messageController.text.length > 0) {
@@ -43,7 +48,7 @@ class _ChatState extends State<Chat> {
           .add({
         'text': messageController.text,
         'from': widget.user.fullName,
-        'date': DateTime.now().toIso8601String().toString(),
+        'date': date2.toString(),
       });
       await _firestore
           .collection('chats')
@@ -52,7 +57,7 @@ class _ChatState extends State<Chat> {
           .add({
         'text': messageController.text,
         'from': widget.user.fullName,
-        'date': DateTime.now().toIso8601String().toString(),
+        'date': date2.toString(),
       });
       messageController.clear();
       scrollController.animateTo(
@@ -68,8 +73,7 @@ class _ChatState extends State<Chat> {
     final uid = user.uid;
     // Similarly we can get email as well
     //final uemail = user.email;
-    print(uid);
-    //print(uemail);
+
   }
 
   @override
@@ -83,42 +87,48 @@ class _ChatState extends State<Chat> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        // actions: <Widget>[
-        //   Container(
-        //     height: 40.0,
-        //     child: CircleAvatar(
-        //                   radius: 20,
-        //                   backgroundImage: NetworkImage(
-        //                       widget.mottagare.photo))
-        //   ),
-
-        // ],
         leading: Hero(
           tag: 'backbutton',
           child: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black,),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
             onPressed: () async {
               Navigator.pop(context);
               //_navigationService.navigateTo(ChatListRoute);
             },
           ),
         ),
-        title: Column(
-          children: <Widget>[
-            Row(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(56.0,0,4,0),
-                child: CircleAvatar(
-                  radius: 15,
-                  backgroundImage: NetworkImage(widget.mottagare.photo)),
-              ),
-                Text(widget.mottagare.fullName, style: TextStyle(color: Colors.black),),
-            ],)
-            
-
+        title: 
+                  Text(
+                    widget.mottagare.fullName,
+                    style: TextStyle(color: Colors.black),
+                    
+                  ),
+                
           
-          ],
-        ),
+           
+          
+        
+        actions: <Widget>[
+           IconButton(
+              
+              icon: Icon(
+                Icons.video_call,
+                color: Colors.black,
+              ),
+              onPressed: () async =>
+                  await Permissions.cameraAndMicrophonePermissionsGranted()
+                      ? CallUtils.dial(
+                          from: widget.user,
+                          to: widget.mottagare,
+                          context: context,
+                        )
+                      : {},
+            ),
+        ],
+        centerTitle: true,
       ),
       body: SafeArea(
         child: Column(
@@ -168,16 +178,14 @@ class _ChatState extends State<Chat> {
                         decoration: InputDecoration(
                           hintText: "Enter a Message...",
                           border: const OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(const Radius.circular(40))
-                          ),
-                          
+                              borderRadius: const BorderRadius.all(
+                                  const Radius.circular(40))),
                         ),
                         controller: messageController,
                       ),
                     ),
                   ),
                   SendButton(
-                    
                     text: "Send",
                     callback: callback,
                   )
@@ -208,12 +216,8 @@ class SendButton extends StatelessWidget {
       height: 60,
       child: FlatButton(
         shape: RoundedRectangleBorder(
-          
-  borderRadius: BorderRadius.circular(40),
-  side: BorderSide(color: Colors.black)
-),
-        
-        
+            borderRadius: BorderRadius.circular(40),
+            side: BorderSide(color: Colors.black)),
         onPressed: callback,
         child: Text(text),
       ),
