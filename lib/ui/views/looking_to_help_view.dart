@@ -6,6 +6,7 @@ import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import '../../locator.dart';
 
@@ -17,6 +18,7 @@ class LookingToHelp extends StatefulWidget{
 bool groVal = true;
 bool socVal = true;
 bool tekVal = true;
+double distanceInMeters;
 final List<MarkObj> markers = [];
 final databaseReference = Firestore.instance;
 final AuthenticationService authService = locator<AuthenticationService>();
@@ -28,10 +30,12 @@ class _LookingToHelpState extends State<LookingToHelp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Hjälp App"),
         backgroundColor: Colors.white,
       ), 
-      body: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
+      body: Column(
+        children: <Widget>[
+        new Expanded(
+        child: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
         if (snapshot.connectionState == ConnectionState.waiting){
           return Center(
             child: Text("Loading"),
@@ -43,18 +47,29 @@ class _LookingToHelpState extends State<LookingToHelp> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
-                  title: Text(markers[index].getName),
+                  leading: Icon(Icons.chat_bubble),
+                  title: Text(markers[index].getName, style: GoogleFonts.openSans(
+                  textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w600))),
+                  subtitle: Text('Avstånd: ' + distanceInMeters.toStringAsFixed(2) + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
+                  textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600))),
                   onTap: (){
                       createChat(markers[index].getUserID, authService.currentUser.id );
-                  },
-                ),
-              );
-             }
-          );
-        }
-       },
-      ),
-      bottomSheet: Container(
+                          },
+                        ),
+                      );
+                    }
+                  );
+                }
+              }
+            ),
+          ),
+          Container(   
       width: screenWidth(context),
       height: screenHeight(context)/6,
       color: Colors.white,
@@ -117,7 +132,9 @@ class _LookingToHelpState extends State<LookingToHelp> {
           )
         ],
       ),
-    ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -127,7 +144,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
         markers.clear();
         QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
         for(var f in snapshot.documents) {
-          double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
+          distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
           MarkObj newMarkObj = MarkObj (coords: f.data['coords'],type: f.data['type'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
           print(distanceInMeters);
           if (newMarkObj.getType == "Socialt" && socVal == true){
