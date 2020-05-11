@@ -34,7 +34,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
       'type': type,
       'name': userData.fullName,  // GetCurrentUser Name ask philip. 
       'desc': desc,
-      'userID': await authService.getCurrentUID(),
+      'userID': userData.id,
       'coords':
           new GeoPoint(position.latitude, position.longitude),
       });
