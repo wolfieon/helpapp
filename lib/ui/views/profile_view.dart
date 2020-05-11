@@ -5,6 +5,7 @@ import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
+import 'package:compound/ui/views/change_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -48,9 +49,8 @@ class _ProfileScreenState extends State<ProfileView> {
   Widget displayProfile(context, snapshot) {
     User user = snapshot.data;
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: <Widget>[
+        backgroundColor: Colors.white,
+        body: Column(children: <Widget>[
           SizedBox(
             height: screenHeight(context) / 7,
           ),
@@ -58,8 +58,7 @@ class _ProfileScreenState extends State<ProfileView> {
               alignment: Alignment.center,
               child: CircleAvatar(
                 radius: 80.0,
-                backgroundImage:
-                  NetworkImage("${user.photo}"),
+                backgroundImage: NetworkImage("${user.photo}"),
                 backgroundColor: Colors.transparent,
               )),
           SizedBox(
@@ -85,49 +84,54 @@ class _ProfileScreenState extends State<ProfileView> {
             height: screenHeight(context) / 10,
           ),
           Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                ButtonTheme(
-                  minWidth: screenWidth(context) / 3.3,
-                  height: 40,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: RaisedButton(
-                    color: Colors.grey,
-                    child: Text("Byt Lösenord",
-                        style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600))),
-                    onPressed: () {
-                      navigateToChangePassword();
-                    },
-                  ),
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ButtonTheme(
+                minWidth: screenWidth(context) / 3.3,
+                height: 40,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: RaisedButton(
+                  color: Colors.grey,
+                  child: Text("Ändra användaruppgifter",
+                      style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600))),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChangePasswordView(),
+                      ),
+                    );
+                  },
                 ),
-                ButtonTheme(
-                  height: 42,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: RaisedButton(
-                    color: Colors.grey,
-                    child: Text("Radera kontot",
-                        style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600))),
-                    onPressed: () {_showDialog(user);
-                //todo ta bort kommentar i showDialog samt i destenationen för att aktivera funktionen bortkommenterad för att undvika misstag
-                print(user.fullName);
-                print("Den fungerar men är opraktiskt om den kör");
-                },
-                  ),
+              ),
+              ButtonTheme(
+                height: 42,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: RaisedButton(
+                  color: Colors.grey,
+                  child: Text("Radera kontot",
+                      style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600))),
+                  onPressed: () {
+                    _showDialog(user);
+                    //todo ta bort kommentar i _showDialog samt i destenationen för att aktivera funktionen bortkommenterad för att undvika misstag
+                    print(user.fullName);
+                    print("Den fungerar men är opraktiskt om den kör");
+                  },
                 ),
-              ])
-        ],
-      ),
-    );
+              ),
+            ],
+          )
+        ]));
   }
 
   void _showDialog(User user) {
@@ -148,7 +152,8 @@ class _ProfileScreenState extends State<ProfileView> {
                   textColor: Colors.red,
                   onPressed: () {
                     _firestoreService.removeUser(user);
-                    print("Konto skulla vara borta om koden ovan denna skulle vara bor kommenterad");
+                    print(
+                        "Konto skulla vara borta om koden ovan denna skulle vara bor kommenterad");
                   },
                   child: new Text("Ja jag vill radera kontot"))
             ],

@@ -14,8 +14,8 @@ class ChangePasswordViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
 
   Future newPassword({
-    @required String newPassword,
-    @required String oldPassword,
+     String newPassword,
+     String oldPassword,
   }) async {
     setBusy(true);
 
@@ -43,7 +43,32 @@ class ChangePasswordViewModel extends BaseModel {
     }
   }
 
-  void navigateToSignUp() {
-    _navigationService.navigateTo(SignUpViewRoute);
+  Future newName({
+     String newName,
+  }) async {
+    setBusy(true);
+
+    var result= await _authenticationService.updateFullName(
+      newName: newName,
+    );
+
+    setBusy(false);
+
+    if (result is bool) {
+      if (result) {
+        _navigationService.navigateTo(HomeViewRoute);
+      } else {
+        await _dialogService.showDialog(
+          title: 'error',
+          description: 'wrong password',
+        );
+      }
+    } else {
+      await _dialogService.showDialog(
+        title: 'mega not cool',
+        description: result,
+      );
+    }
   }
+
 }
