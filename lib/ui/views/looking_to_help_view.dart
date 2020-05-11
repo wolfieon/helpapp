@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
-
 import '../../locator.dart';
 
 class LookingToHelp extends StatefulWidget{
@@ -126,13 +125,20 @@ class _LookingToHelpState extends State<LookingToHelp> {
 
   Future createList() async {
         markers.clear();
-        Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
         QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
         for(var f in snapshot.documents) {
-          double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, position.latitude, position.longitude);
-          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
+          double distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
+          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],type: f.data['type'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
           print(distanceInMeters);
-          markers.add(newMarkObj);
+          if (newMarkObj.getType == "Socialt" && socVal == true){
+            markers.add(newMarkObj);
+          }
+          if (newMarkObj.getType == "Teknisk" && tekVal == true){
+                      markers.add(newMarkObj);
+          }
+          if (newMarkObj.getType == "Matvaror" && groVal == true){
+                      markers.add(newMarkObj);
+          }
         }
         sorthething();
   }
@@ -145,7 +151,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
       } else {
           print('list is less than 2');
       }
-  } 
+    } 
 
   createChat(userOne, userTwo) async {
     Chatters test = new Chatters(messengerid1: userOne, messengerid2: userTwo);
