@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
+import 'package:compound/models/helprequest.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
@@ -59,7 +60,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   fontSize: 15,
                   fontWeight: FontWeight.w600))),
                   onTap: (){
-                      createChat(markers[index].getUserID, authService.currentUser.id );
+                      createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
                           },
                         ),
                       );
@@ -171,7 +172,11 @@ class _LookingToHelpState extends State<LookingToHelp> {
       }
     } 
 
-  createChat(userOne, userTwo) async {
-    Chatters test = new Chatters(messengerid1: userOne, messengerid2: userTwo);
-    await _firestoreService.createChat(test);
+
+
+    //
+  createHelpRequest(sender, reciever, requestType) async {
+    
+    Helprequest req = new Helprequest(sender: sender, reciever: reciever, requestType: requestType);
+    await _firestoreService.createHelprequest(req);
   }

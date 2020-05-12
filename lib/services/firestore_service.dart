@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
+import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -51,6 +52,40 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
       return e.message;
     }
   }
+
+  Future createHelprequest(Helprequest help) async {
+    
+    try {
+      await db.collection('users').document(help.sender).collection('sentHelpRequests').document(help.reciever).setData(help.toJson());
+      await db.collection('users').document(help.reciever).collection('recievedHelpRequests').document(help.sender).setData(help.toJson());
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future acceptRequest(Helprequest help) async {
+    
+    try {
+      await db.collection('users').document(help.sender).collection('acceptedGiveHelpRequest').document(help.reciever).setData(help.toJson());
+      await db.collection('users').document(help.reciever).collection('acceptedHelpRequest').document(help.sender).setData(help.toJson());
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future deleteHelprequest(Helprequest help) async {
+    
+    try {
+      await db.collection('users').document(help.sender).collection('sentHelpRequests').document(help.reciever).delete();
+      await db.collection('users').document(help.reciever).collection('recievedHelpRequests').document(help.sender).delete();
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+
+
+
 
   deleteChat(Chatters chat) async {
     try {
