@@ -53,7 +53,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   color: Colors.black,
                   fontSize: 21,
                   fontWeight: FontWeight.w600))),
-                  subtitle: Text('Avstånd: ' + distanceInMeters.toStringAsFixed(2) + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
+                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toString() + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
