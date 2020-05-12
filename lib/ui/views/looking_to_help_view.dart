@@ -55,7 +55,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   color: Colors.black,
                   fontSize: 21,
                   fontWeight: FontWeight.w600))),
-                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toString() + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
+                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toStringAsFixed(2) + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -160,7 +160,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
           }
           if (newMarkObj.getType == "Matvaror" && groVal == true){
                       markers.add(newMarkObj);
-          }
+            }
           }
         }
         sorthething();
