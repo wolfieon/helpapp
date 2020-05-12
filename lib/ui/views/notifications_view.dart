@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
+import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
@@ -75,7 +76,6 @@ class _NotificationsViewState extends State<NotificationsView> {
                             borderRadius: BorderRadius.circular(18.0),
                             side: BorderSide(color: Colors.black)),
                         onPressed: () async {
-
                           /*
                           Navigator.push(
                             context,
@@ -260,10 +260,15 @@ class _NotificationsViewState extends State<NotificationsView> {
                                     Helprequest req = new Helprequest(
                                         sender: sender.id,
                                         reciever: reciever.id);
+
+                                    Chatters cha = new Chatters(
+                                        messengerid1: sender.id,
+                                        messengerid2: reciever.id);
+
                                     await _firestoreService
                                         .deleteHelprequest(req);
                                     await _firestoreService.acceptRequest(req);
-                                    sendToHelper();
+                                    await _firestoreService.createChat(cha);
                                   }),
                             ],
                           ),
