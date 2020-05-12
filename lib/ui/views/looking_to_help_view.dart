@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
+import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
+import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import '../../locator.dart';
 
-class LookingToHelp extends StatefulWidget{
+class LookingToHelp extends StatefulWidget {
   @override
   _LookingToHelpState createState() => _LookingToHelpState();
 }
@@ -24,115 +26,126 @@ final List<MarkObj> markers = [];
 final databaseReference = Firestore.instance;
 final AuthenticationService authService = locator<AuthenticationService>();
 final FirestoreService _firestoreService = locator<FirestoreService>();
+final DialogService _dialogService = locator<DialogService>();
 
 class _LookingToHelpState extends State<LookingToHelp> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-      ), 
+      ),
       body: Column(
         children: <Widget>[
-        new Expanded(
-        child: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
-        if (snapshot.connectionState == ConnectionState.waiting){
-          return Center(
-            child: Text("Loading"),
-          );
-        }
-        else {
-          return ListView.builder(
-            itemCount: markers.length,
-            itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  leading: Icon(Icons.chat_bubble),
-                  title: Text(markers[index].getName, style: GoogleFonts.openSans(
-                  textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: 21,
-                  fontWeight: FontWeight.w600))),
-                  subtitle: Text('Avstånd: ' + distanceInMeters.toStringAsFixed(2) + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
-                  textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600))),
-                  onTap: (){
-                      createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
-                          },
-                        ),
-                      );
-                    }
-                  );
-                }
-              }
-            ),
+          new Expanded(
+            child: FutureBuilder(
+                future: createList(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: Text("Loading"),
+                    );
+                  } else {
+                    return ListView.builder(
+                        itemCount: markers.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              leading: Icon(Icons.chat_bubble),
+                              title: Text(markers[index].getName,
+                                  style: GoogleFonts.openSans(
+                                      textStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 21,
+                                          fontWeight: FontWeight.w600))),
+                              subtitle: Text(
+                                  'Avstånd: ' +
+                                      distanceInMeters.toStringAsFixed(2) +
+                                      " meter" +
+                                      '\n' +
+                                      'Beskrivning: ' +
+                                      markers[index].getDesc,
+                                  style: GoogleFonts.openSans(
+                                      textStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600))),
+                              onTap: () {
+                                createHelpRequest(
+                                    authService.currentUser.id,
+                                    markers[index].getUserID,
+                                    markers[index].getType);
+                              },
+                            ),
+                          );
+                        });
+                  }
+                }),
           ),
-          Container(   
-      width: screenWidth(context),
-      height: screenHeight(context)/6,
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          SizedBox(height:20),
-          Text("Visa Endast", style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),),
-          SizedBox(height:10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      Text("Sociala"),
-                      Checkbox(
-                          value: socVal,
-                          onChanged: (bool value) {
+          Container(
+            width: screenWidth(context),
+            height: screenHeight(context) / 6,
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 20),
+                Text(
+                  "Visa Endast",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Sociala"),
+                          Checkbox(
+                            value: socVal,
+                            onChanged: (bool value) {
                               setState(() {
-                                  socVal = value;
+                                socVal = value;
                               });
-                          },
+                            },
+                          ),
+                        ],
                       ),
-                  ],
-              ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      Text("Tekniska"),
-                      Checkbox(
-                          value: tekVal,
-                          onChanged: (bool value) {
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Tekniska"),
+                          Checkbox(
+                            value: tekVal,
+                            onChanged: (bool value) {
                               setState(() {
-                                  tekVal = value;
+                                tekVal = value;
                               });
-                          },
+                            },
+                          ),
+                        ],
                       ),
-                  ],
-              ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      Text("Matvaror"),
-                      Checkbox(
-                          value: groVal,
-                          onChanged: (bool value) {
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Matvaror"),
+                          Checkbox(
+                            value: groVal,
+                            onChanged: (bool value) {
                               setState(() {
-                                  groVal = value;
-                                  
+                                groVal = value;
                               });
-                          },
+                            },
+                          ),
+                        ],
                       ),
-                  ],
-              ),
-            ]
-          )
-        ],
-      ),
+                    ])
+              ],
+            ),
           ),
         ],
       ),
@@ -140,42 +153,62 @@ class _LookingToHelpState extends State<LookingToHelp> {
   }
 }
 
-
-  Future createList() async {
-        markers.clear();
-        QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
-        for(var f in snapshot.documents) {
-          distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
-          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],type: f.data['type'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'],  markerID: f.documentID, distance: distanceInMeters);
-          print(distanceInMeters);
-          if (newMarkObj.getType == "Socialt" && socVal == true){
-            markers.add(newMarkObj);
-          }
-          if (newMarkObj.getType == "Teknisk" && tekVal == true){
-                      markers.add(newMarkObj);
-          }
-          if (newMarkObj.getType == "Matvaror" && groVal == true){
-                      markers.add(newMarkObj);
-          }
-        }
-        sorthething();
+Future createList() async {
+  markers.clear();
+  QuerySnapshot snapshot =
+      await databaseReference.collection("markers").getDocuments();
+  for (var f in snapshot.documents) {
+    distanceInMeters = await Geolocator().distanceBetween(
+        f.data['coords'].latitude,
+        f.data['coords'].longitude,
+        52.3546274,
+        4.8285838);
+    MarkObj newMarkObj = MarkObj(
+        coords: f.data['coords'],
+        type: f.data['type'],
+        name: f.data['name'],
+        desc: f.data['desc'],
+        userID: f.data['userID'],
+        markerID: f.documentID,
+        distance: distanceInMeters);
+    print(distanceInMeters);
+    if (newMarkObj.getType == "Socialt" && socVal == true) {
+      markers.add(newMarkObj);
+    }
+    if (newMarkObj.getType == "Teknisk" && tekVal == true) {
+      markers.add(newMarkObj);
+    }
+    if (newMarkObj.getType == "Matvaror" && groVal == true) {
+      markers.add(newMarkObj);
+    }
   }
-  
-  sorthething() { // snapshot data document ID (fetchthething)
-        if (markers.length > 1) {
-          markers.sort((a, b) => a.getDistance.compareTo(b.getDistance));
-          print(markers[0].distance);
-          print('list sorted');
-      } else {
-          print('list is less than 2');
-      }
-    } 
+  sorthething();
+}
 
+sorthething() {
+  // snapshot data document ID (fetchthething)
+  if (markers.length > 1) {
+    markers.sort((a, b) => a.getDistance.compareTo(b.getDistance));
+    print(markers[0].distance);
+    print('list sorted');
+  } else {
+    print('list is less than 2');
+  }
+}
 
-
-    //
-  createHelpRequest(sender, reciever, requestType) async {
-    
-    Helprequest req = new Helprequest(sender: sender, reciever: reciever, requestType: requestType);
+//
+createHelpRequest(sender, reciever, requestType) async {
+  User userData = await _firestoreService.getUser(authService.currentUser.id);
+  int nowActiveEvents = userData.activeEvents + 1;
+  if (userData.activeEvents >= 3) {
+    _dialogService.showDialog(
+      title: 'Error',
+      description: "Du kan inte ha mer än tre aktiva events",
+    );
+  } else {
+    Helprequest req = new Helprequest(
+        sender: sender, reciever: reciever, requestType: requestType);
     await _firestoreService.createHelprequest(req);
+    Firestore.instance.collection('users').document(userData.id).updateData({'activeEvents': nowActiveEvents});
   }
+}

@@ -27,7 +27,9 @@ class SignUpViewModel extends BaseModel {
         password: password,
         fullName: fullName,
         role: 'admin',
-        photo: 'https://images-na.ssl-images-amazon.com/images/I/41FaeFr8VOL._SX342_QL70_ML2_.jpg');
+        photo: 'https://images-na.ssl-images-amazon.com/images/I/41FaeFr8VOL._SX342_QL70_ML2_.jpg',
+        activeEvents:0)
+        ;
 
     setBusy(false);
 

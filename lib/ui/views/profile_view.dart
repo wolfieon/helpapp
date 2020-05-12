@@ -77,7 +77,12 @@ class _ProfileScreenState extends State<ProfileView> {
                           color: Colors.white,
                           fontSize: 25,
                           fontWeight: FontWeight.w600))),
-              onPressed: () {},
+              onPressed: () {
+                print(user.id);
+                print('activeEvents: ');
+                print(user.activeEvents);
+
+              },
             ),
           ),
           SizedBox(
