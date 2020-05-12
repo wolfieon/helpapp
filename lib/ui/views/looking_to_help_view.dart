@@ -37,50 +37,40 @@ class _LookingToHelpState extends State<LookingToHelp> {
       ),
       body: Column(
         children: <Widget>[
-          new Expanded(
-            child: FutureBuilder(
-                future: createList(),
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: Text("Loading"),
-                    );
-                  } else {
-                    return ListView.builder(
-                        itemCount: markers.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              leading: Icon(Icons.chat_bubble),
-                              title: Text(markers[index].getName,
-                                  style: GoogleFonts.openSans(
-                                      textStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 21,
-                                          fontWeight: FontWeight.w600))),
-                              subtitle: Text(
-                                  'Avstånd: ' +
-                                      distanceInMeters.toStringAsFixed(2) +
-                                      " meter" +
-                                      '\n' +
-                                      'Beskrivning: ' +
-                                      markers[index].getDesc,
-                                  style: GoogleFonts.openSans(
-                                      textStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600))),
-                              onTap: () {
-                                createHelpRequest(
-                                    authService.currentUser.id,
-                                    markers[index].getUserID,
-                                    markers[index].getType);
-                              },
-                            ),
-                          );
-                        });
-                  }
-                }),
+        new Expanded(
+        child: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
+        if (snapshot.connectionState == ConnectionState.waiting){
+          return Center(
+            child: Text("Loading"),
+          );
+        }
+        else {
+          return ListView.builder(
+            itemCount: markers.length,
+            itemBuilder: (context, index) {
+              return Card(
+                child: ListTile(
+                  leading: Icon(Icons.chat_bubble),
+                  title: Text(markers[index].getName, style: GoogleFonts.openSans(
+                  textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w600))),
+                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toStringAsFixed(2) + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
+                  textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600))),
+                  onTap: (){
+                      createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
+                          },
+                        ),
+                      );
+                    }
+                  );
+                }
+              }
+            ),
           ),
           Container(
             width: screenWidth(context),
@@ -153,37 +143,32 @@ class _LookingToHelpState extends State<LookingToHelp> {
   }
 }
 
-Future createList() async {
-  markers.clear();
-  QuerySnapshot snapshot =
-      await databaseReference.collection("markers").getDocuments();
-  for (var f in snapshot.documents) {
-    distanceInMeters = await Geolocator().distanceBetween(
-        f.data['coords'].latitude,
-        f.data['coords'].longitude,
-        52.3546274,
-        4.8285838);
-    MarkObj newMarkObj = MarkObj(
-        coords: f.data['coords'],
-        type: f.data['type'],
-        name: f.data['name'],
-        desc: f.data['desc'],
-        userID: f.data['userID'],
-        markerID: f.documentID,
-        distance: distanceInMeters);
-    print(distanceInMeters);
-    if (newMarkObj.getType == "Socialt" && socVal == true) {
-      markers.add(newMarkObj);
-    }
-    if (newMarkObj.getType == "Teknisk" && tekVal == true) {
-      markers.add(newMarkObj);
-    }
-    if (newMarkObj.getType == "Matvaror" && groVal == true) {
-      markers.add(newMarkObj);
-    }
+
+  Future createList() async {
+        final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        markers.clear();
+        User userData = await _firestoreService.getUser(authService.currentUser.id); 
+        QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
+        for(var f in snapshot.documents) {
+          distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, position.latitude, position.longitude);
+          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],type: f.data['type'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
+          print(distanceInMeters);
+          if (userData.id != newMarkObj.getUserID) {
+          if (newMarkObj.getType == "Socialt" && socVal == true){
+            markers.add(newMarkObj);
+          }
+          if (newMarkObj.getType == "Teknisk" && tekVal == true){
+                      markers.add(newMarkObj);
+          }
+          if (newMarkObj.getType == "Matvaror" && groVal == true){
+                      markers.add(newMarkObj);
+            }
+          }
+        }
+        sorthething();
   }
-  sorthething();
-}
+  
+
 
 sorthething() {
   // snapshot data document ID (fetchthething)
