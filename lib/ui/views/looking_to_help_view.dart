@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:compound/constants/route_names.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
-import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
@@ -29,7 +27,6 @@ final databaseReference = Firestore.instance;
 final AuthenticationService authService = locator<AuthenticationService>();
 final FirestoreService _firestoreService = locator<FirestoreService>();
 final DialogService _dialogService = locator<DialogService>();
-final NavigationService _navigationService = locator<NavigationService>();
 
 class _LookingToHelpState extends State<LookingToHelp> {
   @override
@@ -66,7 +63,6 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   fontWeight: FontWeight.w600))),
                   onTap: (){
                       createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
-
                           },
                         ),
                       );
@@ -200,5 +196,4 @@ createHelpRequest(sender, reciever, requestType) async {
     await _firestoreService.createHelprequest(req);
     Firestore.instance.collection('users').document(userData.id).updateData({'activeEvents': nowActiveEvents});
   }
-  _navigationService.navigateTo(HomeViewRoute);
 }
