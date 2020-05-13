@@ -50,7 +50,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
-                  leading: Icon(Icons.chat_bubble),
+                  leading: getIcon(markers[index].getType),
                   title: Text(markers[index].getName, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
@@ -143,6 +143,17 @@ class _LookingToHelpState extends State<LookingToHelp> {
   }
 }
 
+getIcon (String typ){
+  if (typ =="Matvaror"){
+  return Icon(Icons.shopping_cart);
+  }
+  if (typ == "Socialt"){
+   return Icon(Icons.group);
+  }
+  if (typ == "Teknisk"){
+  return Icon(Icons.settings);
+  }
+}
 
   Future createList() async {
         final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -168,8 +179,6 @@ class _LookingToHelpState extends State<LookingToHelp> {
         sorthething();
   }
   
-
-
 sorthething() {
   // snapshot data document ID (fetchthething)
   if (markers.length > 1) {
