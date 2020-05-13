@@ -66,8 +66,18 @@ class HomeView extends StatelessWidget {
               ),
             ),
         ),
-            RaisedButton(
-              child: Text('Share to Twitter'),
+        SizedBox(height: screenHeight(context)/10),
+        ButtonTheme(
+            minWidth: screenWidth(context)/1.5,
+            height: screenHeight(context)/6,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              color: Colors.lightBlue,
+              child: Text('Share to Twitter', style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w600))),
               onPressed: () async {
                 String url = '[insert helpapp link here]';
                 final text =
@@ -86,6 +96,7 @@ class HomeView extends StatelessWidget {
                 print(result);
               },
             ),
+          ),
         ]
       ),
     );

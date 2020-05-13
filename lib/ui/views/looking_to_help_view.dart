@@ -53,7 +53,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
-                  leading: Icon(Icons.chat_bubble),
+                  leading: getIcon(markers[index].getType),
                   title: Text(markers[index].getName, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
@@ -172,6 +172,17 @@ class _LookingToHelpState extends State<LookingToHelp> {
         sorthething();
   }
   
+  getIcon(String type){
+    if (type == "Matvaror"){
+      return Icon(Icons.shopping_cart);
+    }
+    if (type == "Socialt"){
+      return Icon(Icons.group);
+    }
+    if (type == "Teknisk"){
+      return Icon(Icons.settings);
+    }
+  }
 
 
 sorthething() {
