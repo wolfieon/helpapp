@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/authentication_service.dart';
+import 'package:social_share_plugin/social_share_plugin.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key key}) : super(key: key);
@@ -65,6 +66,26 @@ class HomeView extends StatelessWidget {
               ),
             ),
         ),
+            RaisedButton(
+              child: Text('Share to Twitter'),
+              onPressed: () async {
+                String url = '[insert helpapp link here]';
+                final text =
+                    'This is a free marketing ploy not only for us, but for you too!';
+                final result = await SocialSharePlugin.shareToTwitterLink(
+                    text: text,
+                    url: url,
+                    onSuccess: (_) {
+                      print('TWITTER SUCCESS');
+                      return;
+                    },
+                    onCancel: () {
+                      print('TWITTER CANCELLED');
+                      return;
+                    });
+                print(result);
+              },
+            ),
         ]
       ),
     );
