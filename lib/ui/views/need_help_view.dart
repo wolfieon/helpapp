@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:compound/constants/route_names.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
+import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,6 +27,8 @@ class _NeedHelpViewState extends State<NeedHelpView> {
   final AuthenticationService authService = locator<AuthenticationService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final DialogService _dialogService = locator<DialogService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  
   addRequest() async {
     User userData = await _firestoreService.getUser(authService.currentUser.id);
     Position position = await Geolocator()
@@ -46,6 +50,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
       );
       Firestore.instance.collection('users').document(userData.id).updateData({'activeEvents': nowActiveEvents});
     }
+    _navigationService.navigateTo(HomeViewRoute);
 
     //Trigged flag on account here. prevent more posts.
     //Move back to main menu?
