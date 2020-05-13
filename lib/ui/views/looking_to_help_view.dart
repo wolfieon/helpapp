@@ -59,7 +59,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   color: Colors.black,
                   fontSize: 21,
                   fontWeight: FontWeight.w600))),
-                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toStringAsFixed(2) + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
+                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toStringAsFixed(2) + " meter" + '\n' + "Typ Av Problem: " + markers[index].getType + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -84,7 +84,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
               children: <Widget>[
                 SizedBox(height: 20),
                 Text(
-                  "Visa Endast",
+                  "Jag vill endast hjälpa med",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18.0,
@@ -98,7 +98,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Sociala"),
+                          Text("Sociala problem"),
                           Checkbox(
                             value: socVal,
                             onChanged: (bool value) {
@@ -112,7 +112,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Tekniska"),
+                          Text("Tekniska Problem"),
                           Checkbox(
                             value: tekVal,
                             onChanged: (bool value) {
@@ -126,7 +126,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Matvaror"),
+                          Text("Livsmedelproblem"),
                           Checkbox(
                             value: groVal,
                             onChanged: (bool value) {
