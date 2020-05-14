@@ -65,7 +65,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         children: <Widget>[
           SizedBox(height: 110),
           Align(
-            child: Text("Vilken typ av hjälp behöver du?",
+            child: Text("Vad behöver du hjälp med?",
                 style: GoogleFonts.openSans(
                     textStyle: TextStyle(
                         color: Colors.black,
@@ -75,20 +75,20 @@ class _NeedHelpViewState extends State<NeedHelpView> {
           SizedBox(height: 20),
           Align(
             child: RadioListTile<Services>(
-              title: const Text('Matvaror'),
+              title: const Text('Livsmedelköp'),
               value: Services.Matvaror,
               groupValue: _services,
               onChanged: (Services value) {
                 setState(() {
                   _services = value;
-                  type = 'Matvaror';
+                  type = 'Livsmedel';
                 });
               },
             ),
           ),
           Align(
             child: RadioListTile<Services>(
-              title: const Text('Socialt'),
+              title: const Text('Socialt Umgänge'),
               value: Services.Socialt,
               groupValue: _services,
               onChanged: (Services value) {
@@ -101,13 +101,13 @@ class _NeedHelpViewState extends State<NeedHelpView> {
           ),
           Align(
             child: RadioListTile<Services>(
-              title: const Text('Teknisk'),
+              title: const Text('Tekniskt problem'),
               value: Services.Teknisk,
               groupValue: _services,
               onChanged: (Services value) {
                 setState(() {
                   _services = value;
-                  type = 'Teknisk';
+                  type = 'Tekniskt';
                 });
               },
             ),

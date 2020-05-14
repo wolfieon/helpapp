@@ -126,7 +126,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Livsmedelproblem"),
+                          Text("Livsmedelhandling"),
                           Checkbox(
                             value: groVal,
                             onChanged: (bool value) {
@@ -164,7 +164,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
           if (newMarkObj.getType == "Teknisk" && tekVal == true){
                       markers.add(newMarkObj);
           }
-          if (newMarkObj.getType == "Matvaror" && groVal == true){
+          if (newMarkObj.getType == "Livsmedel" && groVal == true){
                       markers.add(newMarkObj);
             }
           }
@@ -173,7 +173,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
   }
   
   getIcon(String type){
-    if (type == "Matvaror"){
+    if (type == "Livsmedel"){
       return Icon(Icons.shopping_cart);
     }
     if (type == "Socialt"){
