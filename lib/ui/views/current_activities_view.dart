@@ -39,8 +39,7 @@ class _CurrentActivitiesState extends State<CurrentActivities> {
                 Scaffold(
                   
                                   body: Center(
-                                    child: Flexible(
-                                                                          child: Column(
+                                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       //mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -150,7 +149,6 @@ class _CurrentActivitiesState extends State<CurrentActivities> {
                         cardStream(context),
                       ],
                     ),
-                                    ),
                                   ),
                 
     );

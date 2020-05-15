@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:compound/constants/route_names.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
+import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
+import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
@@ -12,7 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import '../../locator.dart';
 
-class LookingToHelp extends StatefulWidget{
+class LookingToHelp extends StatefulWidget {
   @override
   _LookingToHelpState createState() => _LookingToHelpState();
 }
@@ -25,16 +28,17 @@ final List<MarkObj> markers = [];
 final databaseReference = Firestore.instance;
 final AuthenticationService authService = locator<AuthenticationService>();
 final FirestoreService _firestoreService = locator<FirestoreService>();
+final DialogService _dialogService = locator<DialogService>();
+final NavigationService _navigationService = locator<NavigationService>();
 
 class _LookingToHelpState extends State<LookingToHelp> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
-      ), 
+      ),
       body: Column(
         children: <Widget>[
         new Expanded(
@@ -68,7 +72,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   color: Colors.black,
                   fontSize: 21,
                   fontWeight: FontWeight.w600))),
-                  subtitle: Text('Avstånd: ' + distanceInMeters.toStringAsFixed(2) + " meter" + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
+                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toStringAsFixed(2) + " meter" + '\n' + "Typ Av Problem: " + markers[index].getType + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
                   fontSize: 15,
@@ -84,69 +88,70 @@ class _LookingToHelpState extends State<LookingToHelp> {
               }
             ),
           ),
-          Container(   
-      width: screenWidth(context),
-      height: screenHeight(context)/6,
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          SizedBox(height:20),
-          Text("Visa Endast", style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),),
-          SizedBox(height:10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      Text("Sociala"),
-                      Checkbox(
-                          value: socVal,
-                          onChanged: (bool value) {
+          Container(
+            width: screenWidth(context),
+            height: screenHeight(context) / 6,
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 20),
+                Text(
+                  "Jag vill endast hjälpa med",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Sociala problem"),
+                          Checkbox(
+                            value: socVal,
+                            onChanged: (bool value) {
                               setState(() {
-                                  socVal = value;
+                                socVal = value;
                               });
-                          },
+                            },
+                          ),
+                        ],
                       ),
-                  ],
-              ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      Text("Tekniska"),
-                      Checkbox(
-                          value: tekVal,
-                          onChanged: (bool value) {
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Tekniska Problem"),
+                          Checkbox(
+                            value: tekVal,
+                            onChanged: (bool value) {
                               setState(() {
-                                  tekVal = value;
+                                tekVal = value;
                               });
-                          },
+                            },
+                          ),
+                        ],
                       ),
-                  ],
-              ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      Text("Matvaror"),
-                      Checkbox(
-                          value: groVal,
-                          onChanged: (bool value) {
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("Livsmedelhandling"),
+                          Checkbox(
+                            value: groVal,
+                            onChanged: (bool value) {
                               setState(() {
-                                  groVal = value;
-                                  
+                                groVal = value;
                               });
-                          },
+                            },
+                          ),
+                        ],
                       ),
-                  ],
-              ),
-            ]
-          )
-        ],
-      ),
+                    ])
+              ],
+            ),
           ),
         ],
       ),
@@ -156,40 +161,68 @@ class _LookingToHelpState extends State<LookingToHelp> {
 
 
   Future createList() async {
+        final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
         markers.clear();
+        User userData = await _firestoreService.getUser(authService.currentUser.id); 
         QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
         for(var f in snapshot.documents) {
-          distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, 52.3546274, 4.8285838);
-          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],type: f.data['type'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'],  markerID: f.documentID, distance: distanceInMeters);
+          distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, position.latitude, position.longitude);
+          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],type: f.data['type'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
           print(distanceInMeters);
+          if (userData.id != newMarkObj.getUserID) {
           if (newMarkObj.getType == "Socialt" && socVal == true){
             markers.add(newMarkObj);
           }
           if (newMarkObj.getType == "Teknisk" && tekVal == true){
                       markers.add(newMarkObj);
           }
-          if (newMarkObj.getType == "Matvaror" && groVal == true){
+          if (newMarkObj.getType == "Livsmedel" && groVal == true){
                       markers.add(newMarkObj);
+            }
           }
         }
         sorthething();
   }
   
-  sorthething() { // snapshot data document ID (fetchthething)
-        if (markers.length > 1) {
-          markers.sort((a, b) => a.getDistance.compareTo(b.getDistance));
-          print(markers[0].distance);
-          print('list sorted');
-      } else {
-          print('list is less than 2');
-      }
-    } 
+  getIcon(String type){
+    if (type == "Livsmedel"){
+      return Icon(Icons.shopping_cart);
+    }
+    if (type == "Socialt"){
+      return Icon(Icons.group);
+    }
+    if (type == "Teknisk"){
+      return Icon(Icons.settings);
+    }
+  }
 
 
+sorthething() {
+  // snapshot data document ID (fetchthething)
+  if (markers.length > 1) {
+    markers.sort((a, b) => a.getDistance.compareTo(b.getDistance));
+    print(markers[0].distance);
+    print('list sorted');
+  } else {
+    print('list is less than 2');
+  }
+}
 
     //
-  createHelpRequest(sender, reciever, requestType, markerID) async {
-    
+ 
+//
+createHelpRequest(sender, reciever, requestType, markerID) async {
+  User userData = await _firestoreService.getUser(authService.currentUser.id);
+  int nowActiveEvents = userData.activeEvents + 1;
+  if (userData.activeEvents >= 3) {
+    _dialogService.showDialog(
+      title: 'Error',
+      description: "Du kan inte ha mer än tre aktiva events",
+    );
+  } else {
     Helprequest req = new Helprequest(sender: sender, reciever: reciever, requestType: requestType, markerID: markerID);
     await _firestoreService.createHelprequest(req);
+    Firestore.instance.collection('users').document(userData.id).updateData({'activeEvents': nowActiveEvents});
   }
+  _navigationService.navigateTo(HomeViewRoute);
+}

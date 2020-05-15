@@ -95,6 +95,19 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
     }
   }
 
+  Future resolveHelprequest(Helprequest help) async {
+    
+    try {
+      await db.collection('users').document(help.sender).collection('resolvedsentHelpRequests').document(help.reciever).setData(help.toJson());
+      await db.collection('users').document(help.reciever).collection('resolvedrecievedHelpRequests').document(help.sender).setData(help.toJson());
+      await db.collection('users').document(help.sender).collection('sentHelpRequests').document(help.reciever).delete();
+      await db.collection('users').document(help.reciever).collection('recievedHelpRequests').document(help.sender).delete();
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+
 
 
 

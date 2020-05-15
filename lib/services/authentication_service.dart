@@ -40,6 +40,7 @@ class AuthenticationService {
     @required String fullName,
     @required String role,
     String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
+    int activeEvents=0,
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -54,6 +55,7 @@ class AuthenticationService {
         fullName: fullName,
         userRole: role,
         photo: photo,
+        activeEvents: activeEvents,
       );
 
       await _firestoreService.createUser(_currentUser);

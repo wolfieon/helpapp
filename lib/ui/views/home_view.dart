@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/authentication_service.dart';
+import 'package:social_share_plugin/social_share_plugin.dart';
 
 import '../../locator.dart';
 
@@ -147,6 +148,38 @@ class _HomeViewState extends State<HomeView> {
                 padding: const EdgeInsets.fromLTRB(0,27,0,0),
                 child: Text("You have no active events"),
               )),
+              Container(child: Padding(
+                padding: const EdgeInsets.fromLTRB(0,27,0,0),
+                child: ButtonTheme(
+           
+            child: RaisedButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                color: Colors.lightBlue,
+                child: Text('Share to Twitter', style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w600))),
+                onPressed: () async {
+                  String url = '[insert helpapp link here]';
+                  final text =
+                      'This is a free marketing ploy not only for us, but for you too!';
+                  final result = await SocialSharePlugin.shareToTwitterLink(
+                      text: text,
+                      url: url,
+                      onSuccess: (_) {
+                        print('TWITTER SUCCESS');
+                        return;
+                      },
+                      onCancel: () {
+                        print('TWITTER CANCELLED');
+                        return;
+                      });
+                  print(result);
+                },
+            ),
+          ),
+              ),),
           ]),
       
     ),
