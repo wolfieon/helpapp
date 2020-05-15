@@ -243,6 +243,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                                         reciever: currentUser.uid);
                                     await _firestoreService
                                         .deleteHelprequest(req);
+                                    
                                   }),
                             ],
                           ),

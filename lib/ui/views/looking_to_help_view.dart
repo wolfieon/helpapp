@@ -8,6 +8,7 @@ import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
+import 'package:compound/ui/views/request_inspect_view.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
 import 'package:geolocator/geolocator.dart';
@@ -64,8 +65,24 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   color: Colors.black,
                   fontSize: 15,
                   fontWeight: FontWeight.w600))),
-                  onTap: (){
-                      createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
+                  onTap: () async {
+                    print(markers[index].getMarkerID);
+                    print(markers[index].name);
+                    print("userId: ");
+                    print(markers[index].userID);
+                    User requestUser = await _firestoreService.getUser(markers[index].userID);
+                   
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                        builder: (context) => RequestInspectView(
+                           markerId: markers[index].getMarkerID,
+                          user: requestUser
+                          )),
+                         );
+                      
+
+                     //createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
 
                           },
                         ),
