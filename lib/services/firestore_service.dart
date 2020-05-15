@@ -77,6 +77,18 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
     }
   }
 
+  Future deleteAcceptRequest(Helprequest help) async {
+    
+    try {
+      await db.collection('users').document(help.sender).collection('acceptedGiveHelpRequest').document(help.reciever).delete();
+      await db.collection('users').document(help.reciever).collection('acceptedHelpRequest').document(help.sender).delete();
+      
+    }
+    catch (e) {
+      return e.message;
+    }
+  }
+
   Future deleteHelprequest(Helprequest help) async {
     try {
       //copy the 4 rows under to lower event counter

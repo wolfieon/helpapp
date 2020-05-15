@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileView> {
               future: _firestoreService.getUser(auth.currentUser.id),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  print('Got It');
+                 
                   return displayProfile(context, snapshot);
                 } else {
                   return CircularProgressIndicator();
