@@ -46,8 +46,9 @@ class _NeedHelpViewState extends State<NeedHelpView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return  Scaffold(
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: Column(
         children: <Widget>[      
@@ -153,7 +154,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         )
         ],
         ),
-      )
+      
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
+import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
@@ -30,6 +31,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
       ), 
@@ -48,7 +50,19 @@ class _LookingToHelpState extends State<LookingToHelp> {
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
-                  leading: Icon(Icons.chat_bubble),
+                  leading: FutureBuilder(
+                
+                  future: _firestoreService.getUser(markers[index].getUserID),
+                  builder: (context, usernsnapshot) {
+                    if (usernsnapshot.connectionState == ConnectionState.done) {
+                      User userx = usernsnapshot.data;
+                      return CircleAvatar(
+                          radius: 20,
+                          backgroundImage: NetworkImage(userx.photo));
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }),
                   title: Text(markers[index].getName, style: GoogleFonts.openSans(
                   textStyle: TextStyle(
                   color: Colors.black,
@@ -60,7 +74,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                   fontSize: 15,
                   fontWeight: FontWeight.w600))),
                   onTap: (){
-                      createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
+                      createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType, markers[index].getMarkerID );
                           },
                         ),
                       );
@@ -174,8 +188,8 @@ class _LookingToHelpState extends State<LookingToHelp> {
 
 
     //
-  createHelpRequest(sender, reciever, requestType) async {
+  createHelpRequest(sender, reciever, requestType, markerID) async {
     
-    Helprequest req = new Helprequest(sender: sender, reciever: reciever, requestType: requestType);
+    Helprequest req = new Helprequest(sender: sender, reciever: reciever, requestType: requestType, markerID: markerID);
     await _firestoreService.createHelprequest(req);
   }

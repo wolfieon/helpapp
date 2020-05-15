@@ -196,17 +196,7 @@ class MountainList extends StatelessWidget {
               onTap: () async {
                 sendToChat(document['messengerid2'], context);
 
-                //testCreateChat();
-
-                //             Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => Chat(
-                //       user: user,
-                //       mottagare: mottagaren,
-                //     ),
-                //   ),
-                // );
+                
               },
             );
           }).toList(),
