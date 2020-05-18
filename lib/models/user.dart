@@ -4,18 +4,16 @@ class User {
   final String email;
   final String photo;
   final String userRole;
-  final int activeEvents;
  
 
-  User({this.id, this.fullName, this.email,this.photo, this.userRole, this.activeEvents});
+  User({this.id, this.fullName, this.email,this.photo, this.userRole});
 
   User.fromData(Map<String, dynamic> data)
       : id = data['id'],
         fullName = data['fullName'],
         email = data['email'],
         photo = data['photo'],
-        userRole = data['userRole'],
-        activeEvents=data['activeEvents'];
+        userRole = data['userRole'];
         
 
   Map<String, dynamic> toJson() {
@@ -26,7 +24,6 @@ class User {
       'photo': photo,
       'userRole': userRole,
       'photo': photo,
-      'activeEvents': activeEvents,
     };
   }
 }

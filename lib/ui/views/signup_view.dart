@@ -47,6 +47,10 @@ class SignUpView extends StatelessWidget {
                 additionalNote: 'Password has to be a minimum of 6 characters.',
               ),
               verticalSpaceSmall,
+              ExpansionList<String>(
+                  items: ['Admin', 'User'],
+                  title: model.selectedRole,
+                  onItemSelected: (item) => model.setSelectedRole(item)),
               verticalSpaceMedium,
               Row(
                 mainAxisSize: MainAxisSize.max,

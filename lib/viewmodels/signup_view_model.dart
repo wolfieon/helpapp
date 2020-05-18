@@ -13,7 +13,13 @@ class SignUpViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  
+  String _selectedRole = 'Select a User Role';
+  String get selectedRole => _selectedRole;
+
+  void setSelectedRole(dynamic role) {
+    _selectedRole = role;
+    notifyListeners();
+  }
 
   Future signUp({
     @required String email,
@@ -26,10 +32,7 @@ class SignUpViewModel extends BaseModel {
         email: email,
         password: password,
         fullName: fullName,
-        role: 'admin',
-        photo: 'https://images-na.ssl-images-amazon.com/images/I/41FaeFr8VOL._SX342_QL70_ML2_.jpg',
-        activeEvents:0)
-        ;
+        role: _selectedRole, photo: null);
 
     setBusy(false);
 

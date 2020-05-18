@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
 import 'package:compound/models/user.dart';
@@ -13,7 +12,7 @@ class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
-  final db = Firestore.instance;
+
 
   User _currentUser;
   User get currentUser => _currentUser;
@@ -39,8 +38,7 @@ class AuthenticationService {
     @required String password,
     @required String fullName,
     @required String role,
-    String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
-    int activeEvents=0,
+    @required String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -55,7 +53,6 @@ class AuthenticationService {
         fullName: fullName,
         userRole: role,
         photo: photo,
-        activeEvents: activeEvents,
       );
 
       await _firestoreService.createUser(_currentUser);
@@ -90,7 +87,7 @@ class AuthenticationService {
   }
 
   getCurrentUser() async {
-    return (await _firebaseAuth.currentUser());
+    return _firebaseAuth.currentUser();
   }
 
   Future getCurrentUserId() async {
@@ -101,37 +98,25 @@ class AuthenticationService {
     return uid;
   }
 
-   Future updateFullName({
-    @required String newName,
- 
-  }) async {
-    FirebaseUser userb = await _firebaseAuth.currentUser();
-    final uid = userb.uid;
-    print(newName);
-    print(userb.displayName);
-    if (newName != null && newName != '') {
-      db.collection('users').document(uid).updateData({'fullName': newName});
-      return true;
-    }
-    else{
-      return false;
-    }
-   
-  }
- 
-  Future updatePassword({
+   Future updatePassword({
     @required String newPassword,
     @required String oldPassword,
   }) async {
     FirebaseUser userb = await _firebaseAuth.currentUser();
     //final uid = userb.uid;
+    print(userb.displayName);
+    print(userb.email);
+    print(userb.uid);
+    print(userb.displayName);
     //User user = await _firestoreService.getUser(uid);
     //DocumentReference userRef = _usersCollectionReference.document(uid);
     print(newPassword);
     print(oldPassword);
     await loginWithEmail(email: userb.email, password: oldPassword);
-    print('here ');
+  print('here ');
     await userb.updatePassword(newPassword);
     return true;
+
+   
   }
 }

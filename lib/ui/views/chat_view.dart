@@ -4,13 +4,12 @@ import 'package:compound/locator.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
-import 'package:compound/utils/call_utilities.dart';
-import 'package:compound/utils/permissions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:compound/ui/views/user_profile_view.dart';
 
 class Chat extends StatefulWidget {
-  //static const String id = "CHAT";
+  static const String id = "CHAT";
   final User user;
   final User mottagare;
 
@@ -32,10 +31,9 @@ class _ChatState extends State<Chat> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
-  Future<void> callback() async {
-    var today = DateTime.now();
-    var date2 = today.millisecondsSinceEpoch;
+  Object get user => _auth.currentUser();
 
+  Future<void> callback() async {
     //print('This is the current user' + _currentUser.toString());
 
     if (messageController.text.length > 0) {
@@ -48,7 +46,7 @@ class _ChatState extends State<Chat> {
           .add({
         'text': messageController.text,
         'from': widget.user.fullName,
-        'date': date2.toString(),
+        'date': DateTime.now().toIso8601String().toString(),
       });
       await _firestore
           .collection('chats')
@@ -57,7 +55,7 @@ class _ChatState extends State<Chat> {
           .add({
         'text': messageController.text,
         'from': widget.user.fullName,
-        'date': date2.toString(),
+        'date': DateTime.now().toIso8601String().toString(),
       });
       messageController.clear();
       scrollController.animateTo(
@@ -73,6 +71,8 @@ class _ChatState extends State<Chat> {
     final uid = user.uid;
     // Similarly we can get email as well
     //final uemail = user.email;
+    print(uid);
+    //print(uemail);
   }
 
   @override
@@ -86,6 +86,17 @@ class _ChatState extends State<Chat> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        // actions: <Widget>[
+        //   Container(
+        //     height: 40.0,
+        //     child: CircleAvatar(
+        //                   radius: 20,
+        //                   backgroundImage: NetworkImage(
+        //                       widget.mottagare.photo))
+        //   ),
+
+        // ],
+
         leading: Hero(
           tag: 'backbutton',
           child: IconButton(
@@ -99,27 +110,32 @@ class _ChatState extends State<Chat> {
             },
           ),
         ),
-        title: Text(
-          widget.mottagare.fullName,
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserProfile(widget.mottagare)),
+                    );
+                  },
+                  child: CircleAvatar(
+                      radius: 15,
+                      backgroundImage: NetworkImage(widget.mottagare.photo)),
+                ),
+                Text(
+                  widget.mottagare.fullName,
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            )
+          ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.video_call,
-              color: Colors.black,
-            ),
-            onPressed: () async =>
-                await Permissions.cameraAndMicrophonePermissionsGranted()
-                    ? CallUtils.dial(
-                        from: widget.user,
-                        to: widget.mottagare,
-                        context: context,
-                      )
-                    : {},
-          ),
-        ],
-        centerTitle: true,
       ),
       body: SafeArea(
         child: Column(
