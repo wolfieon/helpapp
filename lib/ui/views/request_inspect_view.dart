@@ -216,7 +216,7 @@ class RequestInspectView extends StatelessWidget {
                   height: screenHeight(context) / 60,
                 ),
                 SizedBox(
-                  width: screenWidth(context) / 7,
+                  width: screenWidth(context) / 8,
                 ),
                 ButtonTheme(
                     minWidth: 300.0,
@@ -225,7 +225,7 @@ class RequestInspectView extends StatelessWidget {
                       color: Colors.lightBlue,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      child: Text("Erbjud att hjälpa ${marker.name} ",
+                      child: Text("Erbjud att hjälpa",
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(
                                   color: Colors.white,
@@ -239,7 +239,7 @@ class RequestInspectView extends StatelessWidget {
                         print("Name: ${marker.name}");
                         print(marker.markerID);
                         createHelpRequest(
-                            auth.currentUser.id, marker.markerID, marker.type);
+                            auth.currentUser.id, marker.userID, marker.type, markerId);
                       },
                     )),
                 Spacer(flex: 1)
@@ -249,7 +249,7 @@ class RequestInspectView extends StatelessWidget {
     );
   }
 
-  createHelpRequest(sender, reciever, requestType) async {
+  createHelpRequest(sender, reciever, requestType, markerID) async {
     User userData = await _firestoreService.getUser(auth.currentUser.id);
     int nowActiveEvents = userData.activeEvents + 1;
     if (userData.activeEvents >= 3) {
@@ -259,7 +259,7 @@ class RequestInspectView extends StatelessWidget {
       );
     } else {
       Helprequest req = new Helprequest(
-          sender: sender, reciever: reciever, requestType: requestType);
+          sender: sender, reciever: reciever, requestType: requestType, markerID: markerID);
       await _firestoreService.createHelprequest(req);
       Firestore.instance
           .collection('users')
