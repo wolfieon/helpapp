@@ -1,3 +1,4 @@
+
 import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
 import 'package:compound/models/user.dart';
@@ -33,7 +34,7 @@ class _ProfileScreenState extends State<ProfileView> {
               future: _firestoreService.getUser(auth.currentUser.id),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  print('Got It');
+                 
                   return displayProfile(context, snapshot);
                 } else {
                   return CircularProgressIndicator();

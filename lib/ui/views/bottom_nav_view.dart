@@ -12,6 +12,7 @@ import 'package:compound/ui/views/profile_view.dart';
 import 'package:compound/ui/views/settings_view.dart';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
@@ -69,8 +70,8 @@ UserProvider userProvider;
           },
           height: 50,
           items: <Widget>[
-            Icon(Icons.chat, size: 20, color: Colors.white,),
-          Icon(Icons.map, size: 20, color: Colors.white,),
+          Icon(Icons.chat, size: 20, color: Colors.white,),
+          Icon(EvaIcons.map, size: 20, color: Colors.white,),
           Icon(Icons.home, size: 20, color: Colors.white,),
           Icon(Icons.person, size: 20, color: Colors.white,),
           Icon(Icons.notifications, size: 20, color: Colors.white,),
