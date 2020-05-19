@@ -58,32 +58,27 @@ class _NeedHelpViewState extends State<NeedHelpView> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 110),
-          Align(
-            child: Text("Vad behöver du hjälp med?",
-                style: GoogleFonts.openSans(
-                    textStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600))),
-          ),
-          SizedBox(height: 20),
-          Align(
-            child: RadioListTile<Services>(
-              title: const Text('Livsmedelköp'),
-              value: Services.Matvaror,
-              groupValue: _services,
-              onChanged: (Services value) {
-                setState(() {
-                  _services = value;
-                  type = 'Livsmedel';
-                });
-              },
+    return  Scaffold(
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: Column(
+        children: <Widget>[      
+            SizedBox(height: 110),
+            Align(
+                  child: Text("Vilken typ av hjälp behöver du?", style: GoogleFonts.openSans(
+                  textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w600))),
+        ),
+        SizedBox(height: 20),
+      Align(
+      child: RadioListTile<Services>(
+        title: const Text('Matvaror'),
+        value: Services.Matvaror,
+        groupValue: _services,
+        onChanged: (Services value) { setState(() { _services = value; type = 'Matvaror';}); },
             ),
           ),
           Align(
@@ -184,7 +179,8 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                 ),
               ])
         ],
-      ),
-    ));
+        ),
+      
+    );
   }
 }

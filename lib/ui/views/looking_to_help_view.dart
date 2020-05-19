@@ -8,6 +8,7 @@ import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
+import 'package:compound/ui/views/request_inspect_view.dart';
 import 'package:flutter/material.dart';
 import 'package:compound/models/markers.dart';
 import 'package:geolocator/geolocator.dart';
@@ -35,46 +36,85 @@ class _LookingToHelpState extends State<LookingToHelp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
       body: Column(
         children: <Widget>[
-        new Expanded(
-        child: FutureBuilder(future: createList() , builder: (BuildContext context, snapshot) { 
-        if (snapshot.connectionState == ConnectionState.waiting){
-          return Center(
-            child: Text("Loading"),
-          );
-        }
-        else {
-          return ListView.builder(
-            itemCount: markers.length,
-            itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  leading: getIcon(markers[index].getType),
-                  title: Text(markers[index].getName, style: GoogleFonts.openSans(
-                  textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: 21,
-                  fontWeight: FontWeight.w600))),
-                  subtitle: Text('Avstånd: ' + markers[index].getDistance.toStringAsFixed(2) + " meter" + '\n' + "Typ Av Problem: " + markers[index].getType + '\n' + 'Beskrivning: ' + markers[index].getDesc, style: GoogleFonts.openSans(
-                  textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600))),
-                  onTap: (){
-                      createHelpRequest(authService.currentUser.id, markers[index].getUserID, markers[index].getType);
+          new Expanded(
+            child: FutureBuilder(
+                future: createList(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: Text("Loading"),
+                    );
+                  } else {
+                    return ListView.builder(
+                        itemCount: markers.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              leading: FutureBuilder(
+                                  future: _firestoreService
+                                      .getUser(markers[index].getUserID),
+                                  builder: (context, usernsnapshot) {
+                                    if (usernsnapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      User userx = usernsnapshot.data;
+                                      return CircleAvatar(
+                                          radius: 20,
+                                          backgroundImage:
+                                              NetworkImage(userx.photo));
+                                    } else {
+                                      return CircularProgressIndicator();
+                                    }
+                                  }),
+                              title: Text(markers[index].getName,
+                                  style: GoogleFonts.openSans(
+                                      textStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 21,
+                                          fontWeight: FontWeight.w600))),
+                              subtitle: Text(
+                                  'Avstånd: ' +
+                                      markers[index]
+                                          .getDistance
+                                          .toStringAsFixed(2) +
+                                      " meter" +
+                                      '\n' +
+                                      "Typ Av Problem: " +
+                                      markers[index].getType +
+                                      '\n' +
+                                      'Beskrivning: ' +
+                                      markers[index].getDesc,
+                                  style: GoogleFonts.openSans(
+                                      textStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600))),
+                              onTap: () async {
+                                print(markers[index].getMarkerID);
+                                print(markers[index].name);
+                                print("userId: ");
+                                print(markers[index].userID);
+                                User requestUser = await _firestoreService
+                                    .getUser(markers[index].userID);
 
-                          },
-                        ),
-                      );
-                    }
-                  );
-                }
-              }
-            ),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RequestInspectView(
+                                          markerId: markers[index].getMarkerID,
+                                          user: requestUser)),
+                                );
+                              },
+                            ),
+                          );
+                        });
+                  }
+                }),
           ),
           Container(
             width: screenWidth(context),
@@ -147,43 +187,54 @@ class _LookingToHelpState extends State<LookingToHelp> {
   }
 }
 
-
-  Future createList() async {
-        final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        markers.clear();
-        User userData = await _firestoreService.getUser(authService.currentUser.id); 
-        QuerySnapshot snapshot = await databaseReference.collection("markers").getDocuments();
-        for(var f in snapshot.documents) {
-          distanceInMeters = await Geolocator().distanceBetween(f.data['coords'].latitude, f.data['coords'].longitude, position.latitude, position.longitude);
-          MarkObj newMarkObj = MarkObj (coords: f.data['coords'],type: f.data['type'],name: f.data['name'],desc: f.data['desc'],userID: f.data['userID'], markerID: f.documentID, distance: distanceInMeters);
-          print(distanceInMeters);
-          if (userData.id != newMarkObj.getUserID) {
-          if (newMarkObj.getType == "Socialt" && socVal == true){
-            markers.add(newMarkObj);
-          }
-          if (newMarkObj.getType == "Teknisk" && tekVal == true){
-                      markers.add(newMarkObj);
-          }
-          if (newMarkObj.getType == "Livsmedel" && groVal == true){
-                      markers.add(newMarkObj);
-            }
-          }
-        }
-        sorthething();
-  }
-  
-  getIcon(String type){
-    if (type == "Livsmedel"){
-      return Icon(Icons.shopping_cart);
-    }
-    if (type == "Socialt"){
-      return Icon(Icons.group);
-    }
-    if (type == "Teknisk"){
-      return Icon(Icons.settings);
+Future createList() async {
+  final position = await Geolocator()
+      .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  markers.clear();
+  User userData = await _firestoreService.getUser(authService.currentUser.id);
+  QuerySnapshot snapshot =
+      await databaseReference.collection("markers").getDocuments();
+  for (var f in snapshot.documents) {
+    distanceInMeters = await Geolocator().distanceBetween(
+        f.data['coords'].latitude,
+        f.data['coords'].longitude,
+        position.latitude,
+        position.longitude);
+    MarkObj newMarkObj = MarkObj(
+        coords: f.data['coords'],
+        type: f.data['type'],
+        name: f.data['name'],
+        desc: f.data['desc'],
+        userID: f.data['userID'],
+        markerID: f.documentID,
+        distance: distanceInMeters);
+    print(distanceInMeters);
+    if (userData.id != newMarkObj.getUserID) {
+      if (newMarkObj.getType == "Socialt" && socVal == true) {
+        markers.add(newMarkObj);
+      }
+      if (newMarkObj.getType == "Teknisk" && tekVal == true) {
+        markers.add(newMarkObj);
+      }
+      if (newMarkObj.getType == "Livsmedel" && groVal == true) {
+        markers.add(newMarkObj);
+      }
     }
   }
+  sorthething();
+}
 
+getIcon(String type) {
+  if (type == "Livsmedel") {
+    return Icon(Icons.shopping_cart);
+  }
+  if (type == "Socialt") {
+    return Icon(Icons.group);
+  }
+  if (type == "Teknisk") {
+    return Icon(Icons.settings);
+  }
+}
 
 sorthething() {
   // snapshot data document ID (fetchthething)
@@ -197,7 +248,9 @@ sorthething() {
 }
 
 //
-createHelpRequest(sender, reciever, requestType) async {
+
+//
+createHelpRequest(sender, reciever, requestType, markerID) async {
   User userData = await _firestoreService.getUser(authService.currentUser.id);
   int nowActiveEvents = userData.activeEvents + 1;
   if (userData.activeEvents >= 3) {
@@ -207,9 +260,15 @@ createHelpRequest(sender, reciever, requestType) async {
     );
   } else {
     Helprequest req = new Helprequest(
-        sender: sender, reciever: reciever, requestType: requestType);
+        sender: sender,
+        reciever: reciever,
+        requestType: requestType,
+        markerID: markerID);
     await _firestoreService.createHelprequest(req);
-    Firestore.instance.collection('users').document(userData.id).updateData({'activeEvents': nowActiveEvents});
+    Firestore.instance
+        .collection('users')
+        .document(userData.id)
+        .updateData({'activeEvents': nowActiveEvents});
   }
   _navigationService.navigateTo(HomeViewRoute);
 }

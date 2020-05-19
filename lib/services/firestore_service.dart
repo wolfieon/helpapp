@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
+import 'package:compound/models/markers.dart';
 import 'package:compound/models/user.dart';
+import 'package:compound/ui/views/looking_to_help_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreService {
   final CollectionReference _usersCollectionReference =
       Firestore.instance.collection('users');
+      final CollectionReference _markersCollectionReference =
+      Firestore.instance.collection('markers');
 final db = Firestore.instance;
 final FirebaseAuth _auth = FirebaseAuth.instance;
       
@@ -73,9 +77,25 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
     }
   }
 
-  Future deleteHelprequest(Helprequest help) async {
+  Future deleteAcceptRequest(Helprequest help) async {
     
     try {
+      await db.collection('users').document(help.sender).collection('acceptedGiveHelpRequest').document(help.reciever).delete();
+      await db.collection('users').document(help.reciever).collection('acceptedHelpRequest').document(help.sender).delete();
+      
+    }
+    catch (e) {
+      return e.message;
+    }
+  }
+
+  Future deleteHelprequest(Helprequest help) async {
+    try {
+      //copy the 4 rows under to lower event counter
+      var uData = await db.collection('users').document(help.sender).get();
+      User userData= User.fromData(uData.data);
+      int i = userData.activeEvents - 1;
+      await db.collection('users').document(help.sender).updateData({'activeEvents': i});
       await db.collection('users').document(help.sender).collection('sentHelpRequests').document(help.reciever).delete();
       await db.collection('users').document(help.reciever).collection('recievedHelpRequests').document(help.sender).delete();
     } catch (e) {
@@ -166,4 +186,14 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
       return e.message;
     }
   }
+
+Future getMarker(String markId) async {
+    try {
+      var markData = await _markersCollectionReference.document(markId).get();
+      return MarkObj.fromData(markData.data);
+    } catch (e) {
+      return e.message;
+    }
+  }
+
 }

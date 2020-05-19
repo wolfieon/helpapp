@@ -143,9 +143,8 @@ class _HelperViewState extends State<HelperView> {
         .orderBy('date')
         .snapshots();
   }
-
-  Widget buildTripCard(
-      BuildContext context, DocumentSnapshot document, User sender) {
+  @override
+  Widget buildTripCard( BuildContext context, DocumentSnapshot document, User sender) {
     final trip = Helprequest.fromData(document.data);
 
     //

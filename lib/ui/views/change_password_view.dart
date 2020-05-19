@@ -1,5 +1,6 @@
 import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
+import 'package:compound/models/user.dart';
 import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
@@ -9,19 +10,26 @@ import 'package:compound/ui/widgets/input_field.dart';
 import 'package:compound/viewmodels/change_password_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
- 
+
 class ChangePasswordView extends StatelessWidget {
   final passwordController = TextEditingController();
   final newPasswordConteoller = TextEditingController();
   final fullNameController = TextEditingController();
+  final descController = TextEditingController();
   final DialogService _dialogService = locator<DialogService>();
-  final BottomAppBar _bottomAppBar=BottomAppBar();
-  
+  final BottomAppBar _bottomAppBar = BottomAppBar();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<ChangePasswordViewModel>.withConsumer(
       viewModel: ChangePasswordViewModel(),
       builder: (context, model, child) => Scaffold(
+          appBar: AppBar(
+              backgroundColor: Colors.white,
+              title: Text(
+                'Ändra ',
+                style: TextStyle(color: Colors.black),
+              )),
           backgroundColor: Colors.white,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -30,10 +38,6 @@ class ChangePasswordView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  height: 150,
-                  child: Image.asset('assets/images/title.png'),
-                ),
                 InputField(
                   placeholder: 'Nytt användarnamn',
                   password: false,
@@ -51,7 +55,7 @@ class ChangePasswordView extends StatelessWidget {
                             model.newName(
                               newName: fullNameController.text,
                             );
-                           /* Navigator.push(
+                            /* Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ProfileView(),
@@ -71,7 +75,29 @@ class ChangePasswordView extends StatelessWidget {
                         },
                       ),
                     ]),
+                verticalSpaceMedium,
+                InputField(
+                    controller: descController, placeholder: "Beskrivning" ),
                 verticalSpaceSmall,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    BusyButton(
+                      title: 'Byt beskrivning',
+                      busy: model.busy,
+                      onPressed: () {
+                        if (descController.text.length<200) {
+                          model.newDesc(
+                            newDesc: descController.text,
+                            
+                          );
+                        }
+                      },
+                    )
+                  ],
+                ),
+                verticalSpaceMedium,
                 InputField(
                   placeholder: 'Nytt lösenord',
                   password: true,

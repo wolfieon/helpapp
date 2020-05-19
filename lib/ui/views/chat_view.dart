@@ -35,7 +35,7 @@ class _ChatState extends State<Chat> {
   Future<void> callback() async {
     var today = DateTime.now();
     var date2 = today.millisecondsSinceEpoch;
-    
+
     //print('This is the current user' + _currentUser.toString());
 
     if (messageController.text.length > 0) {
@@ -73,7 +73,6 @@ class _ChatState extends State<Chat> {
     final uid = user.uid;
     // Similarly we can get email as well
     //final uemail = user.email;
-
   }
 
   @override
@@ -100,33 +99,25 @@ class _ChatState extends State<Chat> {
             },
           ),
         ),
-        title: 
-                  Text(
-                    widget.mottagare.fullName,
-                    style: TextStyle(color: Colors.black),
-                    
-                  ),
-                
-          
-           
-          
-        
+        title: Text(
+          widget.mottagare.fullName,
+          style: TextStyle(color: Colors.black),
+        ),
         actions: <Widget>[
-           IconButton(
-              
-              icon: Icon(
-                Icons.video_call,
-                color: Colors.black,
-              ),
-              onPressed: () async =>
-                  await Permissions.cameraAndMicrophonePermissionsGranted()
-                      ? CallUtils.dial(
-                          from: widget.user,
-                          to: widget.mottagare,
-                          context: context,
-                        )
-                      : {},
+          IconButton(
+            icon: Icon(
+              Icons.video_call,
+              color: Colors.black,
             ),
+            onPressed: () async =>
+                await Permissions.cameraAndMicrophonePermissionsGranted()
+                    ? CallUtils.dial(
+                        from: widget.user,
+                        to: widget.mottagare,
+                        context: context,
+                      )
+                    : {},
+          ),
         ],
         centerTitle: true,
       ),
