@@ -72,7 +72,7 @@ class _MyHomePageState extends State<Chats> {
                 body: new MountainList(
                   user: userman,
                 ),
-                floatingActionButton: new FloatingActionButton(
+               /* floatingActionButton: new FloatingActionButton(           //This should not be here, this is a test.
                   child: new Icon(Icons.add),
                   onPressed: ()  async {
                     //Dålig konfiguration men bara för att testa, kartfunktionen bör hantera skapandet av chatter.
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<Chats> {
                         messengerid2: 'eGFUoNHg1ohZMyHcRGbnZCoKLm83');
                    await _firestoreService.createChat(chat);
                   },
-                ),
+                ),*/
               );
             }
           },
