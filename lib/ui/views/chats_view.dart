@@ -4,10 +4,12 @@ import 'package:compound/models/user.dart';
 import 'package:compound/provider/user_provider.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
+import 'package:compound/ui/views/map_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 import '../../locator.dart';
@@ -70,7 +72,7 @@ class _MyHomePageState extends State<Chats> {
                 body: new MountainList(
                   user: userman,
                 ),
-                floatingActionButton: new FloatingActionButton(
+               /* floatingActionButton: new FloatingActionButton(           //This should not be here, this is a test.
                   child: new Icon(Icons.add),
                   onPressed: ()  async {
                     //Dålig konfiguration men bara för att testa, kartfunktionen bör hantera skapandet av chatter.
@@ -79,7 +81,7 @@ class _MyHomePageState extends State<Chats> {
                         messengerid2: 'eGFUoNHg1ohZMyHcRGbnZCoKLm83');
                    await _firestoreService.createChat(chat);
                   },
-                ),
+                ),*/
               );
             }
           },
@@ -137,7 +139,11 @@ class MountainList extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     children: <Widget>[
-                      IconButton(icon: Icon(Icons.map,), onPressed: () {  },),
+                      IconButton(icon: Icon(Icons.map,), onPressed: () async { 
+                        final userPos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                        GeoPoint targetPos = userPos as GeoPoint; //TODO this has to be fucking fixed to add new variable from accepted requests of target user?
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => MapView(userPos: userPos, targetPos: targetPos,)),);
+                       },),
                       
                        new IconButton(
                       
