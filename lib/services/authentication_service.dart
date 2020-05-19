@@ -41,6 +41,7 @@ class AuthenticationService {
     @required String role,
     String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
     int activeEvents=0,
+    String desc="",
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -111,6 +112,22 @@ class AuthenticationService {
     print(userb.displayName);
     if (newName != null && newName != '') {
       db.collection('users').document(uid).updateData({'fullName': newName});
+      return true;
+    }
+    else{
+      return false;
+    }
+   
+  }
+   Future updateDesc({
+    @required String newDesc,
+ 
+  }) async {
+    FirebaseUser userb = await _firebaseAuth.currentUser();
+    final uid = userb.uid;
+    print(newDesc);
+    if (newDesc != null && newDesc != '') {
+      db.collection('users').document(uid).updateData({'desc': newDesc});
       return true;
     }
     else{

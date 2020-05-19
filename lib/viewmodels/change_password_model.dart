@@ -3,7 +3,6 @@ import 'package:compound/locator.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/navigation_service.dart';
-import 'package:flutter/foundation.dart';
 
 import 'base_model.dart';
 
@@ -70,5 +69,34 @@ class ChangePasswordViewModel extends BaseModel {
       );
     }
   }
+
+  Future newDesc({
+     String newDesc,
+  }) async {
+    setBusy(true);
+
+    var result= await _authenticationService.updateDesc(
+      newDesc: newDesc,
+    );
+
+    setBusy(false);
+
+    if (result is bool) {
+      if (result) {
+        _navigationService.navigateTo(HomeViewRoute);
+      } else {
+        await _dialogService.showDialog(
+          title: 'error',
+          description: 'wrong password',
+        );
+      }
+    } else {
+      await _dialogService.showDialog(
+        title: 'mega not cool',
+        description: result,
+      );
+    }
+  }
+
 
 }
