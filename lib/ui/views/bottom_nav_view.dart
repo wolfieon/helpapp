@@ -48,7 +48,7 @@ UserProvider userProvider;
   
    int _currentIndex = 2;
   final List<Widget> _children = [
-   Chats(), MapView() , HomeView(), ProfileView(), NotificationsView() // create the pages you want to navigate between
+   Chats(), MenuOptionsScreen() , HomeView(), ProfileView(), NotificationsView() // create the pages you want to navigate between
   ];
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ UserProvider userProvider;
           height: 50,
           items: <Widget>[
             Icon(Icons.chat, size: 20, color: Colors.white,),
-          Icon(Icons.map, size: 20, color: Colors.white,),
+          Icon(Icons.settings, size: 20, color: Colors.white,),
           Icon(Icons.home, size: 20, color: Colors.white,),
           Icon(Icons.person, size: 20, color: Colors.white,),
           Icon(Icons.notifications, size: 20, color: Colors.white,),
