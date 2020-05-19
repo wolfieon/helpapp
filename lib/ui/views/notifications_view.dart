@@ -140,7 +140,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                             side: reviewsButton ? BorderSide(color: Colors.white54) : BorderSide(color: Colors.grey) ),
                         onPressed: () {
                           setState(() {
-                            count = 1;
+                            count = 2;
                             requestsButton = false;
                             acceptedButton = false;
                             reviewsButton = true;
@@ -219,7 +219,7 @@ class _NotificationsViewState extends State<NotificationsView> {
               }),
         ),
       );
-    } else {
+    } if (count == 1) {
       return Container(
         width: 300,
         height: 438,
@@ -256,6 +256,43 @@ class _NotificationsViewState extends State<NotificationsView> {
               }),
         ),
       );
+    }if(count == 2){
+      return Container(
+        width: 300,
+        height: 438,
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0,20,0,0),
+          child: StreamBuilder(
+              stream: getAcceptedHelpRequests(context),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const Text("Loading...");
+
+                return new ListView.builder(
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DocumentSnapshot ds = snapshot.data.documents[index];
+                    return new FutureBuilder(
+                        future: _firestoreService.getUser(ds['sender']),
+                        builder: (context, usernsnapshot) {
+                          if (usernsnapshot.connectionState ==
+                              ConnectionState.done) {
+                            User sender = usernsnapshot.data;
+
+                            return new ReviewCard(
+                              document: ds,
+                              sender: sender,
+                              helpReq: ds['requestType'],
+                            );
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        });
+                  },
+                );
+              }),
+        ),
+      );
     }
   }
 
@@ -279,7 +316,17 @@ class _NotificationsViewState extends State<NotificationsView> {
     yield* Firestore.instance
         .collection('users')
         .document(uid)
-        .collection('acceptedHelpRequest')
+        .collection('acceptedGiveHelpRequest')
+        .orderBy('date')
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getReviewNotifications(BuildContext context) async* {
+    final uid = await authService.currentUser.id;
+    yield* Firestore.instance
+        .collection('users')
+        .document(uid)
+        .collection('reviewNotification')
         .orderBy('date')
         .snapshots();
   }
@@ -379,6 +426,7 @@ class AcceptCard extends StatelessWidget {
       ),
     );
   }
+  
   sendToChat(context) async {
     final FirestoreService _firestoreService = locator<FirestoreService>();
     final AuthenticationService authService = locator<AuthenticationService>();
@@ -395,6 +443,100 @@ class AcceptCard extends StatelessWidget {
     );
   }
 }
+class ReviewCard extends StatelessWidget {
+  final User sender;
+  final DocumentSnapshot document;
+  final String helpReq;
+
+  const ReviewCard({Key key, this.sender, this.document, this.helpReq})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final FirestoreService _firestoreService = locator<FirestoreService>();
+    
+    //final trip = Helprequest.fromData(document.data);
+
+    //
+
+    return Container(
+      padding: EdgeInsets.all(1),
+      child: Container(
+        child: ClipRRect(
+          child: Card(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.white10, width: 40),
+              borderRadius: BorderRadius.circular(9),
+            ),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 40),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(sender.photo)),
+                          Expanded(
+                              child: Text(
+                                  sender.fullName +
+                                      ' accepted your offer to help with ' + helpReq,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black))),
+                        ]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              "Regret",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            IconButton(
+                                icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
+                                onPressed: () async {
+                                  var currentuserid = await authService.getCurrentUID();
+                                  Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
+                                  await _firestoreService.deleteAcceptRequest(req);
+
+                                }),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              "Open chat",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            IconButton(
+                                icon: Icon(Icons.chat, color: Colors.blueAccent,), onPressed: () async {
+                                  //sendToChat(context);
+                                }),
+                          ],
+                        ),
+
+                        //Spacer(),
+                        //(tripType.containsKey(trip.travelType))? tripType[trip.travelType]: tripType["other"],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }}
 
 class RequestCard extends StatelessWidget {
   final User sender;
