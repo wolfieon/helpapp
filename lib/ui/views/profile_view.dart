@@ -70,8 +70,8 @@ class _ProfileScreenState extends State<ProfileView> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: RaisedButton(
-              color: Colors.grey,
-              child: Text("Namn: ${user.fullName ?? 'Anonymous'}",
+              color: Colors.lightBlueAccent,
+              child: Text(user.fullName,
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.white,
@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileView> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 child: RaisedButton(
-                  color: Colors.grey,
+                  color: Colors.lightBlueAccent,
                   child: Text("Ändra användaruppgifter",
                       style: GoogleFonts.openSans(
                           textStyle: TextStyle(
@@ -119,7 +119,7 @@ class _ProfileScreenState extends State<ProfileView> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 child: RaisedButton(
-                  color: Colors.grey,
+                  color: Colors.lightBlueAccent,
                   child: Text("Radera kontot",
                       style: GoogleFonts.openSans(
                           textStyle: TextStyle(

@@ -133,55 +133,68 @@ class MountainList extends StatelessWidget {
                       return CircularProgressIndicator();
                     }
                   }),
-              trailing: new IconButton(
-                  icon: Icon(Icons.block),
-                  onPressed: () {
-                    //pop up window that ask if u are sure you want to remove chat
-                    //then remove
+              trailing: 
+                  Wrap(
+                    spacing: 12,
+                    children: <Widget>[
+                      IconButton(icon: Icon(Icons.map,), onPressed: () {  },),
+                      
+                       new IconButton(
+                      
+                        icon: Icon(Icons.block),
+                        
+                        
+                        onPressed: () {
+                          //pop up window that ask if u are sure you want to remove chat
+                          //then remove
 
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text('Remove chat?'),
-                        content: FutureBuilder(
-                            future: _firestoreService
-                                .getUser(document['messengerid2']),
-                            builder: (context, usernsnapshot) {
-                              if (usernsnapshot.connectionState ==
-                                  ConnectionState.done) {
-                                User userx = usernsnapshot.data;
-                                return Text(
-                                    "Do you want to stop chatting with " +
-                                        userx.fullName +
-                                        "?");
-                              } else {
-                                return Text('Loading...');
-                              }
-                            }),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text("No"),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop('dialog');
-                            },
-                          ),
-                           FlatButton(
-                             child: Text("Yes"),
-                            onPressed: () async {
-                               Chatters chat = Chatters(
-                                   messengerid1: document['messengerid1'],
-                                   messengerid2: document['messengerid2']);
-                               await _firestoreService.deleteChat(chat);
-                               Navigator.of(context, rootNavigator: true)
-                                   .pop('dialog');
-                             },
-                           ),
-                        ],
-                      ),
-                      barrierDismissible: false,
-                    );
-                  }),
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('Remove chat?'),
+                              content: FutureBuilder(
+                                  future: _firestoreService
+                                      .getUser(document['messengerid2']),
+                                  builder: (context, usernsnapshot) {
+                                    if (usernsnapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      User userx = usernsnapshot.data;
+                                      return Text(
+                                          "Do you want to stop chatting with " +
+                                              userx.fullName +
+                                              "?");
+                                    } else {
+                                      return Text('Loading...');
+                                    }
+                                  }),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text("No"),
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop('dialog');
+                                  },
+                                ),
+                                 FlatButton(
+                                   child: Text("Yes"),
+                                   onLongPress: null,
+                                  onPressed: () async {
+                                     Chatters chat = Chatters(
+                                         messengerid1: document['messengerid1'],
+                                         messengerid2: document['messengerid2']);
+                                     await _firestoreService.deleteChat(chat);
+                                     Navigator.of(context, rootNavigator: true)
+                                         .pop('dialog');
+                                   },
+                                 ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }),
+                    ],),
+                
+              
               title: FutureBuilder(
                   future: _firestoreService.getUser(document['messengerid2']),
                   builder: (context, usernsnapshot) {

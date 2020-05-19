@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/markers.dart';
+import 'package:compound/models/review.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/ui/views/looking_to_help_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,6 +67,18 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
       return e.message;
     }
   }
+Future sendReviewNotificationAndStore(Review rev) async {
+    
+    try {
+      await db.collection('users').document(rev.from).collection('sentReviews').document().setData(rev.toJson());
+      await db.collection('users').document(rev.to).collection('reviews').document().setData(rev.toJson());
+      await db.collection('users').document(rev.to).collection('reviewNotification').document().setData(rev.toJson());
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+
 
   Future acceptRequest(Helprequest help) async {
     

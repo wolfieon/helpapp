@@ -58,7 +58,7 @@ UserProvider userProvider;
         body: _children[_currentIndex],
         bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.white,
-        color: Colors.black,
+        color: Colors.lightBlueAccent,
           index: 2,
           onTap: (index){
             setState(() {

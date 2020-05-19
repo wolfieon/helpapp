@@ -154,7 +154,7 @@ class _HomeViewState extends State<HomeView> {
            
             child: RaisedButton(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                color: Colors.lightBlue,
+                color: Colors.lightBlueAccent,
                 child: Text('Share to Twitter', style: GoogleFonts.openSans(
                           textStyle: TextStyle(
                               color: Colors.white,

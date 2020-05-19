@@ -4,6 +4,7 @@ import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
+import 'package:compound/ui/views/review_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -289,8 +290,10 @@ Container cardStream(BuildContext context) {
                                 icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
                                 onPressed: () async {
                                   var currentuserid = await authService.getCurrentUID();
-                                  Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
-                                  await _firestoreService.deleteAcceptRequest(req);
+                                  User reciver = await _firestoreService.getUser(currentuserid);
+                                  // Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
+                                  // await _firestoreService.deleteAcceptRequest(req);
+                                  sendToReview(reciver, sender, context);
 
                                 }),
                           ],
@@ -373,8 +376,10 @@ Container cardStream(BuildContext context) {
                                 icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
                                 onPressed: () async {
                                   var currentuserid = await authService.getCurrentUID();
-                                  Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
-                                  await _firestoreService.deleteAcceptRequest(req);
+                                  User reciver = await _firestoreService.getUser(currentuserid);
+                                  // Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
+                                  // await _firestoreService.deleteAcceptRequest(req);
+                                  sendToReview(reciver, sender, context);
 
                                 }),
                           ],
@@ -392,4 +397,17 @@ Container cardStream(BuildContext context) {
         ),
       ),
     );
-  }}
+  }
+  }
+  sendToReview(User reciver, User sender, context) async {
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReviewView(
+          reciver: reciver,
+          sender: sender,
+        ),
+      ),
+    );
+  }
