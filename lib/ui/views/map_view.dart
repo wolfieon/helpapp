@@ -6,41 +6,24 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MapView extends StatelessWidget {
-  const MapView({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new MyHomePage(),
-    );
-  }
-}
 
 
-final List<MarkObj> markers = [];
-Position position;
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => new _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-    void init() {
-    _getCurrentLocation();
-  }
-
+//This needs 2 vars to be determined when requested to open the page.
+class MapView extends StatelessWidget { //Navigator.push(context,MaterialPageRoute(builder: (context) => MapView(userPos: userPos, targetPos: targetPos,)),);
   final databaseReference = Firestore.instance;
-  bool listMade = false;
-  String _address = "";
+  final Position userPos;
+  final GeoPoint targetPos;
+  final List<MarkObj> markers = []; 
+  MapView({this.userPos, this.targetPos});
+
+
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         body: new FlutterMap(
             options: new MapOptions(
-                center: new LatLng(position.latitude, position.longitude), minZoom: 5.0, maxZoom: 18.0),
+                center: new LatLng(1, 1), minZoom: 5.0, maxZoom: 18.0),
             layers: [
 
               new TileLayerOptions(
@@ -51,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 new Marker(
                     width: 45.0,
                     height: 45.0,
-                    point: new LatLng(position.latitude, position.longitude),
+                    point: new LatLng(1, 1),
                     builder: (context) => new Container(
                           child: IconButton(
                             icon: Icon(Icons.location_on),
@@ -64,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ,new Marker(
                     width: 45.0,
                     height: 45.0,
-                    point: new LatLng(59.3293, 18.0686), //This is supposed to be the sent variable from chat's location marker. or fetch from active events?
+                    point: new LatLng(1, 1), //This is supposed to be the sent variable from chat's location marker. or fetch from active events?
                     builder: (context) => new Container(
                           child: IconButton(
                             icon: Icon(Icons.location_on),
@@ -94,9 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
   void _getCurrentLocation() async { // part of possible under-menu that appears when you click on marker.
-   position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-   print(position);
-   List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
+   List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(userPos.latitude, userPos.longitude);
    Placemark placeMark  = placemark[0]; 
    String name = placeMark.name;
    String subLocality = placeMark.subLocality;
@@ -105,8 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
    String postalCode = placeMark.postalCode;
    String country = placeMark.country;
    String address = "${name}, ${subLocality}, ${locality}, ${administrativeArea} ${postalCode}, ${country}";
-   _address = address;
-   print(_address);
    //double distanceInMeters = await Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);        Usefull later for distance
   }
 
