@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/authentication_service.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:social_share_plugin/social_share_plugin.dart';
 
 import '../../locator.dart';
@@ -58,28 +59,26 @@ class _HomeViewState extends State<HomeView> {
               fontSize: 30),
                 ),
               ),
-              CircleAvatar(
-        radius: 80,
-        backgroundImage: NetworkImage(
-              "https://thumbs.dreamstime.com/b/hand-som-rymmer-en-hj%C3%A4lpande-symbol-av-hj%C3%A4lp-och-service-155114278.jpg")),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,16),
-                child: Text(
-                  'What do you want today?',
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Open Sans',
-                      fontSize: 18),
-                ),
-              ),
-              
+        SizedBox(height: screenHeight(context)/80),
+        Align(
+        alignment: Alignment.center,
+        child: SizedBox(height: screenHeight(context)/3.8,
+                       child: Image.asset('assets/images/hand.png'),
+          ),
+        ),
+        SizedBox(height: screenHeight(context)/25),
+        
+        Align(
+          child: Text("What Do You Want To Do Today?",                       style: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600))),
+        ),
+        SizedBox(height: screenHeight(context)/40),
               Align(
                 alignment: Alignment.center,
                 child: ButtonTheme(
-        
         child: RaisedButton(
           
           
@@ -95,7 +94,7 @@ class _HomeViewState extends State<HomeView> {
                         style: GoogleFonts.openSans(
                             textStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 25,
+                                fontSize: 22,
                                 fontWeight: FontWeight.w600))),
                   ),
                 ),
@@ -128,7 +127,7 @@ class _HomeViewState extends State<HomeView> {
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 25,
+                                  fontSize: 22,
                                   fontWeight: FontWeight.w600))),
                     ),
                   ),
@@ -150,40 +149,40 @@ class _HomeViewState extends State<HomeView> {
                 padding: const EdgeInsets.fromLTRB(0,27,0,0),
                 child: Text("You have no active events"),
               )),
-              Container(child: Padding(
-                padding: const EdgeInsets.fromLTRB(0,27,0,0),
-                child: ButtonTheme(
-           
-            child: RaisedButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                color: Colors.lightBlueAccent,
-                child: Text('Share to Twitter', style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w600))),
-                onPressed: () async {
-                  String url = '[insert helpapp link here]';
-                  final text =
-                      'This is a free marketing ploy not only for us, but for you too!';
-                  final result = await SocialSharePlugin.shareToTwitterLink(
-                      text: text,
-                      url: url,
-                      onSuccess: (_) {
-                        print('TWITTER SUCCESS');
-                        return;
-                      },
-                      onCancel: () {
-                        print('TWITTER CANCELLED');
-                        return;
-                      });
-                  print(result);
-                },
+        SizedBox(height: screenHeight(context)/30),
+        Text("Dela på twitter", style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600))),
+                      Align(
+            alignment: Alignment.center,
+            child: ButtonTheme(
+              child: IconButton(
+                iconSize: screenHeight(context)/15,
+                icon: Icon(EvaIcons.twitter, color: Colors.lightBlue), 
+              onPressed: () async {
+                String url = '[insert helpapp link here]';
+                final text =
+                    'This is a free marketing ploy not only for us, but for you too!';
+                final result = await SocialSharePlugin.shareToTwitterLink(
+                    text: text,
+                    url: url,
+                    onSuccess: (_) {
+                      print('TWITTER SUCCESS');
+                      return;
+                    },
+                    onCancel: () {
+                      print('TWITTER CANCELLED');
+                      return;
+                    });
+                print(result);
+              },
             ),
           ),
-              ),),
+                      )
+
           ]),
-      
     ),
            );
   }
@@ -255,7 +254,7 @@ class ViewCurrentEvents extends StatelessWidget {
                       style: GoogleFonts.openSans(
                           textStyle: TextStyle(
                               color: Colors.white,
-                              fontSize: 25,
+                              fontSize: 22,
                               fontWeight: FontWeight.w600))),
                 ),
               ),

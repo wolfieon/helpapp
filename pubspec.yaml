@@ -45,8 +45,9 @@ dependencies:
   social_share_plugin: ^0.3.1+1
   #permission handler
   permission_handler: 3.0.0
-
+  imagebutton: ^0.0.6
   agora_rtc_engine: ^1.0.8
+  eva_icons_flutter: ^2.0.0
   
 
 dev_dependencies:
@@ -74,6 +75,7 @@ flutter:
   assets:
     - assets/images/title.png
     - assets/images/icon_large.png
+    - assets/images/hand.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
