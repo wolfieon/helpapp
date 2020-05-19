@@ -4,10 +4,12 @@ import 'package:compound/models/user.dart';
 import 'package:compound/provider/user_provider.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
+import 'package:compound/ui/views/map_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 import '../../locator.dart';
@@ -137,7 +139,11 @@ class MountainList extends StatelessWidget {
                   Wrap(
                     spacing: 12,
                     children: <Widget>[
-                      IconButton(icon: Icon(Icons.map,), onPressed: () {  },),
+                      IconButton(icon: Icon(Icons.map,), onPressed: () async { 
+                        final userPos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                        GeoPoint targetPos = userPos as GeoPoint; //TODO this has to be fucking fixed to add new variable from accepted requests of target user?
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => MapView(userPos: userPos, targetPos: targetPos,)),);
+                       },),
                       
                        new IconButton(
                       
