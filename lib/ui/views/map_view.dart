@@ -62,7 +62,10 @@ class MapView extends StatelessWidget { //Navigator.push(context,MaterialPageRou
   }
   
 
-
+ init () {
+   print(userPos);
+   print(targetPos);
+ }
   fetchthething() { //might have to fetch from users,activeevent,markerID to fetch marker? to find location of current activity goal? ALT - send that var from chat
     databaseReference.collection("markers").getDocuments().then((snapshot) {
       snapshot.documents.forEach((f) => print('${f.data}}'));

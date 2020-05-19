@@ -141,7 +141,11 @@ class MountainList extends StatelessWidget {
                     children: <Widget>[
                       IconButton(icon: Icon(Icons.map,), onPressed: () async { 
                         final userPos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                        GeoPoint targetPos = userPos as GeoPoint; //TODO this has to be fucking fixed to add new variable from accepted requests of target user?
+                        final db = Firestore.instance;
+                        var otherUserID = await _firestoreService.getUser(document['messengerid2']);
+                        var targetUserData = await db.collection("users").document(otherUserID).get();
+                        User targetUser = User.fromData(targetUserData.data);
+                        GeoPoint targetPos = targetUser.lastSeen;
                         Navigator.push(context,MaterialPageRoute(builder: (context) => MapView(userPos: userPos, targetPos: targetPos,)),);
                        },),
                       

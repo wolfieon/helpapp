@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   final String id;
   String fullName;
@@ -6,9 +8,10 @@ class User {
   final String userRole;
   final int activeEvents;
   String desc;
+  GeoPoint lastSeen;
  
 
-  User({this.id, this.fullName, this.email,this.photo, this.userRole, this.activeEvents, this.desc});
+  User({this.id, this.fullName, this.email,this.photo, this.userRole, this.activeEvents, this.desc, this.lastSeen});
 
   User.fromData(Map<String, dynamic> data)
       : id = data['id'],
@@ -17,7 +20,8 @@ class User {
         photo = data['photo'],
         userRole = data['userRole'],
         activeEvents=data['activeEvents'],
-        desc=data['desc'];
+        desc=data['desc'],
+        lastSeen = data['lastSeen'];
         
 
   Map<String, dynamic> toJson() {
@@ -30,6 +34,7 @@ class User {
       'photo': photo,
       'activeEvents': activeEvents,
       'desc':desc,
+      'lastSeen':lastSeen,
     };
   }
 }

@@ -6,6 +6,7 @@ import 'package:compound/ui/views/current_activities_view.dart';
 import 'package:compound/ui/views/looking_to_help_view.dart';
 import 'package:compound/ui/views/need_help_view.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/authentication_service.dart';
@@ -22,13 +23,14 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final db = Firestore.instance;
-
+  final AuthenticationService authService = locator<AuthenticationService>();
   bool currentEvents = false;
   @override
   void initState() {
     super.initState();
 
     checkIfActiveEvents();
+    lastSeen();
     print("check method if events");
   }
 
@@ -185,9 +187,18 @@ class _HomeViewState extends State<HomeView> {
     ),
            );
   }
-
+ void lastSeen() async {
+   var user = await authService.getCurrentUID();
+   final userPos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+   db
+        .collection('users')
+        .document(user)
+        .updateData({
+        'lastSeen': new GeoPoint(userPos.latitude, userPos.longitude),
+      });
+ }
   void checkIfActiveEvents() async {
-    final AuthenticationService authService = locator<AuthenticationService>();
+
     var user = await authService.getCurrentUID();
     int doc = 0;
 
