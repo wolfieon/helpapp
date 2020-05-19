@@ -23,7 +23,7 @@ class MapView extends StatelessWidget { //Navigator.push(context,MaterialPageRou
     return new Scaffold(
         body: new FlutterMap(
             options: new MapOptions(
-                center: new LatLng(1, 1), minZoom: 5.0, maxZoom: 18.0),
+                center: new LatLng(userPos.latitude, userPos.longitude), minZoom: 5.0, maxZoom: 18.0),
             layers: [
 
               new TileLayerOptions(
@@ -34,7 +34,7 @@ class MapView extends StatelessWidget { //Navigator.push(context,MaterialPageRou
                 new Marker(
                     width: 45.0,
                     height: 45.0,
-                    point: new LatLng(1, 1),
+                    point: new LatLng(userPos.latitude, userPos.longitude),
                     builder: (context) => new Container(
                           child: IconButton(
                             icon: Icon(Icons.location_on),
@@ -47,7 +47,7 @@ class MapView extends StatelessWidget { //Navigator.push(context,MaterialPageRou
                 ,new Marker(
                     width: 45.0,
                     height: 45.0,
-                    point: new LatLng(1, 1), //This is supposed to be the sent variable from chat's location marker. or fetch from active events?
+                    point: new LatLng(targetPos.latitude, targetPos.longitude), //This is supposed to be the sent variable from chat's location marker. or fetch from active events?
                     builder: (context) => new Container(
                           child: IconButton(
                             icon: Icon(Icons.location_on),
@@ -62,10 +62,6 @@ class MapView extends StatelessWidget { //Navigator.push(context,MaterialPageRou
   }
   
 
- init () {
-   print(userPos);
-   print(targetPos);
- }
   fetchthething() { //might have to fetch from users,activeevent,markerID to fetch marker? to find location of current activity goal? ALT - send that var from chat
     databaseReference.collection("markers").getDocuments().then((snapshot) {
       snapshot.documents.forEach((f) => print('${f.data}}'));
