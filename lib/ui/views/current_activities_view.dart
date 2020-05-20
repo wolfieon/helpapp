@@ -197,7 +197,7 @@ Container cardStream(BuildContext context) {
                   itemBuilder: (BuildContext context, int index) {
                     DocumentSnapshot ds = snapshot.data.documents[index];
                     return new FutureBuilder(
-                        future: _firestoreService.getUser(ds['sender']),
+                        future: givingHelpButton? _firestoreService.getUser(ds['reciever']) :_firestoreService.getUser(ds['sender']) ,
                         builder: (context, usernsnapshot) {
                           if (usernsnapshot.connectionState ==
                               ConnectionState.done) {
@@ -206,13 +206,13 @@ Container cardStream(BuildContext context) {
                             if(givingHelpButton == true) {
                               return GivingHelp(
                               document: ds,
-                              sender: sender,
+                              otherUser: sender,
                               helpReq: ds['requestType'],
                             );}
                             if(recivingHelpButton == true) {
                             return new RecivingHelp(
                               document: ds,
-                              sender: sender,
+                              otherUser: sender,
                               helpReq: ds['requestType'],
                             );
                             }
@@ -229,11 +229,11 @@ Container cardStream(BuildContext context) {
 
 
   class GivingHelp extends StatelessWidget {
-  final User sender;
+  final User otherUser;
   final DocumentSnapshot document;
   final String helpReq;
 
-  const GivingHelp({Key key, this.sender, this.document, this.helpReq})
+  const GivingHelp({Key key, this.otherUser, this.document, this.helpReq})
       : super(key: key);
 
   @override
@@ -265,11 +265,11 @@ Container cardStream(BuildContext context) {
                         children: <Widget>[
                           CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(sender.photo)),
+                              backgroundImage: NetworkImage(otherUser.photo)),
                           Expanded(
                               child: Text(
                                   
-                                      ' You are helping ' + sender.fullName + " with " + helpReq,
+                                      ' You are helping ' + otherUser.fullName + " with " + helpReq,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black))),
@@ -290,10 +290,10 @@ Container cardStream(BuildContext context) {
                                 icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
                                 onPressed: () async {
                                   var currentuserid = await authService.getCurrentUID();
-                                  User reciver = await _firestoreService.getUser(currentuserid);
+                                  User me = await _firestoreService.getUser(currentuserid);
                                   // Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
                                   // await _firestoreService.deleteAcceptRequest(req);
-                                  sendToReview(reciver, sender, context);
+                                  sendToReview(me, otherUser, context);
 
                                 }),
                           ],
@@ -315,11 +315,11 @@ Container cardStream(BuildContext context) {
   }}
 
   class RecivingHelp extends StatelessWidget {
-  final User sender;
+  final User otherUser;
   final DocumentSnapshot document;
   final String helpReq;
 
-  const RecivingHelp({Key key, this.sender, this.document, this.helpReq})
+  const RecivingHelp({Key key, this.otherUser, this.document, this.helpReq})
       : super(key: key);
 
   @override
@@ -351,10 +351,10 @@ Container cardStream(BuildContext context) {
                         children: <Widget>[
                           CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(sender.photo)),
+                              backgroundImage: NetworkImage(otherUser.photo)),
                           Expanded(
                               child: Text(
-                                  sender.fullName +
+                                  otherUser.fullName +
                                       ' is helping you with ' + helpReq,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -373,13 +373,13 @@ Container cardStream(BuildContext context) {
                               style: TextStyle(fontSize: 16),
                             ),
                             IconButton(
-                                icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
+                                icon: Icon(Icons.rate_review, color: Colors.blueAccent,),
                                 onPressed: () async {
                                   var currentuserid = await authService.getCurrentUID();
-                                  User reciver = await _firestoreService.getUser(currentuserid);
+                                  User me = await _firestoreService.getUser(currentuserid);
                                   // Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
                                   // await _firestoreService.deleteAcceptRequest(req);
-                                  sendToReview(reciver, sender, context);
+                                  sendToReview(me, otherUser, context);
 
                                 }),
                           ],
@@ -399,14 +399,14 @@ Container cardStream(BuildContext context) {
     );
   }
   }
-  sendToReview(User reciver, User sender, context) async {
+  sendToReview(User me, User otherUser, context) async {
     
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ReviewView(
-          reciver: reciver,
-          sender: sender,
+          me: me,
+          otherUser: otherUser,
         ),
       ),
     );
