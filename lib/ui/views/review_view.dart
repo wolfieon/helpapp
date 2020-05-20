@@ -15,9 +15,10 @@ class ReviewView extends StatefulWidget {
   @override
   final User otherUser;
   final User me;
+  final bool isRespondReview;
   
 
-  const ReviewView({Key key, this.otherUser, this.me}) : super(key: key);
+  const ReviewView({Key key, this.otherUser, this.me, this.isRespondReview}) : super(key: key);
 
   @override
   _ReviewViewState createState() => _ReviewViewState();
@@ -120,8 +121,14 @@ class _ReviewViewState extends State<ReviewView> {
                                   fontWeight: FontWeight.w600))),
                       onPressed: () async { 
                         //create review notification for recivier, and store the review for the reciverer
+
+                                if(widget.isRespondReview == true) {
+                                  Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy,);
+                                  _firestoreService.sendAnswerReviewAndStore(rev);
+                                  _firestoreService.deleteNotificationReview(rev);
+                                } else {
                                       Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy,);
-                                      _firestoreService.sendReviewNotificationAndStore(rev);
+                                      _firestoreService.sendReviewNotificationAndStore(rev);}
                                       Helprequest req = new Helprequest(sender: widget.otherUser.id, reciever: widget.me.id);
                                       await _firestoreService.deleteAcceptRequest(req);
                                       Chatters chat = new Chatters(messengerid1: widget.otherUser.id, messengerid2: widget.me.id);

@@ -73,11 +73,33 @@ Future sendReviewNotificationAndStore(Review rev) async {
     try {
       await db.collection('users').document(rev.from).collection('sentReviews').document().setData(rev.toJson());
       await db.collection('users').document(rev.to).collection('reviews').document().setData(rev.toJson());
-      await db.collection('users').document(rev.to).collection('reviewNotification').document().setData(rev.toJson());
+      await db.collection('users').document(rev.to).collection('reviewNotification').document(rev.from).setData(rev.toJson());
     } catch (e) {
       return e.message;
     }
   }
+
+Future sendAnswerReviewAndStore(Review rev) async {
+    //from är mig
+    //to är otheruser
+    try {
+      await db.collection('users').document(rev.from).collection('sentReviews').document().setData(rev.toJson());
+      await db.collection('users').document(rev.to).collection('reviews').document().setData(rev.toJson());
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future deleteNotificationReview(Review rev) async {
+    //from är mig
+    //to är otheruser
+    try {
+      await db.collection('users').document(rev.from).collection('reviewNotification').document(rev.to).delete();
+    } catch (e) {
+      return e.message;
+    }
+  }
+  
 
 
 

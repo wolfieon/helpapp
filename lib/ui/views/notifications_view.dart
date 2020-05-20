@@ -553,6 +553,7 @@ class ReviewCard extends StatelessWidget {
         builder: (context) => ReviewView(
           me: me,
           otherUser: otherUser,
+          isRespondReview: true,
         ),
       ),
     );
