@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/constants/route_names.dart';
-import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';

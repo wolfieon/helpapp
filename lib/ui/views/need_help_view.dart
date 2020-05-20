@@ -6,6 +6,7 @@ import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
+import 'package:compound/ui/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,7 +29,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
-  
+
   addRequest() async {
     User userData = await _firestoreService.getUser(authService.currentUser.id);
     Position position = await Geolocator()
@@ -39,16 +40,18 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         description: "Du kan inte ha mer än tre aktiva events",
       );
     } else {
-      int nowActiveEvents = userData.activeEvents +1;
+      int nowActiveEvents = userData.activeEvents + 1;
       Firestore.instance.collection('markers').add({
         'type': type,
         'name': userData.fullName, // GetCurrentUser Name ask philip.
         'desc': desc,
         'userID': userData.id,
         'coords': new GeoPoint(position.latitude, position.longitude),
-      }
-      );
-      Firestore.instance.collection('users').document(userData.id).updateData({'activeEvents': nowActiveEvents});
+      });
+      Firestore.instance
+          .collection('users')
+          .document(userData.id)
+          .updateData({'activeEvents': nowActiveEvents});
     }
     _navigationService.navigateTo(HomeViewRoute);
 
@@ -175,14 +178,30 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                       onPressed: () async {
                         await addRequest();
                         Navigator.pop(context);
-                      },
-                    ),
+                      }),
+                ),
+                ButtonTheme(
+                  height: 50,
+                  child: RaisedButton(
+                    color: Colors.green,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text("Godkänn",
+                        style: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600))),
+                    onPressed: () async {
+                      await addRequest();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomeView()));
+                    },
                   ),
-                ])
-          ],
-          ),
-        
-      );
-    
+                ),
+              ])
+        ],
+      ),
+    );
   }
 }

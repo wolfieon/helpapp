@@ -17,7 +17,6 @@ class ChangePasswordView extends StatelessWidget {
   final fullNameController = TextEditingController();
   final descController = TextEditingController();
   final DialogService _dialogService = locator<DialogService>();
-  final BottomAppBar _bottomAppBar = BottomAppBar();
 
   @override
   Widget build(BuildContext context) {
