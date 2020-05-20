@@ -31,7 +31,6 @@ class User {
       'email': email,
       'photo': photo,
       'userRole': userRole,
-      'photo': photo,
       'activeEvents': activeEvents,
       'desc':desc,
       'lastSeen':lastSeen,

@@ -143,6 +143,7 @@ class MountainList extends StatelessWidget {
                         final userPos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                         var otherUserID = await _firestoreService.getUser(document['messengerid2']);
                         Navigator.push(context,MaterialPageRoute(builder: (context) => MapView(userPos: userPos, targetPos: otherUserID.lastSeen,)),);
+
                        },),
                       
                        new IconButton(
