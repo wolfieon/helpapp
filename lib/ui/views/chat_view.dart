@@ -121,7 +121,8 @@ class _ChatState extends State<Chat> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UserProfile(widget.mottagare)),
+                          builder: (context) =>
+                              UserProfilePage(widget.mottagare)),
                     );
                   },
                   child: CircleAvatar(
