@@ -68,7 +68,8 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
     }
   }
 Future sendReviewNotificationAndStore(Review rev) async {
-    
+    //from är mig
+    //to är otheruser
     try {
       await db.collection('users').document(rev.from).collection('sentReviews').document().setData(rev.toJson());
       await db.collection('users').document(rev.to).collection('reviews').document().setData(rev.toJson());
@@ -95,7 +96,8 @@ Future sendReviewNotificationAndStore(Review rev) async {
     try {
       await db.collection('users').document(help.sender).collection('acceptedGiveHelpRequest').document(help.reciever).delete();
       await db.collection('users').document(help.reciever).collection('acceptedHelpRequest').document(help.sender).delete();
-      
+      await db.collection('users').document(help.sender).collection('acceptedHelpRequest').document(help.reciever).delete();
+      await db.collection('users').document(help.reciever).collection('acceptedGiveHelpRequest').document(help.sender).delete();
     }
     catch (e) {
       return e.message;
@@ -175,7 +177,7 @@ Future sendReviewNotificationAndStore(Review rev) async {
       var userData = await _usersCollectionReference.document(uid).get();
       return User.fromData(userData.data);
     } catch (e) {
-      return e.message;
+      return null;
     }
   }
 

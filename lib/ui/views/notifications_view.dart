@@ -10,6 +10,8 @@ import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/views/chat_view.dart';
 import 'package:compound/ui/views/looking_to_help_view.dart';
+import 'package:compound/ui/views/review_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -236,13 +238,13 @@ class _NotificationsViewState extends State<NotificationsView> {
                   itemBuilder: (BuildContext context, int index) {
                     DocumentSnapshot ds = snapshot.data.documents[index];
                     return new FutureBuilder(
-                        future: _firestoreService.getUser(ds['sender']),
+                        future: _firestoreService.getUser(ds['reciever']),
                         builder: (context, usernsnapshot) {
                           if (usernsnapshot.connectionState ==
                               ConnectionState.done) {
                             User sender = usernsnapshot.data;
 
-                            return new AcceptCard(
+                            return AcceptCard(
                               document: ds,
                               sender: sender,
                               helpReq: ds['requestType'],
@@ -264,25 +266,30 @@ class _NotificationsViewState extends State<NotificationsView> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(0,20,0,0),
           child: StreamBuilder(
-              stream: getAcceptedHelpRequests(context),
+              stream: getReviewNotifications(context),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const Text("Loading...");
+                if (!snapshot.hasData) {
+                  print("Nodata");
+                  return const Text("Loading...");
+                  
+                };
 
                 return new ListView.builder(
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (BuildContext context, int index) {
                     DocumentSnapshot ds = snapshot.data.documents[index];
                     return new FutureBuilder(
-                        future: _firestoreService.getUser(ds['sender']),
+                        future: _firestoreService.getUser(ds['from']),
                         builder: (context, usernsnapshot) {
                           if (usernsnapshot.connectionState ==
                               ConnectionState.done) {
                             User sender = usernsnapshot.data;
 
-                            return new ReviewCard(
+                            return ReviewCard(
                               document: ds,
-                              sender: sender,
-                              helpReq: ds['requestType'],
+                              from: sender,
+                              description: ds['description'],
+                              happy: ds['happy'],
                             );
                           } else {
                             return CircularProgressIndicator();
@@ -322,12 +329,11 @@ class _NotificationsViewState extends State<NotificationsView> {
   }
 
   Stream<QuerySnapshot> getReviewNotifications(BuildContext context) async* {
-    final uid = await authService.currentUser.id;
+    final uid = authService.currentUser.id;
     yield* Firestore.instance
         .collection('users')
         .document(uid)
         .collection('reviewNotification')
-        .orderBy('date')
         .snapshots();
   }
 }
@@ -444,11 +450,12 @@ class AcceptCard extends StatelessWidget {
   }
 }
 class ReviewCard extends StatelessWidget {
-  final User sender;
+  final User from;
   final DocumentSnapshot document;
-  final String helpReq;
+  final String description;
+  final bool happy;
 
-  const ReviewCard({Key key, this.sender, this.document, this.helpReq})
+  const ReviewCard({Key key, this.from, this.document, this.description, this.happy})
       : super(key: key);
 
   @override
@@ -480,11 +487,10 @@ class ReviewCard extends StatelessWidget {
                         children: <Widget>[
                           CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(sender.photo)),
+                              backgroundImage: NetworkImage(from.photo)),
                           Expanded(
                               child: Text(
-                                  sender.fullName +
-                                      ' accepted your offer to help with ' + helpReq,
+                                  from.fullName + " gave you a review!",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black))),
@@ -493,32 +499,34 @@ class ReviewCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Text(
-                              "Regret",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            IconButton(
-                                icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
-                                onPressed: () async {
-                                  var currentuserid = await authService.getCurrentUID();
-                                  Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
-                                  await _firestoreService.deleteAcceptRequest(req);
+                            // Text(
+                            //   "Regret",
+                            //   style: TextStyle(fontSize: 16),
+                            // ),
+                            // IconButton(
+                            //     icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
+                            //     onPressed: () async {
+                                  
+                            //       //await _firestoreService.deleteReviewNotification();
 
-                                }),
+                            //     }),
                           ],
                         ),
                         Column(
                           children: <Widget>[
                             Text(
-                              "Open chat",
+                              "Leave a review",
                               style: TextStyle(fontSize: 16),
                             ),
                             IconButton(
-                                icon: Icon(Icons.chat, color: Colors.blueAccent,), onPressed: () async {
+                                icon: Icon(Icons.rate_review, color: Colors.lightBlueAccent,), onPressed: () async {
+                                  FirebaseUser us = await authService.getCurrentUser();
+                                  User me = await _firestoreService.getUser(us.uid);
+                                  sendToReview(me, from, context);
                                   //sendToChat(context);
                                 }),
                           ],
@@ -533,6 +541,18 @@ class ReviewCard extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+   sendToReview(User me, User otherUser, context) async {
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReviewView(
+          me: me,
+          otherUser: otherUser,
         ),
       ),
     );

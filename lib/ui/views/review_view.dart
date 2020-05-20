@@ -1,7 +1,10 @@
+import 'package:compound/models/chat.dart';
+import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/review.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
+import 'package:compound/ui/views/chat_view.dart';
 import 'package:compound/ui/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,11 +13,11 @@ import '../../locator.dart';
 
 class ReviewView extends StatefulWidget {
   @override
-  final User sender;
-  final User reciver;
+  final User otherUser;
+  final User me;
   
 
-  const ReviewView({Key key, this.sender, this.reciver}) : super(key: key);
+  const ReviewView({Key key, this.otherUser, this.me}) : super(key: key);
 
   @override
   _ReviewViewState createState() => _ReviewViewState();
@@ -42,7 +45,7 @@ class _ReviewViewState extends State<ReviewView> {
                         padding: const EdgeInsets.fromLTRB(0, 34, 0, 0),
                         child: CircleAvatar(
                           radius: 80.0,
-                          backgroundImage: NetworkImage(widget.sender.photo),
+                          backgroundImage: NetworkImage(widget.otherUser.photo),
                           backgroundColor: Colors.transparent,
                         ),
                       ),
@@ -115,9 +118,15 @@ class _ReviewViewState extends State<ReviewView> {
                                   color: Colors.white,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600))),
-                      onPressed: () async { //create review notification for recivier, and store the review for the reciverer
-                                      Review rev = new Review(from: widget.sender.id, to: widget.reciver.id, description: reviewController.text, happy: happy,);
+                      onPressed: () async { 
+                        //create review notification for recivier, and store the review for the reciverer
+                                      Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy,);
                                       _firestoreService.sendReviewNotificationAndStore(rev);
+                                      Helprequest req = new Helprequest(sender: widget.otherUser.id, reciever: widget.me.id);
+                                      await _firestoreService.deleteAcceptRequest(req);
+                                      Chatters chat = new Chatters(messengerid1: widget.otherUser.id, messengerid2: widget.me.id);
+                                      await _firestoreService.deleteChat(chat);
+                                      Navigator.pop(context);
 
 
 
@@ -143,8 +152,8 @@ class _ReviewViewState extends State<ReviewView> {
       context,
       MaterialPageRoute(
         builder: (context) => ReviewView(
-          reciver: reciver,
-          sender: sender,
+          me: reciver,
+          otherUser: sender,
         ),
       ),
     );
