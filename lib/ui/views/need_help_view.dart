@@ -78,7 +78,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
         title: const Text('Matvaror'),
         value: Services.Matvaror,
         groupValue: _services,
-        onChanged: (Services value) { setState(() { _services = value; type = 'Matvaror';}); },
+        onChanged: (Services value) { setState(() { _services = value; type = 'Livsmedel';}); },
             ),
           ),
           Align(
@@ -102,7 +102,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
               onChanged: (Services value) {
                 setState(() {
                   _services = value;
-                  type = 'Tekniskt';
+                  type = 'Teknisk';
                 });
               },
             ),
