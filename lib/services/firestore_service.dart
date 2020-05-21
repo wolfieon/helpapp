@@ -229,7 +229,7 @@ Future getMarker(String markId) async {
       var markData = await _markersCollectionReference.document(markId).get();
       return MarkObj.fromData(markData.data);
     } catch (e) {
-      return e.message;
+      return print("lol");
     }
   }
 

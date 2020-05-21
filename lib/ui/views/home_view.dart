@@ -33,6 +33,7 @@ class _HomeViewState extends State<HomeView> {
     checkIfActiveEvents();
     lastSeen();
     print("check method if events");
+    
   }
 
   @override
@@ -211,16 +212,17 @@ class _HomeViewState extends State<HomeView> {
         .getDocuments();
     qsa.documents.forEach((DocumentSnapshot snap) {
       doc++;
-    });
+    });if(mounted) {
     if (doc != 0) {
       setState(() {
         currentEvents = true;
       });
     } else {
       setState(() {
+        
         currentEvents = false;
       });
-    }
+    }}
   }
 }
 
