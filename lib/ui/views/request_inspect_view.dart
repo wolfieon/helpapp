@@ -114,7 +114,7 @@ class RequestInspectView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text("Behöver hjälp med:",
+                  Text("Need help with:",
                       style: GoogleFonts.openSans(
                           textStyle: TextStyle(
                               color: Colors.blue,
@@ -150,7 +150,7 @@ class RequestInspectView extends StatelessWidget {
                 children: <Widget>[
                   Align(
                       alignment: Alignment.topLeft,
-                      child: Text("När?",
+                      child: Text("When?",
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(
                                   color: Colors.blue,
@@ -163,14 +163,14 @@ class RequestInspectView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Icon(Icons.calendar_today),
-                        Text("Datum")
+                        Text("Date")
                       ]),
                   SizedBox(
                     height: screenHeight(context) / 60,
                   ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[Icon(Icons.timer), Text("Tid")])
+                      children: <Widget>[Icon(Icons.timer), Text("Time")])
                 ],
               )
             ],
@@ -183,7 +183,7 @@ class RequestInspectView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(padding: EdgeInsets.all(16.0)),
-              Text("Beskrivning:",
+              Text("Description:",
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.black,
@@ -225,7 +225,7 @@ class RequestInspectView extends StatelessWidget {
                       color: Colors.lightBlue,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      child: Text("Erbjud att hjälpa",
+                      child: Text("Offer to help",
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(
                                   color: Colors.white,
@@ -255,7 +255,7 @@ class RequestInspectView extends StatelessWidget {
     if (userData.activeEvents >= 3) {
       _dialogService.showDialog(
         title: 'Error',
-        description: "Du kan inte ha mer än tre aktiva events",
+        description: "You cannot have more than 3 active events",
       );
     } else {
       Helprequest req = new Helprequest(
