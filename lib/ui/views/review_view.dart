@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/review.dart';
@@ -16,16 +17,16 @@ class ReviewView extends StatefulWidget {
   final User otherUser;
   final User me;
   final bool isRespondReview;
-  
 
-  const ReviewView({Key key, this.otherUser, this.me, this.isRespondReview}) : super(key: key);
+  const ReviewView({Key key, this.otherUser, this.me, this.isRespondReview})
+      : super(key: key);
 
   @override
   _ReviewViewState createState() => _ReviewViewState();
 }
-final FirestoreService _firestoreService = locator<FirestoreService>();
- final reviewController = TextEditingController();
 
+final FirestoreService _firestoreService = locator<FirestoreService>();
+final reviewController = TextEditingController();
 
 bool happy;
 bool sad;
@@ -38,120 +39,161 @@ class _ReviewViewState extends State<ReviewView> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         body: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 34, 0, 0),
-                        child: CircleAvatar(
-                          radius: 80.0,
-                          backgroundImage: NetworkImage(widget.otherUser.photo),
-                          backgroundColor: Colors.transparent,
-                        ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 34, 0, 0),
+                child: CircleAvatar(
+                  radius: 80.0,
+                  backgroundImage: NetworkImage(widget.otherUser.photo),
+                  backgroundColor: Colors.transparent,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                child: Text("Are you happy with the help?",
+                    style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600))),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  IconButton(
+                      iconSize: 62,
+                      icon: Icon(
+                        Icons.mood,
+                        color: colorhappy,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                        child: Text("Are you happy with the help?",
-                            style: GoogleFonts.openSans(
-                                textStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600))),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          IconButton(
-                              iconSize: 62,
-                              icon: Icon(Icons.mood, color: colorhappy,),
-                              onPressed: () {
-                                setState(() {
-                                  happy = true;
-                                  sad = false;
-                                  colorhappy = Colors.lightBlueAccent;
-                                  colorsad = Colors.grey;
-                                });
-                              }),
-                          IconButton(
-                              iconSize: 62,
-                              icon: Icon(Icons.mood_bad, color: colorsad),
-                              onPressed: () {
-                                setState(() {
-                                  sad = true;
-                                  happy = false;
-                                  colorsad= Colors.lightBlueAccent;
-                                  colorhappy = Colors.grey;
-
-                                });
-                              }),
-                        ],
-                      ),
-                      verticalSpace(21),
-                      Container(
-                        height: 100,
-                        width: 350,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 3.3,
-                            color: Colors.lightBlueAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextField(
-    controller: reviewController,
-    textInputAction: TextInputAction.newline,
-    keyboardType: TextInputType.multiline,
-    maxLines: 13,
-  ),
-                      ),
-                      verticalSpace(35),
-                      ButtonTheme(
-                    minWidth: 300.0,
-                    height: 75.0,
-                    child: RaisedButton(
-                      color: Colors.lightBlueAccent,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text("Send Review",
-                          style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600))),
-                      onPressed: () async { 
-                        //create review notification for recivier, and store the review for the reciverer
-
-                                if(widget.isRespondReview == true) {
-                                  Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy, fromName: widget.me.fullName, toName: widget.otherUser.fullName);
-                                  _firestoreService.sendAnswerReviewAndStore(rev);
-                                  _firestoreService.deleteNotificationReview(rev);
-                                } else {
-                                      Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy, fromName: widget.me.fullName, toName: widget.otherUser.fullName);
-                                      _firestoreService.sendReviewNotificationAndStore(rev);}
-                                      Helprequest req = new Helprequest(sender: widget.otherUser.id, reciever: widget.me.id);
-                                      await _firestoreService.deleteAcceptRequest(req);
-                                      Chatters chat = new Chatters(messengerid1: widget.otherUser.id, messengerid2: widget.me.id);
-                                      await _firestoreService.deleteChat(chat);
-                                      Navigator.pop(context);
-
-
-
-
-
-
-
-
-
-
-                       
-                      },
-                    )),
-                    ],
+                      onPressed: () {
+                        setState(() {
+                          happy = true;
+                          sad = false;
+                          colorhappy = Colors.lightBlueAccent;
+                          colorsad = Colors.grey;
+                        });
+                      }),
+                  IconButton(
+                      iconSize: 62,
+                      icon: Icon(Icons.mood_bad, color: colorsad),
+                      onPressed: () {
+                        setState(() {
+                          sad = true;
+                          happy = false;
+                          colorsad = Colors.lightBlueAccent;
+                          colorhappy = Colors.grey;
+                        });
+                      }),
+                ],
+              ),
+              verticalSpace(21),
+              Container(
+                height: 100,
+                width: 350,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 3.3,
+                    color: Colors.lightBlueAccent,
                   ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  controller: reviewController,
+                  textInputAction: TextInputAction.newline,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 13,
+                ),
+              ),
+              verticalSpace(35),
+              ButtonTheme(
+                  minWidth: 300.0,
+                  height: 75.0,
+                  child: RaisedButton(
+                    color: Colors.lightBlueAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text("Send Review",
+                        style: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600))),
+                    onPressed: () async {
+                      //create review notification for recivier, and store the review for the reciverer
+
+                      if (widget.isRespondReview == true) {
+                        Review rev = new Review(
+                            from: widget.me.id,
+                            to: widget.otherUser.id,
+                            description: reviewController.text,
+                            happy: happy,
+                            fromName: widget.me.fullName,
+                            toName: widget.otherUser.fullName);
+                        _firestoreService.sendAnswerReviewAndStore(rev);
+                        _firestoreService.deleteNotificationReview(rev);
+                        happySadCount(happy);
+                      } else {
+                        Review rev = new Review(
+                            from: widget.me.id,
+                            to: widget.otherUser.id,
+                            description: reviewController.text,
+                            happy: happy,
+                            fromName: widget.me.fullName,
+                            toName: widget.otherUser.fullName);
+                        _firestoreService.sendReviewNotificationAndStore(rev);
+                        happySadCount(happy);
+                      }
+                      Helprequest req = new Helprequest(
+                          sender: widget.otherUser.id, reciever: widget.me.id);
+                      await _firestoreService.deleteAcceptRequest(req);
+                      Chatters chat = new Chatters(
+                          messengerid1: widget.otherUser.id,
+                          messengerid2: widget.me.id);
+                      await _firestoreService.deleteChat(chat);
+                      Navigator.pop(context);
+                    },
+                  )),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void happySadCount(bool happy) {
+    var happies;
+    
+    if (happy == true) {
+      
+      
+      if(widget.otherUser.happyCount == null){
+      happies =1;
+      
+    } else {
+      happies = widget.otherUser.happyCount + 1;
+    }
+    
+      Firestore.instance
+          .collection('users')
+          .document(widget.otherUser.id)
+          .updateData({'happyCount': happies});
+    } else {
+      var saddies;
+      
+      if(widget.otherUser.sadCount == null){
+      saddies =1;
+    } else {
+      saddies = widget.otherUser.sadCount + 1;
+    }
+      Firestore.instance
+          .collection('users')
+          .document(widget.otherUser.id)
+          .updateData({'sadCount': saddies});
+    }
   }
 
   sendToChat(User reciver, User sender, context) async {
