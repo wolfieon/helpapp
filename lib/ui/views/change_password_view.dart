@@ -26,7 +26,7 @@ class ChangePasswordView extends StatelessWidget {
           appBar: AppBar(
               backgroundColor: Colors.white,
               title: Text(
-                'Ändra ',
+                'Edit Profile ',
                 style: TextStyle(color: Colors.black),
               )),
           backgroundColor: Colors.white,
