@@ -163,23 +163,6 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                           Navigator.pop(context);
                         }),
                   ),
-                  ButtonTheme(
-                    height: 50,
-                    child: RaisedButton(
-                      color: Colors.green,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text("Godkänn",
-                          style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w600))),
-                      onPressed: () async {
-                        await addRequest();
-                        Navigator.pop(context);
-                      }),
-                ),
                 ButtonTheme(
                   height: 50,
                   child: RaisedButton(

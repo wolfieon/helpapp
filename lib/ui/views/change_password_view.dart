@@ -34,9 +34,10 @@ class ChangePasswordView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                SizedBox(height: screenHeight(context)/50,),
                 InputField(
                   placeholder: 'Nytt användarnamn',
                   password: false,
@@ -75,8 +76,23 @@ class ChangePasswordView extends StatelessWidget {
                       ),
                     ]),
                 verticalSpaceMedium,
-                InputField(
-                    controller: descController, placeholder: "Beskrivning" ),
+                Container(
+                  height: 100,
+                  width: 350,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextField(
+                    controller: descController,
+                    textInputAction: TextInputAction.newline,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 13,
+                  ),
+                ),
                 verticalSpaceSmall,
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -86,10 +102,9 @@ class ChangePasswordView extends StatelessWidget {
                       title: 'Byt beskrivning',
                       busy: model.busy,
                       onPressed: () {
-                        if (descController.text.length<200) {
+                        if (descController.text.length < 200) {
                           model.newDesc(
                             newDesc: descController.text,
-                            
                           );
                         }
                       },
@@ -108,7 +123,7 @@ class ChangePasswordView extends StatelessWidget {
                   password: true,
                   controller: passwordController,
                 ),
-                verticalSpaceMedium,
+                verticalSpaceSmall,
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,

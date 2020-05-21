@@ -29,7 +29,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-
+    BottomAppBar();
     checkIfActiveEvents();
     lastSeen();
     print("check method if events");
