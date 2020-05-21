@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../locator.dart';
 
 class NeedHelpView extends StatefulWidget {
+
   @override
   _NeedHelpViewState createState() => _NeedHelpViewState();
 }
@@ -163,23 +164,6 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                           Navigator.pop(context);
                         }),
                   ),
-                  ButtonTheme(
-                    height: 50,
-                    child: RaisedButton(
-                      color: Colors.green,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text("Godkänn",
-                          style: GoogleFonts.openSans(
-                              textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w600))),
-                      onPressed: () async {
-                        await addRequest();
-                        Navigator.pop(context);
-                      }),
-                ),
                 ButtonTheme(
                   height: 50,
                   child: RaisedButton(
@@ -194,8 +178,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                                 fontWeight: FontWeight.w600))),
                     onPressed: () async {
                       await addRequest();
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomeView()));
+                      HomeView();
                     },
                   ),
                 ),

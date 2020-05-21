@@ -128,11 +128,11 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LookingToHelp()),
-                          );
+                                                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LookingToHelp()),
+                        );
                         }),
                   ),
                 ),
