@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/models/chat.dart';
 import 'package:compound/models/user.dart';
+import 'package:compound/provider/user_provider.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
+import 'package:compound/ui/views/map_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 
 import '../../locator.dart';
 import 'chat_view.dart';
@@ -20,15 +25,27 @@ class _MyHomePageState extends State<Chats> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthenticationService authService = locator<AuthenticationService>();
+  UserProvider userProvider; 
 
   @override
   void initState() {
     super.initState();
+    
+
+    SchedulerBinding.instance.addPostFrameCallback((_){
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.refreshUser();
+    
+
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider<UserProvider>(
+      create:(context) => UserProvider(),
+
+    child: MaterialApp(
       title: 'Help Chat',
       home: Scaffold(
         appBar: AppBar(
@@ -55,22 +72,22 @@ class _MyHomePageState extends State<Chats> {
                 body: new MountainList(
                   user: userman,
                 ),
-                floatingActionButton: new FloatingActionButton(
+               /* floatingActionButton: new FloatingActionButton(           //This should not be here, this is a test.
                   child: new Icon(Icons.add),
                   onPressed: ()  async {
                     //Dålig konfiguration men bara för att testa, kartfunktionen bör hantera skapandet av chatter.
                     Chatters chat = new Chatters(
                         messengerid1: userman.id,
-                        messengerid2: 'IDtkswOy3FPIOX7HYnVYOtG1dFj1');
+                        messengerid2: 'eGFUoNHg1ohZMyHcRGbnZCoKLm83');
                    await _firestoreService.createChat(chat);
                   },
-                ),
+                ),*/
               );
             }
           },
         ),
       ),
-    );
+    ),);
   }
 }
 
@@ -118,55 +135,73 @@ class MountainList extends StatelessWidget {
                       return CircularProgressIndicator();
                     }
                   }),
-              trailing: new IconButton(
-                  icon: Icon(Icons.block),
-                  onPressed: () {
-                    //pop up window that ask if u are sure you want to remove chat
-                    //then remove
+              trailing: 
+                  Wrap(
+                    spacing: 12,
+                    children: <Widget>[
+                      IconButton(icon: Icon(Icons.map,), onPressed: () async { 
+                        final userPos = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                        var otherUserID = await _firestoreService.getUser(document['messengerid2']);
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => MapView(userPos: userPos, targetPos: otherUserID.lastSeen,)),);
 
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text('Remove chat?'),
-                        content: FutureBuilder(
-                            future: _firestoreService
-                                .getUser(document['messengerid2']),
-                            builder: (context, usernsnapshot) {
-                              if (usernsnapshot.connectionState ==
-                                  ConnectionState.done) {
-                                User userx = usernsnapshot.data;
-                                return Text(
-                                    "Do you want to stop chatting with " +
-                                        userx.fullName +
-                                        "?");
-                              } else {
-                                return Text('Loading...');
-                              }
-                            }),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text("No"),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop('dialog');
-                            },
-                          ),
-                           FlatButton(
-                             child: Text("Yes"),
-                            onPressed: () async {
-                               Chatters chat = Chatters(
-                                   messengerid1: document['messengerid1'],
-                                   messengerid2: document['messengerid2']);
-                               await _firestoreService.deleteChat(chat);
-                               Navigator.of(context, rootNavigator: true)
-                                   .pop('dialog');
-                             },
-                           ),
-                        ],
-                      ),
-                      barrierDismissible: false,
-                    );
-                  }),
+                       },),
+                      
+                       new IconButton(
+                      
+                        icon: Icon(Icons.block),
+                        
+                        
+                        onPressed: () {
+                          //pop up window that ask if u are sure you want to remove chat
+                          //then remove
+
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('Remove chat?'),
+                              content: FutureBuilder(
+                                  future: _firestoreService
+                                      .getUser(document['messengerid2']),
+                                  builder: (context, usernsnapshot) {
+                                    if (usernsnapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      User userx = usernsnapshot.data;
+                                      return Text(
+                                          "Do you want to stop chatting with " +
+                                              userx.fullName +
+                                              "?");
+                                    } else {
+                                      return Text('Loading...');
+                                    }
+                                  }),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text("No"),
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop('dialog');
+                                  },
+                                ),
+                                 FlatButton(
+                                   child: Text("Yes"),
+                                   onLongPress: null,
+                                  onPressed: () async {
+                                     Chatters chat = Chatters(
+                                         messengerid1: document['messengerid1'],
+                                         messengerid2: document['messengerid2']);
+                                     await _firestoreService.deleteChat(chat);
+                                     Navigator.of(context, rootNavigator: true)
+                                         .pop('dialog');
+                                   },
+                                 ),
+                              ],
+                            ),
+                            barrierDismissible: false,
+                          );
+                        }),
+                    ],),
+                
+              
               title: FutureBuilder(
                   future: _firestoreService.getUser(document['messengerid2']),
                   builder: (context, usernsnapshot) {
@@ -177,21 +212,11 @@ class MountainList extends StatelessWidget {
                       return Text('Loading...');
                     }
                   }),
-              subtitle: new Text(user.fullName),
+              
               onTap: () async {
                 sendToChat(document['messengerid2'], context);
 
-                //testCreateChat();
-
-                //             Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => Chat(
-                //       user: user,
-                //       mottagare: mottagaren,
-                //     ),
-                //   ),
-                // );
+                
               },
             );
           }).toList(),

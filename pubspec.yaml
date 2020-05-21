@@ -34,13 +34,20 @@ dependencies:
   # get it
   get_it: ^3.0.0+1
   # provider
-  provider: ^3.2.0
+  provider: ^4.0.3
   # provider architecture
   provider_architecture: ^1.0.3
+  cached_network_image: ^2.0.0
   firebase_auth: ^0.15.3
   cloud_firestore: ^0.13.0+1
   curved_navigation_bar: ^0.3.2 #latest version
   google_fonts: ^1.0.0
+  social_share_plugin: 0.3.1+1
+  #permission handler
+  permission_handler: 3.0.0
+  imagebutton: ^0.0.6
+  agora_rtc_engine: ^1.0.8
+  eva_icons_flutter: ^2.0.0
   
 
 dev_dependencies:
@@ -68,6 +75,7 @@ flutter:
   assets:
     - assets/images/title.png
     - assets/images/icon_large.png
+    - assets/images/hand.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

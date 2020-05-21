@@ -7,7 +7,6 @@ import 'package:compound/locator.dart';
 
 import 'login_view.dart';
 
-
 class MenuOptionsScreen extends StatefulWidget {
   @override
   _MenuOptionsScreenState createState() => _MenuOptionsScreenState();
@@ -15,28 +14,26 @@ class MenuOptionsScreen extends StatefulWidget {
 
 class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   int _selectedOption = 0;
- final AuthenticationService _firebaseAuth = AuthenticationService();
+  final AuthenticationService _firebaseAuth = AuthenticationService();
   final AuthenticationService auth = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
-  
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-
         backgroundColor: Colors.white,
         title: Text('Settings'),
-
         leading: FlatButton(
           textColor: Colors.white,
           child: Icon(
             Icons.arrow_back,
-          ), onPressed: () {print('back');},
+          ),
+          onPressed: () {
+            print('back');
+          },
           // onPressed: () => loginUser(),
-          
         ),
         actions: <Widget>[
           FlatButton(
@@ -45,7 +42,8 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
               'HELP',
               style: TextStyle(
                 fontSize: 16.0,
-                fontWeight: FontWeight.bold, color: Colors.black,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
             onPressed: () => print('HEEEEEEEEEEEEELP'),
@@ -100,37 +98,45 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
         },
       ),
       bottomSheet: Container(
-
         width: double.infinity,
         height: 80.0,
         color: Colors.white,
-
-
         child: Padding(
           padding: EdgeInsets.only(right: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'Logga Ut',
-                style: TextStyle(
-                  color: Colors.lime,
-                  fontSize: 18.0,
+          child: GestureDetector(
+            onTap: () async {
+              await _firebaseAuth.signOut();
+              Navigator.popUntil(context, ModalRoute.withName('/'));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginView()),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Logga Ut',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18.0,
+                  ),
                 ),
-              ),
-              SizedBox(width: 8.0),
-              new IconButton(
-                  icon: new Icon(Icons.input),
-                  color: Colors.black,
-                  onPressed: () async {
-                    await _firebaseAuth.signOut();
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                    Navigator.pushReplacement(context,
-                     MaterialPageRoute(builder: (context)=> LoginView()),);
-
-                  }),
-            ],
+                SizedBox(width: 8.0),
+                new IconButton(
+                    icon: new Icon(Icons.input),
+                    color: Colors.black,
+                    onPressed: () async {
+                      await _firebaseAuth.signOut();
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginView()),
+                      );
+                    }),
+              ],
+            ),
           ),
         ),
       ),
@@ -144,12 +150,8 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   void navigateToSignUp() {
     _navigationService.navigateTo(SignUpViewRoute);
   }
-  void navigateToLogIn()
-  {
+
+  void navigateToLogIn() {
     _navigationService.navigateTo(LoginViewRoute);
   }
- 
-
-
-
 }
