@@ -146,7 +146,7 @@ class _HomeViewState extends State<HomeView> {
                           child: Text("You have no active events"),
                         )),
               SizedBox(height: screenHeight(context) / 30),
-              Text("Dela på twitter",
+              Text("Share to twitter",
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.blue,
