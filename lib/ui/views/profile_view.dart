@@ -7,8 +7,11 @@ import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:compound/ui/views/change_password_view.dart';
+import 'package:compound/ui/views/recived_reviews_view.dart';
+import 'package:compound/ui/views/written_reviews_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -20,13 +23,13 @@ class _ProfileScreenState extends State<ProfileView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthenticationService auth = locator<AuthenticationService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
-
+  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: 1000,
-        width: 500,
+        height: screenHeight(context) -50,
+        width: screenWidth(context),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -48,6 +51,7 @@ class _ProfileScreenState extends State<ProfileView> {
 
   Widget displayProfile(context, snapshot) {
     User user = snapshot.data;
+   
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(children: <Widget>[
@@ -73,7 +77,7 @@ class _ProfileScreenState extends State<ProfileView> {
                         //SizedBox(height: screenHeight(context) / 15),
                         //editprofile
                         Column(children: <Widget>[
-                          Text("Redigera profil",
+                          Text("Edit profile",
                               style: GoogleFonts.openSans(
                                   textStyle: TextStyle(
                                       color: Colors.black,
@@ -147,7 +151,7 @@ class _ProfileScreenState extends State<ProfileView> {
               SizedBox(
                 width: screenWidth(context) / 15,
               ),
-              Text("Om mig",
+              Text("About me",
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.black,
@@ -190,7 +194,7 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Align(
                   alignment: Alignment.center,
-                  child: Text("Kommentarer",
+                  child: Text("Commitments",
                       style: GoogleFonts.raleway(
                           textStyle: TextStyle(
                               color: Colors.black,
@@ -201,13 +205,13 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Icon(Icons.view_headline),
               SizedBox(
-                width: screenWidth(context) / 2.27,
+                width: screenWidth(context) / 3.06,
               ),
               
               GestureDetector(
-                onTap: () => {print("lägg kommentarer här")},
+                onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => WrittenReviewsView()))},
                 child: Row(
-                  children: <Widget>[Text("15"),Icon(Icons.arrow_right),],
+                  children: <Widget>[Icon(Icons.mode_comment),Icon(Icons.arrow_right),],
 
                 )
               ),
@@ -223,7 +227,7 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Align(
                   alignment: Alignment.center,
-                  child: Text("Resentioner?",
+                  child: Text("Reviews",
                       style: GoogleFonts.raleway(
                           textStyle: TextStyle(
                               color: Colors.black,
@@ -242,9 +246,11 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               
               GestureDetector(
-                onTap: () => {print("lägg resentioner här")},
+                onTap: () => {
+                  
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewsView()))},
                 child: Row(
-                  children: <Widget>[Text("25"),Icon(Icons.arrow_right),],
+                  children: <Widget>[Icon(Icons.comment),Icon(Icons.arrow_right),],
 
                 )
               ),
@@ -305,6 +311,7 @@ class _ProfileScreenState extends State<ProfileView> {
           )*/
         ]));
   }
+
 
   void _showDialog(User user) {
     showDialog(

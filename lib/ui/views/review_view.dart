@@ -123,11 +123,11 @@ class _ReviewViewState extends State<ReviewView> {
                         //create review notification for recivier, and store the review for the reciverer
 
                                 if(widget.isRespondReview == true) {
-                                  Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy,);
+                                  Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy, fromName: widget.me.fullName, toName: widget.otherUser.fullName);
                                   _firestoreService.sendAnswerReviewAndStore(rev);
                                   _firestoreService.deleteNotificationReview(rev);
                                 } else {
-                                      Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy,);
+                                      Review rev = new Review(from: widget.me.id, to: widget.otherUser.id, description: reviewController.text, happy: happy, fromName: widget.me.fullName, toName: widget.otherUser.fullName);
                                       _firestoreService.sendReviewNotificationAndStore(rev);}
                                       Helprequest req = new Helprequest(sender: widget.otherUser.id, reciever: widget.me.id);
                                       await _firestoreService.deleteAcceptRequest(req);

@@ -29,10 +29,11 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-
+    BottomAppBar();
     checkIfActiveEvents();
     lastSeen();
     print("check method if events");
+    
   }
 
   @override
@@ -145,7 +146,7 @@ class _HomeViewState extends State<HomeView> {
                           child: Text("You have no active events"),
                         )),
               SizedBox(height: screenHeight(context) / 30),
-              Text("Dela på twitter",
+              Text("Share to twitter",
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.blue,
@@ -211,16 +212,17 @@ class _HomeViewState extends State<HomeView> {
         .getDocuments();
     qsa.documents.forEach((DocumentSnapshot snap) {
       doc++;
-    });
+    });if(mounted) {
     if (doc != 0) {
       setState(() {
         currentEvents = true;
       });
     } else {
       setState(() {
+        
         currentEvents = false;
       });
-    }
+    }}
   }
 }
 
