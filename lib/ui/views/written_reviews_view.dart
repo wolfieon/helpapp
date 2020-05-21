@@ -34,7 +34,7 @@ class _InspectWrittenReviewState extends State<WrittenReviewsView> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          "Skrivna ressentioner",
+          "Commitments",
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -76,10 +76,10 @@ class _InspectWrittenReviewState extends State<WrittenReviewsView> {
                                             fontSize: 21,
                                             fontWeight: FontWeight.w600))),
                                 subtitle: Text(
-                                    "Nöjd: " +
+                                    "Good: " +
                                         reviews[index].getHappy.toString() +
                                         '\n' +
-                                        'Beskrivning: ' +
+                                        'Description: ' +
                                         reviews[index].getDescription,
                                     style: GoogleFonts.openSans(
                                         textStyle: TextStyle(

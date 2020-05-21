@@ -39,7 +39,7 @@ class ChangePasswordView extends StatelessWidget {
               children: <Widget>[
                 SizedBox(height: screenHeight(context)/50,),
                 InputField(
-                  placeholder: 'Nytt användarnamn',
+                  placeholder: 'New username',
                   password: false,
                   controller: fullNameController,
                 ),
@@ -48,7 +48,7 @@ class ChangePasswordView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       BusyButton(
-                        title: 'Byt Namn',
+                        title: 'Change Name',
                         busy: model.busy,
                         onPressed: () {
                           if (fullNameController.text != '') {
@@ -64,12 +64,12 @@ class ChangePasswordView extends StatelessWidget {
                           } else if (fullNameController.text == '') {
                             _dialogService.showDialog(
                               title: 'Error',
-                              description: "Måste ange ett nytt namn",
+                              description: "You must enter a new name",
                             );
                           } else {
                             _dialogService.showDialog(
                               title: 'Error',
-                              description: "Error något gick väldigt fel",
+                              description: "Error something went wrong",
                             );
                           }
                         },
@@ -99,7 +99,7 @@ class ChangePasswordView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     BusyButton(
-                      title: 'Byt beskrivning',
+                      title: 'Change description',
                       busy: model.busy,
                       onPressed: () {
                         if (descController.text.length < 200) {
@@ -113,13 +113,13 @@ class ChangePasswordView extends StatelessWidget {
                 ),
                 verticalSpaceMedium,
                 InputField(
-                  placeholder: 'Nytt lösenord',
+                  placeholder: 'New password',
                   password: true,
                   controller: newPasswordConteoller,
                 ),
                 verticalSpaceSmall,
                 InputField(
-                  placeholder: 'Skriv ditt nuvarande lösenord',
+                  placeholder: 'Current password',
                   password: true,
                   controller: passwordController,
                 ),
@@ -129,7 +129,7 @@ class ChangePasswordView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     BusyButton(
-                      title: 'Byt lösenord',
+                      title: 'Change password',
                       busy: model.busy,
                       onPressed: () {
                         if (newPasswordConteoller.text != '' &&
@@ -147,20 +147,20 @@ class ChangePasswordView extends StatelessWidget {
                           print("error");
                           _dialogService.showDialog(
                             title: 'Error',
-                            description: "Kan inte ange samma lösenord",
+                            description: "Can't give same password",
                           );
                         } else if (newPasswordConteoller.text.length >= 6) {
                           print("error");
                           _dialogService.showDialog(
                             title: 'Error',
                             description:
-                                "Lösenordet måste vara längre än 6 tecken",
+                                "Password must be longer than 6",
                           );
                         } else {
                           print("error");
                           _dialogService.showDialog(
                             title: 'Error',
-                            description: "Måste ange nytt och gammalt lösenord",
+                            description: "Must give new and old password",
                           );
                         }
                       },

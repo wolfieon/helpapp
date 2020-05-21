@@ -117,7 +117,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  'Logga Ut',
+                  'Log out',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18.0,
