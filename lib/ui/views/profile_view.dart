@@ -28,8 +28,8 @@ class _ProfileScreenState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: 1000,
-        width: 500,
+        height: screenHeight(context) -50,
+        width: screenWidth(context),
         child: Row(
           children: <Widget>[
             Expanded(
