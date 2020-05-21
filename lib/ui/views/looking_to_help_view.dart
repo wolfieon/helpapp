@@ -78,16 +78,16 @@ class _LookingToHelpState extends State<LookingToHelp> {
                                           fontSize: 21,
                                           fontWeight: FontWeight.w600))),
                               subtitle: Text(
-                                  'Avstånd: ' +
+                                  'Distance: ' +
                                       markers[index]
                                           .getDistance
                                           .toStringAsFixed(2) +
                                       " meter" +
                                       '\n' +
-                                      "Typ Av Problem: " +
+                                      "Type of problem: " +
                                       markers[index].getType +
                                       '\n' +
-                                      'Beskrivning: ' +
+                                      'Description: ' +
                                       markers[index].getDesc,
                                   style: GoogleFonts.openSans(
                                       textStyle: TextStyle(
@@ -124,7 +124,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
               children: <Widget>[
                 SizedBox(height: 20),
                 Text(
-                  "Jag vill endast hjälpa med",
+                  "I only want help with",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18.0,
@@ -138,7 +138,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Sociala problem"),
+                          Text("Social problems"),
                           Checkbox(
                             value: socVal,
                             onChanged: (bool value) {
@@ -152,7 +152,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Tekniska Problem"),
+                          Text("Technical Problems"),
                           Checkbox(
                             value: tekVal,
                             onChanged: (bool value) {
@@ -166,7 +166,7 @@ class _LookingToHelpState extends State<LookingToHelp> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text("Livsmedelhandling"),
+                          Text("Grocery shopping"),
                           Checkbox(
                             value: groVal,
                             onChanged: (bool value) {
@@ -256,7 +256,7 @@ createHelpRequest(sender, reciever, requestType, markerID) async {
   if (userData.activeEvents >= 3) {
     _dialogService.showDialog(
       title: 'Error',
-      description: "Du kan inte ha mer än tre aktiva events",
+      description: "You cannot have more than 3 active events!",
     );
   } else {
     Helprequest req = new Helprequest(

@@ -76,7 +76,7 @@ class _ProfileScreenState extends State<ProfileView> {
                         //SizedBox(height: screenHeight(context) / 15),
                         //editprofile
                         Column(children: <Widget>[
-                          Text("Redigera profil",
+                          Text("Edit profile",
                               style: GoogleFonts.openSans(
                                   textStyle: TextStyle(
                                       color: Colors.black,
@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileView> {
               SizedBox(
                 width: screenWidth(context) / 15,
               ),
-              Text("Om mig",
+              Text("About me",
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.black,
@@ -193,7 +193,7 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Align(
                   alignment: Alignment.center,
-                  child: Text("Kommentarer",
+                  child: Text("Commitments",
                       style: GoogleFonts.raleway(
                           textStyle: TextStyle(
                               color: Colors.black,
@@ -226,7 +226,7 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Align(
                   alignment: Alignment.center,
-                  child: Text("Resentioner",
+                  child: Text("Reviews",
                       style: GoogleFonts.raleway(
                           textStyle: TextStyle(
                               color: Colors.black,

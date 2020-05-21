@@ -37,7 +37,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
     if (userData.activeEvents >= 3) {
       _dialogService.showDialog(
         title: 'Error',
-        description: "Du kan inte ha mer än tre aktiva events",
+        description: "You cannot have more than 3 active events!",
       );
     } else {
       int nowActiveEvents = userData.activeEvents + 1;
@@ -70,7 +70,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
           children: <Widget>[      
               SizedBox(height: 110),
               Align(
-                    child: Text("Vilken typ av hjälp behöver du?", style: GoogleFonts.openSans(
+                    child: Text("What kind of help do you need?", style: GoogleFonts.openSans(
                     textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 25,
@@ -79,7 +79,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
           SizedBox(height: 20),
         Align(
         child: RadioListTile<Services>(
-          title: const Text('Matvaror'),
+          title: const Text('Groceries'),
           value: Services.Matvaror,
           groupValue: _services,
           onChanged: (Services value) { setState(() { _services = value; type = 'Livsmedel';}); },
@@ -87,7 +87,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
             ),
             Align(
               child: RadioListTile<Services>(
-                title: const Text('Socialt Umgänge'),
+                title: const Text('Social'),
                 value: Services.Socialt,
                 groupValue: _services,
                 onChanged: (Services value) {
@@ -100,7 +100,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
             ),
             Align(
               child: RadioListTile<Services>(
-                title: const Text('Tekniskt problem'),
+                title: const Text('Technical'),
                 value: Services.Teknisk,
                 groupValue: _services,
                 onChanged: (Services value) {
@@ -113,7 +113,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
             ),
             SizedBox(height: 40),
             Align(
-              child: Text("Beskriv vad du behöver hjälp med?",
+              child: Text("Please note what you need help with in detail!",
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.black,
@@ -153,7 +153,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                         color: Colors.red,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        child: Text("Avbryt",
+                        child: Text("Cancel",
                             style: GoogleFonts.openSans(
                                 textStyle: TextStyle(
                                     color: Colors.white,
@@ -169,7 +169,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
                     color: Colors.green,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    child: Text("Godkänn",
+                    child: Text("Request",
                         style: GoogleFonts.openSans(
                             textStyle: TextStyle(
                                 color: Colors.white,
