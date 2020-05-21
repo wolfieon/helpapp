@@ -37,23 +37,6 @@ class _InspectWrittenReviewState extends State<WrittenReviewsView> {
           "Skrivna ressentioner",
           style: TextStyle(color: Colors.black),
         ),
-        actions: <Widget>[
-          FlatButton(
-            textColor: Colors.white,
-            child: Text(
-              'HELP',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            onPressed: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ReviewsView()))
-            },
-          )
-        ],
       ),
       body: Column(
         children: <Widget>[

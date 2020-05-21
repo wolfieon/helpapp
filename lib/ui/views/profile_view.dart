@@ -8,6 +8,7 @@ import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:compound/ui/views/change_password_view.dart';
 import 'package:compound/ui/views/recived_reviews_view.dart';
+import 'package:compound/ui/views/written_reviews_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
@@ -27,8 +28,8 @@ class _ProfileScreenState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        height: 1000,
-        width: 500,
+        height: screenHeight(context) -50,
+        width: screenWidth(context),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -204,13 +205,13 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Icon(Icons.view_headline),
               SizedBox(
-                width: screenWidth(context) / 2.27,
+                width: screenWidth(context) / 3.06,
               ),
               
               GestureDetector(
-                onTap: () => {print("lägg kommentarer här")},
+                onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => WrittenReviewsView()))},
                 child: Row(
-                  children: <Widget>[Text("15"),Icon(Icons.arrow_right),],
+                  children: <Widget>[Icon(Icons.mode_comment),Icon(Icons.arrow_right),],
 
                 )
               ),
