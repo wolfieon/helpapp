@@ -9,9 +9,11 @@ class User {
   final int activeEvents;
   String desc;
   GeoPoint lastSeen;
+  final int happyCount;
+  final int sadCount;
  
 
-  User({this.id, this.fullName, this.email,this.photo, this.userRole, this.activeEvents, this.desc, this.lastSeen});
+  User({this.id, this.fullName, this.email,this.photo, this.userRole, this.activeEvents, this.desc, this.lastSeen,this.happyCount, this.sadCount, });
 
   User.fromData(Map<String, dynamic> data)
       : id = data['id'],
@@ -21,7 +23,10 @@ class User {
         userRole = data['userRole'],
         activeEvents=data['activeEvents'],
         desc=data['desc'],
-        lastSeen = data['lastSeen'];
+        lastSeen = data['lastSeen'],
+        happyCount = data['happyCount'],
+        sadCount = data['sadCount']
+        ;
         
 
   Map<String, dynamic> toJson() {
@@ -34,6 +39,9 @@ class User {
       'activeEvents': activeEvents,
       'desc':desc,
       'lastSeen':lastSeen,
+      'happyCount':happyCount,
+      'sadCount': sadCount,
+
     };
   }
 }

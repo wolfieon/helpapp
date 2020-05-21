@@ -29,7 +29,9 @@ class SignUpViewModel extends BaseModel {
         role: 'admin',
         photo: 'https://images-na.ssl-images-amazon.com/images/I/41FaeFr8VOL._SX342_QL70_ML2_.jpg',
         activeEvents:0, 
-        desc: "",);
+        desc: "",
+        happyCount: 0,
+        sadCount: 0,);
 
     setBusy(false);
 

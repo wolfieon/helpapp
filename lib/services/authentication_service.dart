@@ -42,6 +42,8 @@ class AuthenticationService {
     String photo = 'https://i.ibb.co/tPRRv0v/f1.png',
     int activeEvents=0,
     String desc="",
+    int happyCount=0,
+    int sadCount=0,
   }) async {
     try {
       var authResult = await _firebaseAuth.createUserWithEmailAndPassword(
