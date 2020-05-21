@@ -114,7 +114,7 @@ class _NeedHelpViewState extends State<NeedHelpView> {
             ),
             SizedBox(height: 40),
             Align(
-              child: Text("Please note what you need help with in detail!",
+              child: Text("Describe what you need help with",
                   style: GoogleFonts.openSans(
                       textStyle: TextStyle(
                           color: Colors.black,
