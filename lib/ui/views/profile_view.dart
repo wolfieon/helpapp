@@ -136,11 +136,11 @@ class _ProfileScreenState extends State<ProfileView> {
               children: <Widget>[Icon(Icons.map), Text("Stad , Län")]),
           Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             Column(
-              children: <Widget>[Icon(Icons.tag_faces), Text("2")],
+              children: <Widget>[Icon(Icons.tag_faces), Text("${user.happyCount}")],
             ),
             SizedBox(width: screenWidth(context) / 20),
             Column(
-              children: <Widget>[Icon(Icons.mood_bad), Text("5")],
+              children: <Widget>[Icon(Icons.mood_bad), Text("${user.sadCount}")],
             ),
             SizedBox(width: screenWidth(context) / 15)
           ]),
@@ -205,7 +205,7 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Icon(Icons.view_headline),
               SizedBox(
-                width: screenWidth(context) / 3.06,
+                width: screenWidth(context) / 2.4,
               ),
               
               GestureDetector(
@@ -242,7 +242,7 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               Icon(Icons.mood_bad),
               SizedBox(
-                width: screenWidth(context) / 2.67,
+                width: screenWidth(context) / 2.26,
               ),
               
               GestureDetector(
