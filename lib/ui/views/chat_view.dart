@@ -8,6 +8,7 @@ import 'package:compound/utils/call_utilities.dart';
 import 'package:compound/utils/permissions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:compound/ui/views/user_profile_view.dart';
 
 class Chat extends StatefulWidget {
   //static const String id = "CHAT";
@@ -99,9 +100,32 @@ class _ChatState extends State<Chat> {
             },
           ),
         ),
-        title: Text(
-          widget.mottagare.fullName,
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              UserProfilePage(widget.mottagare)),
+                    );
+                  },
+                  child: CircleAvatar(
+                      radius: 15,
+                      backgroundImage: NetworkImage(widget.mottagare.photo)),
+                ),
+                Text(
+                  widget.mottagare.fullName,
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            )
+          ],
         ),
         actions: <Widget>[
           IconButton(
