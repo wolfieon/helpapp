@@ -89,21 +89,44 @@ class _ChatState extends State<Chat> {
         leading: Hero(
           tag: 'backbutton',
           child: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
+            icon: Row(
+              children: <Widget>[
+                
+                Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+              ],
             ),
             onPressed: () async {
               Navigator.pop(context);
               //_navigationService.navigateTo(ChatListRoute);
             },
           ),
+          
+          
         ),
+        
         title: Text(
           widget.mottagare.fullName,
           style: TextStyle(color: Colors.black),
         ),
-        actions: <Widget>[
+        actions: <Widget>[IconButton(
+            icon: Icon(
+              Icons.phone,
+              color: Colors.black,
+            ),
+            onPressed: () async =>
+                await Permissions.cameraAndMicrophonePermissionsGranted()
+                    ? CallUtils.dial(
+                        from: widget.user,
+                        to: widget.mottagare,
+                        context: context,
+                      )
+                    : {},
+          ),
+          
+
           IconButton(
             icon: Icon(
               Icons.video_call,

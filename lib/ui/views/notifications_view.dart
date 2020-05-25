@@ -45,6 +45,7 @@ class _NotificationsViewState extends State<NotificationsView> {
     
     return MaterialApp(
           home: Scaffold(
+            backgroundColor: Colors.white,
         
                   body: Center(
           child: Column(

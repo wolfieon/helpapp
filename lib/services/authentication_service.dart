@@ -59,6 +59,8 @@ class AuthenticationService {
         userRole: role,
         photo: photo,
         activeEvents: activeEvents,
+        happyCount: 0,
+        sadCount: 0,
       );
 
       await _firestoreService.createUser(_currentUser);

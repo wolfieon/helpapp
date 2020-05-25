@@ -64,127 +64,129 @@ class _NeedHelpViewState extends State<NeedHelpView> {
   Widget build(BuildContext context) {
     return 
             Scaffold(
-          resizeToAvoidBottomPadding: false,
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomPadding: true,
+          resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
-          body: Column(
-          children: <Widget>[      
-              SizedBox(height: 110),
-              Align(
-                    child: Text("What kind of help do you need?", style: GoogleFonts.openSans(
-                    textStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600))),
-          ),
-          SizedBox(height: 20),
-        Align(
-        child: RadioListTile<Services>(
-          title: const Text('Groceries'),
-          value: Services.Matvaror,
-          groupValue: _services,
-          onChanged: (Services value) { setState(() { _services = value; type = 'Livsmedel';}); },
-              ),
-            ),
-            Align(
-              child: RadioListTile<Services>(
-                title: const Text('Social'),
-                value: Services.Socialt,
-                groupValue: _services,
-                onChanged: (Services value) {
-                  setState(() {
-                    _services = value;
-                    type = 'Socialt';
-                  });
-                },
-              ),
-            ),
-            Align(
-              child: RadioListTile<Services>(
-                title: const Text('Technical'),
-                value: Services.Teknisk,
-                groupValue: _services,
-                onChanged: (Services value) {
-                  setState(() {
-                    _services = value;
-                    type = 'Teknisk';
-                  });
-                },
-              ),
-            ),
-            SizedBox(height: 40),
-            Align(
-              child: Text("Describe what you need help with",
-                  style: GoogleFonts.openSans(
+          body: SingleChildScrollView(
+                      child: Column(
+            children: <Widget>[      
+                SizedBox(height: 110),
+                Align(
+                      child: Text("What kind of help do you need?", style: GoogleFonts.openSans(
                       textStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 23,
-                          fontWeight: FontWeight.w600))),
+                      color: Colors.black,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600))),
             ),
             SizedBox(height: 20),
-            Align(
-                child: Container(
-              width: screenWidth(context) - 70,
-              decoration: new BoxDecoration(
-                shape: BoxShape.rectangle,
-                border: new Border.all(
-                  color: Colors.black,
-                  width: 1.0,
+        Align(
+        child: RadioListTile<Services>(
+            title: const Text('Groceries'),
+            value: Services.Matvaror,
+            groupValue: _services,
+            onChanged: (Services value) { setState(() { _services = value; type = 'Livsmedel';}); },
                 ),
               ),
-              child: new TextField(
-                onChanged: (text) {
-                  desc = text;
-                },
-                textAlign: TextAlign.center,
-                decoration: new InputDecoration(
-                  border: InputBorder.none,
+              Align(
+                child: RadioListTile<Services>(
+                  title: const Text('Social'),
+                  value: Services.Socialt,
+                  groupValue: _services,
+                  onChanged: (Services value) {
+                    setState(() {
+                      _services = value;
+                      type = 'Socialt';
+                    });
+                  },
                 ),
               ),
-            )),
-            SizedBox(height: 80),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
+              Align(
+                child: RadioListTile<Services>(
+                  title: const Text('Technical'),
+                  value: Services.Teknisk,
+                  groupValue: _services,
+                  onChanged: (Services value) {
+                    setState(() {
+                      _services = value;
+                      type = 'Teknisk';
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 40),
+              Align(
+                child: Text("Describe what you need help with",
+                    style: GoogleFonts.openSans(
+                        textStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 23,
+                            fontWeight: FontWeight.w600))),
+              ),
+              SizedBox(height: 20),
+              Align(
+                  child: Container(
+                width: screenWidth(context) - 70,
+                decoration: new BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  border: new Border.all(
+                    color: Colors.black,
+                    width: 1.0,
+                  ),
+                ),
+                child: new TextField(
+                  onChanged: (text) {
+                    desc = text;
+                  },
+                  textAlign: TextAlign.center,
+                  decoration: new InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                ),
+              )),
+              SizedBox(height: 80),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ButtonTheme(
+                      height: 50,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: RaisedButton(
+                          color: Colors.red,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Text("Cancel",
+                              style: GoogleFonts.openSans(
+                                  textStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w600))),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ),
                   ButtonTheme(
                     height: 50,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
                     child: RaisedButton(
-                        color: Colors.red,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Text("Cancel",
-                            style: GoogleFonts.openSans(
-                                textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w600))),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
+                      color: Colors.green,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text("Request",
+                          style: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w600))),
+                      onPressed: () async {
+                        await addRequest();
+                        HomeView();
+                      },
+                    ),
                   ),
-                ButtonTheme(
-                  height: 50,
-                  child: RaisedButton(
-                    color: Colors.green,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text("Request",
-                        style: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600))),
-                    onPressed: () async {
-                      await addRequest();
-                      HomeView();
-                    },
-                  ),
-                ),
-              ])
+                ])
         ],
       ),
+          ),
     );
   }
 }

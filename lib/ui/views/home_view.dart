@@ -61,7 +61,7 @@ class _HomeViewState extends State<HomeView> {
               Align(
                 alignment: Alignment.center,
                 child: SizedBox(
-                  height: screenHeight(context) / 3.8,
+                  height: screenHeight(context) / 4.5,
                   child: Image.asset('assets/images/hand.png'),
                 ),
               ),
