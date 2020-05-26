@@ -211,13 +211,13 @@ Future createList() async {
         distance: distanceInMeters);
     print(distanceInMeters);
     if (userData.id != newMarkObj.getUserID) {
-      if (newMarkObj.getType == "Groceries" && socVal == true) {
+      if (newMarkObj.getType == "Groceries" && groVal == true) {
         markers.add(newMarkObj);
       }
-      if (newMarkObj.getType == "Technical" && tekVal == true) {
+     if (newMarkObj.getType == "Technical" && tekVal == true) {
         markers.add(newMarkObj);
       }
-      if (newMarkObj.getType == "Social" && groVal == true) {
+    if (newMarkObj.getType == "Social" && socVal == true) {
         markers.add(newMarkObj);
       }
     }
