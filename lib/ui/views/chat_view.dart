@@ -4,6 +4,7 @@ import 'package:compound/locator.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
+import 'package:compound/ui/views/user_profile_view.dart';
 import 'package:compound/utils/call_utilities.dart';
 import 'package:compound/utils/permissions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -91,7 +92,6 @@ class _ChatState extends State<Chat> {
           child: IconButton(
             icon: Row(
               children: <Widget>[
-                
                 Icon(
                   Icons.arrow_back,
                   color: Colors.black,
@@ -103,15 +103,36 @@ class _ChatState extends State<Chat> {
               //_navigationService.navigateTo(ChatListRoute);
             },
           ),
-          
-          
         ),
-        
-        title: Text(
-          widget.mottagare.fullName,
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () => {
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              UserProfilePage(uid: widget.mottagare.id)),)
+
+              },
+                child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                    radius: 15,
+                    backgroundImage: NetworkImage(widget.mottagare.photo)),
+                Text(
+                  widget.mottagare.fullName,
+                  style: TextStyle(color: Colors.black),
+                ),
+              ],
+            ))
+          ],
         ),
-        actions: <Widget>[IconButton(
+        actions: <Widget>[
+          IconButton(
             icon: Icon(
               Icons.phone,
               color: Colors.black,
@@ -125,8 +146,6 @@ class _ChatState extends State<Chat> {
                       )
                     : {},
           ),
-          
-
           IconButton(
             icon: Icon(
               Icons.video_call,

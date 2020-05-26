@@ -11,6 +11,7 @@ import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/views/chat_view.dart';
 import 'package:compound/ui/views/looking_to_help_view.dart';
 import 'package:compound/ui/views/review_view.dart';
+import 'package:compound/ui/views/user_profile_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -22,12 +23,9 @@ class NotificationsView extends StatefulWidget {
   _NotificationsViewState createState() => new _NotificationsViewState();
 }
 
-UserProvider userProvider; 
-  
+UserProvider userProvider;
 
 class _NotificationsViewState extends State<NotificationsView> {
-
-  
   final AuthenticationService authService = locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
@@ -38,148 +36,154 @@ class _NotificationsViewState extends State<NotificationsView> {
   String pageText = "Offers to help you";
   var streamMethod;
 
-
-
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
-          home: Scaffold(
-            backgroundColor: Colors.white,
-        
-                  body: Center(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,45,0,0),
-                  child: Container(
-          alignment: Alignment.center,
-          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                child: Text(
-                  'Notifications',
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'Open Sans',
-                      fontSize: 30),
+                padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        child: Text(
+                          'Notifications',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'Open Sans',
+                              fontSize: 30),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Opacity(
+                            opacity: requestsButton ? 1 : 0.3,
+                            child: RaisedButton(
+                              color: requestsButton
+                                  ? Colors.lightBlueAccent
+                                  : Colors.white,
+                              textColor: Colors.black,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              padding: EdgeInsets.all(8.0),
+                              splashColor: Colors.lightBlue,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: requestsButton
+                                      ? BorderSide(color: Colors.white54)
+                                      : BorderSide(color: Colors.grey)),
+                              onPressed: () {
+                                setState(() {
+                                  count = 0;
+                                  reviewsButton = false;
+                                  requestsButton = true;
+                                  acceptedButton = false;
+                                  pageText = "Offers to help you";
+                                });
+                              },
+                              child: Text(
+                                "Help offers",
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                            ),
+                          ),
+                          Opacity(
+                            opacity: acceptedButton ? 1 : 0.3,
+                            child: RaisedButton(
+                              color: acceptedButton
+                                  ? Colors.lightBlueAccent
+                                  : Colors.white,
+                              textColor: Colors.black,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              padding: EdgeInsets.all(8.0),
+                              splashColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: acceptedButton
+                                      ? BorderSide(color: Colors.white54)
+                                      : BorderSide(color: Colors.grey)),
+                              onPressed: () {
+                                setState(() {
+                                  count = 1;
+                                  reviewsButton = false;
+                                  requestsButton = false;
+                                  acceptedButton = true;
+                                  pageText = "Accepted your offer to help";
+                                });
+                              },
+                              child: Text(
+                                "Your offers",
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                            ),
+                          ),
+                          Opacity(
+                            opacity: reviewsButton ? 1 : 0.3,
+                            child: RaisedButton(
+                              color: reviewsButton
+                                  ? Colors.lightBlueAccent
+                                  : Colors.white,
+                              textColor: Colors.black,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.black,
+                              padding: EdgeInsets.all(8.0),
+                              splashColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: reviewsButton
+                                      ? BorderSide(color: Colors.white54)
+                                      : BorderSide(color: Colors.grey)),
+                              onPressed: () {
+                                setState(() {
+                                  count = 2;
+                                  requestsButton = false;
+                                  acceptedButton = false;
+                                  reviewsButton = true;
+                                  pageText = "New reviews";
+                                });
+                              },
+                              child: Text(
+                                "Reviews",
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          pageText,
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'Open Sans',
+                              fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
+                  color: Colors.white,
+                  width: 340,
+                  height: 150,
                 ),
               ),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Opacity(
-                      opacity: requestsButton?  1:0.3,
-                      child: RaisedButton(
-                        color: requestsButton ? Colors.lightBlueAccent : Colors.white,
-                        textColor: Colors.black,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.lightBlue,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: requestsButton ? BorderSide(color: Colors.white54) : BorderSide(color: Colors.grey) ),
-                        onPressed: () {
-                          setState(() {
-                            count = 0;
-                            reviewsButton = false;
-                            requestsButton = true;
-                            acceptedButton = false;
-                            pageText = "Offers to help you";
-                          });
-                        },
-                        child: Text(
-                          "Help offers",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                    ),
-                    Opacity(
-                      opacity:acceptedButton? 1:0.3,
-                      child: RaisedButton(
-                        color: acceptedButton ?  Colors.lightBlueAccent:Colors.white ,
-                        textColor: Colors.black,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.blueAccent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: acceptedButton ? BorderSide(color: Colors.white54) : BorderSide(color: Colors.grey) ),
-                        onPressed: () {
-                          setState(() {
-                            count = 1;
-                            reviewsButton = false;
-                            requestsButton = false;
-                            acceptedButton = true;
-                            pageText = "Accepted your offer to help";
-
-                          });
-                        },
-                        child: Text(
-                          "Your offers",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                    ),
-                    Opacity(
-                      opacity:reviewsButton? 1:0.3,
-                      child: RaisedButton(
-                        color: reviewsButton ?  Colors.lightBlueAccent:Colors.white ,
-                        textColor: Colors.black,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.black,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.blueAccent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: reviewsButton ? BorderSide(color: Colors.white54) : BorderSide(color: Colors.grey) ),
-                        onPressed: () {
-                          setState(() {
-                            count = 2;
-                            requestsButton = false;
-                            acceptedButton = false;
-                            reviewsButton = true;
-                            pageText = "New reviews";
-
-                          });
-                        },
-                        child: Text(
-                          "Reviews",
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                            pageText,
-                            style: TextStyle(
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'Open Sans',
-                      fontSize: 13),
-                            
-                          ),
-            ),],
+              cardStream(context),
+            ],
           ),
-          color: Colors.white,
-          width: 340,
-          height: 150,
-                  ),
-                ),
-                cardStream(context),
-              ],
-            ),
         ),
       ),
     );
@@ -191,7 +195,7 @@ class _NotificationsViewState extends State<NotificationsView> {
         width: 300,
         height: 438,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0,20,0,0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: StreamBuilder(
               stream: getUserRecievedHelpRequests(context),
               builder: (context, snapshot) {
@@ -222,13 +226,14 @@ class _NotificationsViewState extends State<NotificationsView> {
               }),
         ),
       );
-    } if (count == 1) {
+    }
+    if (count == 1) {
       return Container(
         width: 300,
         height: 438,
         alignment: Alignment.bottomCenter,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0,20,0,0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: StreamBuilder(
               stream: getAcceptedHelpRequests(context),
               builder: (context, snapshot) {
@@ -259,21 +264,22 @@ class _NotificationsViewState extends State<NotificationsView> {
               }),
         ),
       );
-    }if(count == 2){
+    }
+    if (count == 2) {
       return Container(
         width: 300,
         height: 438,
         alignment: Alignment.bottomCenter,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0,20,0,0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: StreamBuilder(
               stream: getReviewNotifications(context),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   print("Nodata");
                   return const Text("Loading...");
-                  
-                };
+                }
+                ;
 
                 return new ListView.builder(
                   itemCount: snapshot.data.documents.length,
@@ -350,7 +356,7 @@ class AcceptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FirestoreService _firestoreService = locator<FirestoreService>();
-    
+
     //final trip = Helprequest.fromData(document.data);
 
     //
@@ -374,13 +380,24 @@ class AcceptCard extends StatelessWidget {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(sender.photo)),
+                          GestureDetector(
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserProfilePage(uid: sender.id)),
+                              ),
+                            },
+                            child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(sender.photo)),
+                          ),
                           Expanded(
                               child: Text(
                                   sender.fullName +
-                                      ' accepted your offer to help with ' + helpReq,
+                                      ' accepted your offer to help with ' +
+                                      helpReq,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black))),
@@ -398,12 +415,18 @@ class AcceptCard extends StatelessWidget {
                               style: TextStyle(fontSize: 16),
                             ),
                             IconButton(
-                                icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
+                                icon: Icon(
+                                  Icons.do_not_disturb,
+                                  color: Colors.blueAccent,
+                                ),
                                 onPressed: () async {
-                                  var currentuserid = await authService.getCurrentUID();
-                                  Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
-                                  await _firestoreService.deleteAcceptRequest(req);
-
+                                  var currentuserid =
+                                      await authService.getCurrentUID();
+                                  Helprequest req = new Helprequest(
+                                      sender: sender.id,
+                                      reciever: currentuserid);
+                                  await _firestoreService
+                                      .deleteAcceptRequest(req);
                                 }),
                           ],
                         ),
@@ -414,7 +437,11 @@ class AcceptCard extends StatelessWidget {
                               style: TextStyle(fontSize: 16),
                             ),
                             IconButton(
-                                icon: Icon(Icons.chat, color: Colors.blueAccent,), onPressed: () async {
+                                icon: Icon(
+                                  Icons.chat,
+                                  color: Colors.blueAccent,
+                                ),
+                                onPressed: () async {
                                   sendToChat(context);
                                 }),
                           ],
@@ -433,7 +460,7 @@ class AcceptCard extends StatelessWidget {
       ),
     );
   }
-  
+
   sendToChat(context) async {
     final FirestoreService _firestoreService = locator<FirestoreService>();
     final AuthenticationService authService = locator<AuthenticationService>();
@@ -450,19 +477,21 @@ class AcceptCard extends StatelessWidget {
     );
   }
 }
+
 class ReviewCard extends StatelessWidget {
   final User from;
   final DocumentSnapshot document;
   final String description;
   final bool happy;
 
-  const ReviewCard({Key key, this.from, this.document, this.description, this.happy})
+  const ReviewCard(
+      {Key key, this.from, this.document, this.description, this.happy})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final FirestoreService _firestoreService = locator<FirestoreService>();
-    
+
     //final trip = Helprequest.fromData(document.data);
 
     //
@@ -486,12 +515,21 @@ class ReviewCard extends StatelessWidget {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(from.photo)),
+                          GestureDetector(
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserProfilePage(uid: from.id)),
+                              )
+                            },
+                            child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(from.photo)),
+                          ),
                           Expanded(
-                              child: Text(
-                                  from.fullName + " gave you a review!",
+                              child: Text(from.fullName + " gave you a review!",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black))),
@@ -511,7 +549,7 @@ class ReviewCard extends StatelessWidget {
                             // IconButton(
                             //     icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
                             //     onPressed: () async {
-                                  
+
                             //       //await _firestoreService.deleteReviewNotification();
 
                             //     }),
@@ -524,9 +562,15 @@ class ReviewCard extends StatelessWidget {
                               style: TextStyle(fontSize: 16),
                             ),
                             IconButton(
-                                icon: Icon(Icons.rate_review, color: Colors.lightBlueAccent,), onPressed: () async {
-                                  FirebaseUser us = await authService.getCurrentUser();
-                                  User me = await _firestoreService.getUser(us.uid);
+                                icon: Icon(
+                                  Icons.rate_review,
+                                  color: Colors.lightBlueAccent,
+                                ),
+                                onPressed: () async {
+                                  FirebaseUser us =
+                                      await authService.getCurrentUser();
+                                  User me =
+                                      await _firestoreService.getUser(us.uid);
                                   sendToReview(me, from, context);
                                   //sendToChat(context);
                                 }),
@@ -546,8 +590,8 @@ class ReviewCard extends StatelessWidget {
       ),
     );
   }
-   sendToReview(User me, User otherUser, context) async {
-    
+
+  sendToReview(User me, User otherUser, context) async {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -558,7 +602,8 @@ class ReviewCard extends StatelessWidget {
         ),
       ),
     );
-  }}
+  }
+}
 
 class RequestCard extends StatelessWidget {
   final User sender;
@@ -597,8 +642,7 @@ class RequestCard extends StatelessWidget {
                           //Text("${trip.date}"),
                           Expanded(
                               child: Text(
-                                  
-                                      'Accept help with ' + helpReq + " help",
+                                  'Accept help with ' + helpReq + " help",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 20, color: Colors.black))),
@@ -625,13 +669,23 @@ class RequestCard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 6.0),
-                                    child: CircleAvatar(
-                                        radius: 45,
-                                        backgroundImage:
-                                            NetworkImage(sender.photo)),
-                                  ),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 0, 6.0),
+                                      child: GestureDetector(
+                                        onTap: () => {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserProfilePage(
+                                                        uid: sender.id)),
+                                          ),
+                                        },
+                                        child: CircleAvatar(
+                                            radius: 45,
+                                            backgroundImage:
+                                                NetworkImage(sender.photo)),
+                                      )),
                                   Text(
                                     sender.fullName,
                                     style: new TextStyle(fontSize: 15.0),
@@ -654,17 +708,18 @@ class RequestCard extends StatelessWidget {
                             children: <Widget>[
                               Text("Reject"),
                               IconButton(
-                                  icon: Icon(Icons.delete_forever, color: Colors.redAccent,),
+                                  icon: Icon(
+                                    Icons.delete_forever,
+                                    color: Colors.redAccent,
+                                  ),
                                   onPressed: () async {
-                                    final currentUser =
-                                        await _firestoreService
-                                            .getCurrentUser();
+                                    final currentUser = await _firestoreService
+                                        .getCurrentUser();
                                     Helprequest req = new Helprequest(
                                         sender: sender.id,
                                         reciever: currentUser.uid);
                                     await _firestoreService
                                         .deleteHelprequest(req);
-                                    
                                   }),
                             ],
                           ),
@@ -675,11 +730,13 @@ class RequestCard extends StatelessWidget {
                             children: <Widget>[
                               Text("Accept"),
                               IconButton(
-                                  icon: Icon(Icons.check, color: Colors.greenAccent,),
+                                  icon: Icon(
+                                    Icons.check,
+                                    color: Colors.greenAccent,
+                                  ),
                                   onPressed: () async {
-                                    final currentUser =
-                                        await _firestoreService
-                                            .getCurrentUser();
+                                    final currentUser = await _firestoreService
+                                        .getCurrentUser();
                                     final User reciever =
                                         await _firestoreService
                                             .getUser(currentUser.uid);
@@ -695,8 +752,7 @@ class RequestCard extends StatelessWidget {
 
                                     await _firestoreService
                                         .deleteHelprequest(req);
-                                    await _firestoreService
-                                        .acceptRequest(req);
+                                    await _firestoreService.acceptRequest(req);
                                     await _firestoreService.createChat(cha);
                                     await Firestore.instance
                                         .collection('markers')

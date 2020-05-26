@@ -5,13 +5,13 @@ import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/views/review_view.dart';
+import 'package:compound/ui/views/user_profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class CurrentActivities extends StatefulWidget {
   @override
   final User me;
-  
 
   const CurrentActivities({Key key, this.me}) : super(key: key);
 
@@ -22,213 +22,206 @@ class CurrentActivities extends StatefulWidget {
 final AuthenticationService authService = locator<AuthenticationService>();
 final FirestoreService _firestoreService = locator<FirestoreService>();
 
-
-
-  int count = 0;
-  bool givingHelpButton = true;
-  bool recivingHelpButton = false;
-  bool reviewsButton = false;
-  String pageText = "People you are giving help to";
-
-
-
-
+int count = 0;
+bool givingHelpButton = true;
+bool recivingHelpButton = false;
+bool reviewsButton = false;
+String pageText = "People you are giving help to";
 
 class _CurrentActivitiesState extends State<CurrentActivities> {
   Widget build(BuildContext context) {
-    return  
-                Scaffold(
-                  
-                                  body: Center(
-                                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0,45,0,0),
-                          child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: <Widget>[
-                      
-                      Padding(
-                        
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                        
-                        child: Text(
-                          'Your activities',
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'Open Sans',
-                              fontSize: 30),
-                        ),
+    return Scaffold(
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Text(
+                        'Your activities',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'Open Sans',
+                            fontSize: 30),
                       ),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Opacity(
-                              opacity: givingHelpButton?  1:0.3,
-                              child: RaisedButton(
-                                color: givingHelpButton ? Colors.lightBlueAccent : Colors.white,
-                                textColor: Colors.black,
-                                disabledColor: Colors.grey,
-                                disabledTextColor: Colors.black,
-                                padding: EdgeInsets.all(8.0),
-                                splashColor: Colors.lightBlue,
-                                shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18.0),
-                                        side: givingHelpButton ? BorderSide(color: Colors.white54) : BorderSide(color: Colors.grey) ),
-                                onPressed: () {
-                                      setState(() {
-                                        count = 0;
-                                        reviewsButton = false;
-                                        givingHelpButton = true;
-                                        recivingHelpButton = false;
-                                        pageText = "People you are giving help to";
-                                        
-                                      });
-                                },
-                                child: Text(
-                                      "Giving help",
-                                      style: TextStyle(fontSize: 18.0),
-                                ),
-                              ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Opacity(
+                          opacity: givingHelpButton ? 1 : 0.3,
+                          child: RaisedButton(
+                            color: givingHelpButton
+                                ? Colors.lightBlueAccent
+                                : Colors.white,
+                            textColor: Colors.black,
+                            disabledColor: Colors.grey,
+                            disabledTextColor: Colors.black,
+                            padding: EdgeInsets.all(8.0),
+                            splashColor: Colors.lightBlue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: givingHelpButton
+                                    ? BorderSide(color: Colors.white54)
+                                    : BorderSide(color: Colors.grey)),
+                            onPressed: () {
+                              setState(() {
+                                count = 0;
+                                reviewsButton = false;
+                                givingHelpButton = true;
+                                recivingHelpButton = false;
+                                pageText = "People you are giving help to";
+                              });
+                            },
+                            child: Text(
+                              "Giving help",
+                              style: TextStyle(fontSize: 18.0),
                             ),
-                            Opacity(
-                              opacity:recivingHelpButton? 1:0.3,
-                              child: RaisedButton(
-                                color: recivingHelpButton ?  Colors.lightBlueAccent:Colors.white ,
-                                textColor: Colors.black,
-                                disabledColor: Colors.grey,
-                                disabledTextColor: Colors.black,
-                                padding: EdgeInsets.all(8.0),
-                                splashColor: Colors.blueAccent,
-                                shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18.0),
-                                        side: recivingHelpButton ? BorderSide(color: Colors.white54) : BorderSide(color: Colors.grey) ),
-                                onPressed: () {
-                                      setState(() {
-                                        count = 1;
-                                        reviewsButton = false;
-                                        givingHelpButton = false;
-                                        recivingHelpButton = true;
-                                        pageText = "People that are helping you";
-                                        
-
-                                      });
-                                },
-                                child: Text(
-                                      "Reciving help",
-                                      style: TextStyle(fontSize: 18.0),
-                                ),
-                              ),
-                            ),
-                          
-                          ],
+                          ),
                         ),
+                        Opacity(
+                          opacity: recivingHelpButton ? 1 : 0.3,
+                          child: RaisedButton(
+                            color: recivingHelpButton
+                                ? Colors.lightBlueAccent
+                                : Colors.white,
+                            textColor: Colors.black,
+                            disabledColor: Colors.grey,
+                            disabledTextColor: Colors.black,
+                            padding: EdgeInsets.all(8.0),
+                            splashColor: Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: recivingHelpButton
+                                    ? BorderSide(color: Colors.white54)
+                                    : BorderSide(color: Colors.grey)),
+                            onPressed: () {
+                              setState(() {
+                                count = 1;
+                                reviewsButton = false;
+                                givingHelpButton = false;
+                                recivingHelpButton = true;
+                                pageText = "People that are helping you";
+                              });
+                            },
+                            child: Text(
+                              "Reciving help",
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                                        pageText,
-                                        style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w900,
-                              fontFamily: 'Open Sans',
-                              fontSize: 13),
-                                        
-                                      ),
-                    ),],
-                  ),
-                  color: Colors.white,
-                  width: 340,
-                  height: 150,
-                          ),
-                        ),
-                        cardStream(context),
-                      ],
+                        pageText,
+                        style: TextStyle(
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'Open Sans',
+                            fontSize: 13),
+                      ),
                     ),
-                                  ),
-                
+                  ],
+                ),
+                color: Colors.white,
+                width: 340,
+                height: 150,
+              ),
+            ),
+            cardStream(context),
+          ],
+        ),
+      ),
     );
   }
-  }
+}
 
 Stream<QuerySnapshot> getAcceptedHelpRequests(BuildContext context) async* {
-    final uid =  authService.currentUser.id;
-    yield* Firestore.instance
-        .collection('users')
-        .document(uid)
-        .collection('acceptedHelpRequest')
-        .orderBy('date')
-        .snapshots();
-  }
+  final uid = authService.currentUser.id;
+  yield* Firestore.instance
+      .collection('users')
+      .document(uid)
+      .collection('acceptedHelpRequest')
+      .orderBy('date')
+      .snapshots();
+}
 
-  Stream<QuerySnapshot> getAcceptedGiveHelpRequests(BuildContext context) async* {
-    final uid =  authService.currentUser.id;
-    yield* Firestore.instance
-        .collection('users')
-        .document(uid)
-        .collection('acceptedGiveHelpRequest')
-        .orderBy('date')
-        .snapshots();
-  }
+Stream<QuerySnapshot> getAcceptedGiveHelpRequests(BuildContext context) async* {
+  final uid = authService.currentUser.id;
+  yield* Firestore.instance
+      .collection('users')
+      .document(uid)
+      .collection('acceptedGiveHelpRequest')
+      .orderBy('date')
+      .snapshots();
+}
 
 Container cardStream(BuildContext context) {
-  
-  
-    
-      return Container(
-        width: 300,
-        height: 438,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0,20,0,0),
-          child: StreamBuilder(
-              stream: givingHelpButton? getAcceptedGiveHelpRequests(context) : getAcceptedHelpRequests(context)//get acceptedgivehelprequest
-                
-              ,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const Text("Loading...");
+  return Container(
+    width: 300,
+    height: 438,
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+      child: StreamBuilder(
+          stream: givingHelpButton
+              ? getAcceptedGiveHelpRequests(context)
+              : getAcceptedHelpRequests(context) //get acceptedgivehelprequest
 
-                return new ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    DocumentSnapshot ds = snapshot.data.documents[index];
-                    return new FutureBuilder(
-                        future: givingHelpButton? _firestoreService.getUser(ds['reciever']) :_firestoreService.getUser(ds['sender']) ,
-                        builder: (context, usernsnapshot) {
-                          if (usernsnapshot.connectionState ==
-                              ConnectionState.done) {
-                            User sender = usernsnapshot.data;
-                            
-                            if(givingHelpButton == true) {
-                              return GivingHelp(
-                              document: ds,
-                              otherUser: sender,
-                              helpReq: ds['requestType'],
-                            );}
-                            if(recivingHelpButton == true) {
-                            return new RecivingHelp(
-                              document: ds,
-                              otherUser: sender,
-                              helpReq: ds['requestType'],
-                            );
-                            }
-                          } else {
-                            return CircularProgressIndicator();
-                          }
-                        });
-                  },
-                );
-              }),
-        ),
-      );
-    } 
+          ,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const Text("Loading...");
 
+            return new ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (BuildContext context, int index) {
+                DocumentSnapshot ds = snapshot.data.documents[index];
+                return new FutureBuilder(
+                    future: givingHelpButton
+                        ? _firestoreService.getUser(ds['reciever'])
+                        : _firestoreService.getUser(ds['sender']),
+                    builder: (context, usernsnapshot) {
+                      if (usernsnapshot.connectionState ==
+                          ConnectionState.done) {
+                        User sender = usernsnapshot.data;
 
-  class GivingHelp extends StatelessWidget {
+                        if (givingHelpButton == true) {
+                          return GivingHelp(
+                            document: ds,
+                            otherUser: sender,
+                            helpReq: ds['requestType'],
+                          );
+                        }
+                        if (recivingHelpButton == true) {
+                          return new RecivingHelp(
+                            document: ds,
+                            otherUser: sender,
+                            helpReq: ds['requestType'],
+                          );
+                        }
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    });
+              },
+            );
+          }),
+    ),
+  );
+}
+
+class GivingHelp extends StatelessWidget {
   final User otherUser;
   final DocumentSnapshot document;
   final String helpReq;
@@ -239,7 +232,7 @@ Container cardStream(BuildContext context) {
   @override
   Widget build(BuildContext context) {
     final FirestoreService _firestoreService = locator<FirestoreService>();
-    
+
     //final trip = Helprequest.fromData(document.data);
 
     //
@@ -263,13 +256,25 @@ Container cardStream(BuildContext context) {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(otherUser.photo)),
+                          GestureDetector(
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserProfilePage(uid: otherUser.id)),
+                              ),
+                            },
+                            child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(otherUser.photo)),
+                          ),
                           Expanded(
                               child: Text(
-                                  
-                                      ' You are helping ' + otherUser.fullName + " with " + helpReq,
+                                  ' You are helping ' +
+                                      otherUser.fullName +
+                                      " with " +
+                                      helpReq,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black))),
@@ -287,18 +292,21 @@ Container cardStream(BuildContext context) {
                               style: TextStyle(fontSize: 16),
                             ),
                             IconButton(
-                                icon: Icon(Icons.do_not_disturb, color: Colors.blueAccent,),
+                                icon: Icon(
+                                  Icons.do_not_disturb,
+                                  color: Colors.blueAccent,
+                                ),
                                 onPressed: () async {
-                                  var currentuserid = await authService.getCurrentUID();
-                                  User me = await _firestoreService.getUser(currentuserid);
+                                  var currentuserid =
+                                      await authService.getCurrentUID();
+                                  User me = await _firestoreService
+                                      .getUser(currentuserid);
                                   // Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
                                   // await _firestoreService.deleteAcceptRequest(req);
                                   sendToReview(me, otherUser, context);
-
                                 }),
                           ],
                         ),
-                        
 
                         //Spacer(),
                         //(tripType.containsKey(trip.travelType))? tripType[trip.travelType]: tripType["other"],
@@ -312,9 +320,10 @@ Container cardStream(BuildContext context) {
         ),
       ),
     );
-  }}
+  }
+}
 
-  class RecivingHelp extends StatelessWidget {
+class RecivingHelp extends StatelessWidget {
   final User otherUser;
   final DocumentSnapshot document;
   final String helpReq;
@@ -325,7 +334,7 @@ Container cardStream(BuildContext context) {
   @override
   Widget build(BuildContext context) {
     final FirestoreService _firestoreService = locator<FirestoreService>();
-    
+
     //final trip = Helprequest.fromData(document.data);
 
     //
@@ -349,13 +358,24 @@ Container cardStream(BuildContext context) {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(otherUser.photo)),
+                          GestureDetector(
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserProfilePage(uid: otherUser.id)),
+                              ),
+                            },
+                            child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(otherUser.photo)),
+                          ),
                           Expanded(
                               child: Text(
                                   otherUser.fullName +
-                                      ' is helping you with ' + helpReq,
+                                      ' is helping you with ' +
+                                      helpReq,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black))),
@@ -373,18 +393,22 @@ Container cardStream(BuildContext context) {
                               style: TextStyle(fontSize: 16),
                             ),
                             IconButton(
-                                icon: Icon(Icons.rate_review, color: Colors.blueAccent,),
+                                icon: Icon(
+                                  Icons.rate_review,
+                                  color: Colors.blueAccent,
+                                ),
                                 onPressed: () async {
-                                  var currentuserid = await authService.getCurrentUID();
-                                  User me = await _firestoreService.getUser(currentuserid);
+                                  var currentuserid =
+                                      await authService.getCurrentUID();
+                                  User me = await _firestoreService
+                                      .getUser(currentuserid);
                                   // Helprequest req = new Helprequest(sender: sender.id, reciever: currentuserid);
                                   // await _firestoreService.deleteAcceptRequest(req);
                                   sendToReview(me, otherUser, context);
-
                                 }),
                           ],
                         ),
-                        
+
                         //Spacer(),
                         //(tripType.containsKey(trip.travelType))? tripType[trip.travelType]: tripType["other"],
                       ],
@@ -398,16 +422,16 @@ Container cardStream(BuildContext context) {
       ),
     );
   }
-  }
-  sendToReview(User me, User otherUser, context) async {
-    
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ReviewView(
-          me: me,
-          otherUser: otherUser,
-        ),
+}
+
+sendToReview(User me, User otherUser, context) async {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ReviewView(
+        me: me,
+        otherUser: otherUser,
       ),
-    );
-  }
+    ),
+  );
+}
