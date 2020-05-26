@@ -211,30 +211,18 @@ Future createList() async {
         distance: distanceInMeters);
     print(distanceInMeters);
     if (userData.id != newMarkObj.getUserID) {
-      if (newMarkObj.getType == "Socialt" && socVal == true) {
+      if (newMarkObj.getType == "Social" && socVal == true) {
         markers.add(newMarkObj);
       }
-      if (newMarkObj.getType == "Teknisk" && tekVal == true) {
+      if (newMarkObj.getType == "Technical" && tekVal == true) {
         markers.add(newMarkObj);
       }
-      if (newMarkObj.getType == "Livsmedel" && groVal == true) {
+      if (newMarkObj.getType == "Groceries" && groVal == true) {
         markers.add(newMarkObj);
       }
     }
   }
   sorthething();
-}
-
-getIcon(String type) {
-  if (type == "Livsmedel") {
-    return Icon(Icons.shopping_cart);
-  }
-  if (type == "Socialt") {
-    return Icon(Icons.group);
-  }
-  if (type == "Teknisk") {
-    return Icon(Icons.settings);
-  }
 }
 
 sorthething() {
