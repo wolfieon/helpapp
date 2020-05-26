@@ -9,9 +9,9 @@ import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
+import 'package:compound/ui/views/user_profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
 class RequestInspectView extends StatelessWidget {
   final DialogService _dialogService = locator<DialogService>();
@@ -75,16 +75,28 @@ class RequestInspectView extends StatelessWidget {
               ),
               Column(
                 children: <Widget>[
+                   SizedBox(
+                height: screenHeight(context) / 50,
+              ),
+                  GestureDetector(
+                      onTap: () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserProfilePage(uid: marker.userID)),
+                            )
+                          },
+                      child: Align(
+                          alignment: Alignment.topLeft,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 50,
+                            backgroundImage: NetworkImage(user.photo),
+                          ))),
                   SizedBox(
                     height: screenHeight(context) / 50,
                   ),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        radius: 50,
-                        backgroundImage: NetworkImage(user.photo),
-                      ))
                 ],
               ),
 
@@ -238,8 +250,8 @@ class RequestInspectView extends StatelessWidget {
                         print(marker.distance);
                         print("Name: ${marker.name}");
                         print(marker.markerID);
-                        createHelpRequest(
-                            auth.currentUser.id, marker.userID, marker.type, markerId);
+                        createHelpRequest(auth.currentUser.id, marker.userID,
+                            marker.type, markerId);
                       },
                     )),
                 Spacer(flex: 1)
@@ -259,7 +271,10 @@ class RequestInspectView extends StatelessWidget {
       );
     } else {
       Helprequest req = new Helprequest(
-          sender: sender, reciever: reciever, requestType: requestType, markerID: markerID);
+          sender: sender,
+          reciever: reciever,
+          requestType: requestType,
+          markerID: markerID);
       await _firestoreService.createHelprequest(req);
       Firestore.instance
           .collection('users')

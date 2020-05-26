@@ -1,30 +1,21 @@
-
-import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
-import 'package:compound/models/user.dart';
-import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';
-import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
-import 'package:compound/ui/views/change_password_view.dart';
 import 'package:compound/ui/views/recived_reviews_view.dart';
 import 'package:compound/ui/views/written_reviews_view.dart';
 import 'package:flutter/material.dart';
+import 'package:compound/models/user.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:geolocator/geolocator.dart';
 
-class ProfileView extends StatefulWidget {
-  @override
-  _ProfileScreenState createState() => _ProfileScreenState();
-}
 
-class _ProfileScreenState extends State<ProfileView> {
-  //const ProfileView({Key key}) : super(key: key);
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthenticationService auth = locator<AuthenticationService>();
-  final FirestoreService _firestoreService = locator<FirestoreService>();
-  
-  @override
+
+class UserProfilePage extends StatelessWidget {
+   final FirestoreService _firestoreService = locator<FirestoreService>();
+ final String uid;
+  UserProfilePage({this.uid});
+
+
+@override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
@@ -34,7 +25,7 @@ class _ProfileScreenState extends State<ProfileView> {
           children: <Widget>[
             Expanded(
                 child: FutureBuilder(
-              future: _firestoreService.getUser(auth.currentUser.id),
+              future: _firestoreService.getUser(uid),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return displayProfile(context, snapshot);
@@ -54,49 +45,21 @@ class _ProfileScreenState extends State<ProfileView> {
    
     return Scaffold(
         backgroundColor: Colors.white,
+         appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ), onPressed:  () async {
+              Navigator.pop(context);
+              //_navigationService.navigateTo(ChatListRoute);
+            },),
+          title: Text(
+            '${user.fullName}s profile ',
+            style: TextStyle(color: Colors.black),
+          )),
         body: Column(children: <Widget>[
-          GestureDetector(
-            //top lådan med pennan etc
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChangePasswordView(),
-                ),
-              );
-            },
-            child: SizedBox(
-              height: screenHeight(context) / 7,
-              width: screenWidth(context),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        //SizedBox(height: screenHeight(context) / 15),
-                        //editprofile
-                        Column(children: <Widget>[
-                          Text("Edit profile",
-                              style: GoogleFonts.openSans(
-                                  textStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600))),
-                        ]),
-
-                        // pen icon
-                        Column(children: <Widget>[
-                          Icon(Icons.edit),
-                        ]),
-                      ]),
-                  SizedBox(
-                    width: screenWidth(context) / 20,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          SizedBox(height:screenHeight(context)/50),
           Row(
             //bilden
             children: <Widget>[
@@ -159,6 +122,7 @@ class _ProfileScreenState extends State<ProfileView> {
                           fontWeight: FontWeight.w600)))
             ],
           ),
+          SizedBox(height: screenHeight(context)/75),
           Row(
             // user desc,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -209,7 +173,8 @@ class _ProfileScreenState extends State<ProfileView> {
               ),
               
               GestureDetector(
-                onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => WrittenReviewsView(id: user.id)))},
+                onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => WrittenReviewsView(id:user.id)))
+                },
                 child: Row(
                   children: <Widget>[Icon(Icons.mode_comment),Icon(Icons.arrow_right),],
 
@@ -248,7 +213,8 @@ class _ProfileScreenState extends State<ProfileView> {
               GestureDetector(
                 onTap: () => {
                   
-                   Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewsView(id: user.id)))},
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReviewsView(id:user.id)))
+                  },
                 child: Row(
                   children: <Widget>[Icon(Icons.comment),Icon(Icons.arrow_right),],
 
@@ -264,34 +230,7 @@ class _ProfileScreenState extends State<ProfileView> {
   }
 
 
-  void _showDialog(User user) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: new Text("Radera kontot ${user.fullName ?? 'Anonymous'}?"),
-            content: new Text("Är du säker detta går ej att ångra"),
-            actions: <Widget>[
-              new FlatButton(
-                  textColor: Colors.green,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: new Text("Nej jag vill inte radera kontot")),
-              new FlatButton(
-                  textColor: Colors.red,
-                  onPressed: () {
-                    _firestoreService.removeUser(user);
-                    print(
-                        "Konto skulla vara borta om koden ovan denna skulle vara bor kommenterad");
-                  },
-                  child: new Text("Ja jag vill radera kontot"))
-            ],
-          );
-        });
-  }
 
-  void navigateToChangePassword() {
-    _navigationService.navigateTo(ChangePasswordViewRoute);
-  }
+
+ 
 }

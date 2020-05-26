@@ -1,24 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:compound/constants/route_names.dart';
-import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/review.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
-import 'package:compound/services/dialog_service.dart';
 import 'package:compound/services/firestore_service.dart';
-import 'package:compound/services/navigation_service.dart';
-import 'package:compound/ui/shared/ui_helpers.dart';
-import 'package:compound/ui/views/request_inspect_view.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
-import 'package:compound/ui/views/recived_reviews_view.dart';
 import '../../locator.dart';
 
 class WrittenReviewsView extends StatefulWidget {
+  final String id;
   @override
-  State<StatefulWidget> createState() => _InspectWrittenReviewState();
+  WrittenReviewsView({this.id});
+  State<StatefulWidget> createState() => _InspectWrittenReviewState(id: id);
 }
 
 final List<Review> reviews = [];
@@ -27,12 +21,24 @@ final AuthenticationService authService = locator<AuthenticationService>();
 final FirestoreService _firestoreService = locator<FirestoreService>();
 
 class _InspectWrittenReviewState extends State<WrittenReviewsView> {
+  String id;
+
+_InspectWrittenReviewState({this.id});
+
   @override
+  
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ), onPressed:  () async {
+              Navigator.pop(context);
+              //_navigationService.navigateTo(ChatListRoute);
+            },),
         title: Text(
           "Commitments",
           style: TextStyle(color: Colors.black),
@@ -42,7 +48,7 @@ class _InspectWrittenReviewState extends State<WrittenReviewsView> {
         children: <Widget>[
           new Expanded(
             child: FutureBuilder(
-                future: createList(),
+                future: createList(id),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -100,9 +106,9 @@ class _InspectWrittenReviewState extends State<WrittenReviewsView> {
   }
 }
 
-Future createList() async {
+Future createList(String id) async {
   reviews.clear();
-  User userData = await _firestoreService.getUser(authService.currentUser.id);
+  User userData = await _firestoreService.getUser(id);
   QuerySnapshot snapshot = await db
       .collection("users")
       .document(userData.id)
