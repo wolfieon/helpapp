@@ -10,43 +10,34 @@ class Option {
 
 final options = [
   Option(
-    icon: Icon(Icons.dashboard, size: 40.0),
-    title: 'Option One',
+    icon: Icon(Icons.account_circle, size: 40.0),
+    title: 'Account settings',
     subtitle: 'Titta.',
   ),
   Option(
-    icon: Icon(Icons.do_not_disturb, size: 40.0),
-    title: 'Option Two',
+    icon: Icon(Icons.perm_identity, size: 40.0),
+    title: 'Personal information',
     subtitle: 'Text.',
   ),
   Option(
-    icon: Icon(Icons.account_circle, size: 40.0),
-    title: 'Option Three',
+    icon: Icon(Icons.group_add, size: 40.0),
+    title: 'Invite',
     subtitle: 'Kan skriva vad man vill.',
   ),
   Option(
-    icon: Icon(Icons.ac_unit, size: 40.0),
-    title: 'Option Four',
+    icon: Icon(Icons.gavel, size: 40.0),
+    title: 'User Terms',
     subtitle: 'asdasd.',
   ),
   Option(
-    icon: Icon(Icons.watch_later, size: 40.0),
-    title: 'Option Five',
+    icon: Icon(Icons.remove_circle, size: 40.0),
+    title: 'Report user',
     subtitle: 'dsasda.',
   ),
   Option(
-    icon: Icon(Icons.directions_railway, size: 40.0),
-    title: 'Option Six',
+    icon: Icon(Icons.block, size: 40.0),
+    title: 'Block user',
     subtitle: 'sdasdasdasd.',
   ),
-  Option(
-    icon: Icon(Icons.local_airport, size: 40.0),
-    title: 'Option Seven',
-    subtitle: 'qweqweqwe.',
-  ),
-  Option(
-    icon: Icon(Icons.add_shopping_cart, size: 40.0),
-    title: 'Option Eight',
-    subtitle: 'asdasdasdasdasd.',
-  ),
+  
 ];

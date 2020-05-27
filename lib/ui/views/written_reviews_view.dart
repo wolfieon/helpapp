@@ -23,22 +23,24 @@ final FirestoreService _firestoreService = locator<FirestoreService>();
 class _InspectWrittenReviewState extends State<WrittenReviewsView> {
   String id;
 
-_InspectWrittenReviewState({this.id});
+  _InspectWrittenReviewState({this.id});
 
   @override
-  
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ), onPressed:  () async {
-              Navigator.pop(context);
-              //_navigationService.navigateTo(ChatListRoute);
-            },),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () async {
+            Navigator.pop(context);
+            //_navigationService.navigateTo(ChatListRoute);
+          },
+        ),
         title: Text(
           "Commitments",
           style: TextStyle(color: Colors.black),
@@ -81,17 +83,34 @@ _InspectWrittenReviewState({this.id});
                                             color: Colors.black,
                                             fontSize: 21,
                                             fontWeight: FontWeight.w600))),
-                                subtitle: Text(
-                                    "Good: " +
-                                        reviews[index].getHappy.toString() +
-                                        '\n' +
-                                        'Description: ' +
-                                        reviews[index].getDescription,
-                                    style: GoogleFonts.openSans(
-                                        textStyle: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600))),
+                                subtitle: 
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Icon(happySadIcon(
+                                          reviews[index].getHappy)),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Flexible(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              reviews[index].getDescription,
+                                              style: GoogleFonts.openSans(
+                                                  textStyle: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              maxLines: 5,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                
                                 onTap: () {
                                   print(reviews[index].description);
                                 }),
@@ -124,5 +143,26 @@ Future createList(String id) async {
         toName: f.data['toName']);
 
     reviews.add(newReview);
+  }
+}
+
+IconData happySadIcon(happySad) {
+  switch (happySad) {
+    case true:
+      {
+        return Icons.tag_faces;
+      }
+      break;
+    case false:
+      {
+        return Icons.mood_bad;
+      }
+      break;
+
+    default:
+      {
+        return Icons.sentiment_neutral;
+      }
+      break;
   }
 }

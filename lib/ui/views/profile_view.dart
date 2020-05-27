@@ -133,7 +133,7 @@ class _ProfileScreenState extends State<ProfileView> {
           Row(
               //ska förmodligen bort men gjorde för att imitera desigen
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Icon(Icons.map), Text("Stad , Län")]),
+              children: <Widget>[Icon(Icons.map), Text("Stockholm , Stockholm county")]),
           Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             Column(
               children: <Widget>[Icon(Icons.tag_faces), Text("${user.happyCount}")],

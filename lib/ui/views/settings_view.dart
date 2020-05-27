@@ -80,13 +80,6 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                       : Colors.grey[600],
                 ),
               ),
-              subtitle: Text(
-                options[index - 1].subtitle,
-                style: TextStyle(
-                  color:
-                      _selectedOption == index - 1 ? Colors.black : Colors.grey,
-                ),
-              ),
               selected: _selectedOption == index - 1,
               onTap: () {
                 setState(() {
