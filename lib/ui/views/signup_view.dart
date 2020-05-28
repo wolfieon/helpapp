@@ -1,6 +1,5 @@
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:compound/ui/widgets/busy_button.dart';
-import 'package:compound/ui/widgets/expansion_list.dart';
 import 'package:compound/ui/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';

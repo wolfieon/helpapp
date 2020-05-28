@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
 import 'package:compound/ui/views/current_activities_view.dart';
@@ -8,7 +6,6 @@ import 'package:compound/ui/views/need_help_view.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:compound/services/firestore_service.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:social_share_plugin/social_share_plugin.dart';

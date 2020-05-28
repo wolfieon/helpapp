@@ -1,10 +1,6 @@
-import 'package:compound/constants/route_names.dart';
 import 'package:compound/locator.dart';
-import 'package:compound/models/user.dart';
 import 'package:compound/services/dialog_service.dart';
-import 'package:compound/services/navigation_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
-import 'package:compound/ui/views/profile_view.dart';
 import 'package:compound/ui/widgets/busy_button.dart';
 import 'package:compound/ui/widgets/input_field.dart';
 import 'package:compound/viewmodels/change_password_model.dart';

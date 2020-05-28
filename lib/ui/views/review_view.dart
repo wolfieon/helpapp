@@ -5,8 +5,6 @@ import 'package:compound/models/review.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/firestore_service.dart';
 import 'package:compound/ui/shared/ui_helpers.dart';
-import 'package:compound/ui/views/chat_view.dart';
-import 'package:compound/ui/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

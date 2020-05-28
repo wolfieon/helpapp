@@ -1,15 +1,14 @@
 
+import 'package:compound/constants/route_names.dart';
 import 'package:compound/ui/views/bottom_nav_view.dart';
-import 'package:compound/ui/views/chats_view.dart';
 import 'package:compound/ui/views/change_password_view.dart';
+import 'package:compound/ui/views/chats_view.dart';
 import 'package:compound/ui/views/helper_view.dart';
-import 'package:compound/ui/views/home_view.dart';
+import 'package:compound/ui/views/login_view.dart';
 import 'package:compound/ui/views/profile_view.dart';
 import 'package:compound/ui/views/settings_view.dart';
-import 'package:flutter/material.dart';
-import 'package:compound/constants/route_names.dart';
-import 'package:compound/ui/views/login_view.dart';
 import 'package:compound/ui/views/signup_view.dart';
+import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

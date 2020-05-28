@@ -1,18 +1,12 @@
 
-import 'package:compound/models/user.dart';
 import 'package:compound/provider/user_provider.dart';
 import 'package:compound/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:compound/services/authentication_service.dart';
-import 'package:compound/ui/views/chat_view.dart';
 import 'package:compound/ui/views/home_view.dart';
-
-import 'package:compound/ui/views/map_view.dart';
 import 'package:compound/ui/views/notifications_view.dart';
 import 'package:compound/ui/views/profile_view.dart';
 import 'package:compound/ui/views/settings_view.dart';
-
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';

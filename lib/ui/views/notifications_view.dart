@@ -14,10 +14,6 @@ import 'package:compound/ui/views/review_view.dart';
 import 'package:compound/ui/views/user_profile_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-
 class NotificationsView extends StatefulWidget {
   @override
   _NotificationsViewState createState() => new _NotificationsViewState();

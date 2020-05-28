@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compound/locator.dart';
-import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/user.dart';
 import 'package:compound/services/authentication_service.dart';
 import 'package:compound/services/firestore_service.dart';

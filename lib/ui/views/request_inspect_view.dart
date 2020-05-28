@@ -108,8 +108,10 @@ class RequestInspectView extends StatelessWidget {
                     style: GoogleFonts.openSans(
                         textStyle: TextStyle(
                             color: Colors.black,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w600))),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600)),
+                            overflow: TextOverflow.fade,
+                            ),
               ])
             ],
           ),
@@ -146,13 +148,11 @@ class RequestInspectView extends StatelessWidget {
                   ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[Icon(Icons.check), Text("YEEEt")]),
+                      children: <Widget>[Icon(Icons.check), Text("Close by")]),
                   SizedBox(
                     height: screenHeight(context) / 60,
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[Icon(Icons.check), Text("ZIT")])
+                  
                 ],
               ),
 
@@ -175,14 +175,14 @@ class RequestInspectView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Icon(Icons.calendar_today),
-                        Text("Date")
+                        Text("30/05")
                       ]),
                   SizedBox(
                     height: screenHeight(context) / 60,
                   ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[Icon(Icons.timer), Text("Time")])
+                      children: <Widget>[Icon(Icons.timer), Text("15:00")])
                 ],
               )
             ],

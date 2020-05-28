@@ -11,7 +11,7 @@ import 'package:compound/ui/views/recived_reviews_view.dart';
 import 'package:compound/ui/views/written_reviews_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:geolocator/geolocator.dart';
+
 
 class ProfileView extends StatefulWidget {
   @override

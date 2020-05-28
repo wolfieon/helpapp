@@ -6,8 +6,6 @@ import 'package:compound/configs/agora_configs.dart';
 import 'package:compound/models/call.dart';
 import 'package:compound/provider/user_provider.dart';
 import 'package:compound/resources/call_methods.dart';
-import 'package:compound/ui/views/chats_view.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';

@@ -4,7 +4,6 @@ import 'package:compound/models/helprequest.dart';
 import 'package:compound/models/markers.dart';
 import 'package:compound/models/review.dart';
 import 'package:compound/models/user.dart';
-import 'package:compound/ui/views/looking_to_help_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreService {
